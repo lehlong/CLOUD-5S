@@ -1,0 +1,514 @@
+<div class="card order-detail-container" [style.width]="widthDeault" style="min-height: 100%;" [appPermission]="ORDER_DELIVERY_RIGHTS.CHI_TIET">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Chi tiết đợt xuất hàng
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="showButton.edit && isInforGeneral">
+          <button type="button" class="btn btn-success" (click)="onUpdate()">
+            <i class="bi bi-pencil-square"></i> Chỉnh sửa
+          </button>
+        </div>
+        <div *ngIf="showButton.confirm && isInforGeneral">
+          <button type="button" class="btn btn-primary" (click)="onConfirm()"
+            [appPermission]="ORDER_DELIVERY_RIGHTS.XAC_NHAN_KET_THUC">
+            <i class="bi bi-check-circle"></i> Xác nhận kết thúc
+          </button>
+        </div>
+        <div *ngIf="showButton.cancel && isInforGeneral">
+          <button type="button" class="btn btn-danger" (click)="onCancel()"><i class="bi bi-trash"></i> Hủy</button>
+        </div>
+        <div *ngIf="showButton.upload">
+          <input id="filesUpload" type="file" style="display: none" multiple (change)="onFileSelected($event)" />
+          <button class="btn btn-primary" [appPermission]="ORDER_DELIVERY_RIGHTS.UPLOAD_FILE">
+            <label class="custom-file-label" for="filesUpload">
+              <i class="bi bi-upload"></i>
+              Upload file</label>
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i> Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div style="width: 100%">
+      <div>
+        <div class="tab-content">
+          <div class="fade show active" role="tabpanel" aria-labelledby="info-tab">
+            <nz-tabset [nzAnimated]="false" (nzSelectChange)="onTabChange($event)" name="tabset">
+              <nz-tab nzTitle="Thông tin chung">
+                <div class="row">
+                  <div class="main-content col-md-8 pr-10">
+                    <div *ngIf="itemDetail" class="">
+                      <div class="mbf-box">
+                        <div class="mbf-box__body">
+                          <div style="overflow-x: auto;display: flex;flex-wrap: wrap;">
+                            <div class="box-container-custom">
+                              <div>
+                                Khối lượng dự kiến
+                              </div>
+                              <span>{{ utils.formatNumber(itemDetail?.expectNumber) }}
+                                {{ itemDetail.orderBatchDetails[0]?.unit?.name }}</span>
+                            </div>
+
+                            <div class="box-container-custom">
+                              <div>
+                                Khối lượng đã xuất
+                              </div>
+                              <span>{{ utils.formatNumber(itemDetail?.releaseNumber) }}
+                                {{ itemDetail.orderBatchDetails[0]?.unit?.name }}({{toPercent(itemDetail?.releaseNumber,itemDetail?.expectNumber)}})
+                              </span>
+                            </div>
+
+                            <div class="box-container-custom">
+                              <div>
+                                Khối lượng đã xuống tàu
+                              </div>
+                              <span>{{ utils.formatNumber(itemDetail?.completeNumber) }}
+                                {{ itemDetail.orderBatchDetails[0]?.unit?.name }}</span>
+                            </div>
+
+                            <div class="box-container-custom">
+                              <div>
+                                Số lượng xe tham gia
+                              </div>
+                              <span>{{ utils.formatNumber(itemDetail?.totalVehicle) }} xe</span>
+                            </div>
+
+                            <div class="box-container-custom">
+                              <div>
+                                Số chuyến đã xuất
+                              </div>
+                              <span>{{ utils.formatNumber(itemDetail?.deliveryNumber) }} chuyến</span>
+                            </div>
+
+                            <div class="box-container-custom">
+                              <div>
+                                Số chuyến đã đến cảng
+                              </div>
+                              <span>{{ utils.formatNumber(itemDetail?.completeDeliveryNumber) }} chuyến</span>
+                            </div>
+
+                            <div class="box-container-custom">
+                              <div>
+                                Số chuyến trên đường
+                              </div>
+                              <span>{{ utils.formatNumber(itemDetail?.deliveringNumber) }} chuyến</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="info-content col-md-4">
+                    <div class="" *ngIf="itemDetail">
+                      <div class="info--export mb-20">
+                        <div class="mbf-box">
+                          <div class="mbf-box__header">
+                            <div class="mbf-box__title">
+                              <i class="bi bi-info-circle"></i>
+                              Thông tin đợt xuất hàng
+                            </div>
+                          </div>
+                          <div class="mbf-box__body">
+                            <div class="table--custom">
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Mã đợt</div>
+                                <div>{{ itemDetail.code }}</div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Từ ngày</div>
+                                <div>{{ itemDetail.startDate | date : 'dd/MM/yyyy HH:mm' }}</div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Đến ngày</div>
+                                <div>{{ itemDetail.endDate | date : 'dd/MM/yyyy HH:mm' }}</div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Tàu xuất hàng</div>
+                                <div>{{ itemDetail.shipCode }}</div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Số tờ khai hải quan</div>
+                                <div>{{ itemDetail?.customsDeclaration }}</div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Ghi chú</div>
+                                <div>{{ itemDetail?.note }}</div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Trạng thái</div>
+                                <div *ngIf="STATE_ORDER_DELIVERY[itemDetail?.state]" class="label-status"
+                                  [style.background]="STATE_ORDER_DELIVERY[itemDetail?.state].background"
+                                  [style.color]="STATE_ORDER_DELIVERY[itemDetail?.state].color">
+                                  {{ STATE_ORDER_DELIVERY[itemDetail?.state].name }}
+                                </div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Người tạo</div>
+                                <div>{{ itemDetail.creator.fullName }}</div>
+                              </div>
+                              <div
+                                class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                                <div>Ngày tạo</div>
+                                <div>{{ itemDetail.createDate | date : 'dd/MM/yyyy HH:mm' }}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </nz-tab>
+              <nz-tab nzTitle="Phương tiện chở hàng">
+                <div [appPermission]="ORDER_DELIVERY_RIGHTS.CHI_TIET_PHUONG_TIEN" class="box-table-vehicle">
+                  <div class="d-flex flex-wrap d-gap d-space-bw my-2">
+                    <div class="d-flex flex-wrap d-gap">
+                      <div style="max-width: 250px;">
+                        <nz-range-picker nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledDate"
+                          [(ngModel)]="selectedRangeVehicle" [nzPlaceHolder]="['Từ ngày', 'Đến ngày']">
+                        </nz-range-picker>
+                      </div>
+                      <div class="d-flex flex-row flex-grow-1">
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Biển số xe" [(ngModel)]="filterVehicle.VehicleCode">
+                          <nz-option *ngFor="let type of listVehicle" [nzLabel]="type.code" [nzValue]="type.code">
+                          </nz-option>
+                        </nz-select>
+                      </div>
+                      <div>
+                        <span (click)="getDetailVehicle()" class="input-group-text"><i class="bi bi-search"></i></span>
+                      </div>
+                    </div>
+                    <div>
+                      <button (click)="exportExcel()" type="button" class="btn export-excel-btn"
+                        [appPermission]="ORDER_DELIVERY_RIGHTS.EXCEL_PHUONG_TIEN">
+                        <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+                        Tải excel
+                      </button>
+                    </div>
+                  </div>
+                  <section class="wraper-table">
+                    <table mat-table [dataSource]="dataSource" class="table table-hover table-click-row"
+                      *ngIf="dataSource?.length > 0">
+
+                      <!-- HEADER 1 -->
+
+                      <ng-container matColumnDef="header-row-index">
+                        <th class="align-y-center text-center custom-header-tt1" mat-header-cell *matHeaderCellDef rowSpan="3">
+                          TT
+                        </th>
+                      </ng-container>
+
+                      <ng-container matColumnDef="header-row-vehicleNumber">
+                        <th class="align-y-center text-center custom-header-vehicle1" mat-header-cell *matHeaderCellDef rowSpan="3">
+                          Biển số xe
+                        </th>
+                      </ng-container>
+
+                      <ng-container matColumnDef="header-row-total">
+                        <th class="align-y-center text-center custom-header-total1" mat-header-cell *matHeaderCellDef rowSpan="3">
+                          Tổng
+                        </th>
+                      </ng-container>
+
+                      <ng-container matColumnDef="header-row-time">
+                        <th class="text-center" mat-header-cell *matHeaderCellDef [colSpan]="dates?.length * 4">
+                          Số chuyến trong mỗi ca
+                        </th>
+                      </ng-container>
+
+                      <!-- HEADER 2 -->
+
+                      <ng-container *ngFor="let date of dates; let i = index"
+                        [matColumnDef]="'header-row-hn-' + (i + 1)">
+                        <th class="text-center" mat-header-cell *matHeaderCellDef colSpan="4">
+                          {{ date }}
+                        </th>
+                      </ng-container>
+
+                      <!-- HEADER 3 -->
+
+                      <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef style="display: none;"></th>
+                        <td mat-cell class="text-center custom-header-tt" *matCellDef="let element; let i = index">
+                          {{ i+1 }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef class="fw-600 text-center custom-footer-tt footer-color"></td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="vehicleCode">
+                        <th mat-header-cell *matHeaderCellDef style="display: none;"></th>
+                        <td mat-cell class="text-center custom-header-vehicle" *matCellDef="let element">
+                          {{ element.vehicleCode }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef class="fw-600 text-center text-center custom-footer-vehicle footer-color">
+                          <div>Số chuyến</div>
+                          <div>Khối lượng (Kg)</div>
+                          <div>KLTB (Kg/xe)</div>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="total">
+                        <th mat-header-cell *matHeaderCellDef style="display: none;"></th>
+                        <td mat-cell class="text-center p-0" *matCellDef="let element">
+                          <table cellPadding="0" cellSpacing="0" style="width:100%">
+                             <tr class="border-bottom">
+                              {{ utils.formatNumber(element.total) }}
+                             </tr>
+                             <tr>
+                              {{ utils.formatNumber(element.totalWeight) }}
+                             </tr>
+                          </table>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef class="fw-600 text-center custom-footer-total footer-color">
+                          <div>{{utils.formatNumber(totalValue)}}</div>
+                          <div>{{utils.formatNumber(totalWeight)}}</div>
+                          <div>{{utils.formatNumber(totalAverage)}}</div>
+                        </td>
+                      </ng-container>
+
+                      <ng-container *ngFor="let date of dates; let i = index">
+                        <ng-container matColumnDef="value0To6-{{i}}">
+                          <th mat-header-cell *matHeaderCellDef class="text-center">0h-6h</th>
+                          <td mat-cell class="text-center p-0" *matCellDef="let element">
+                            <table cellPadding="0" cellSpacing="0" style="width:100%">
+                               <tr class="border-bottom">
+                                {{ utils.formatNumber(element?.data[i]?.value0To6) }}
+                               </tr>
+                               <tr>
+                                {{ utils.formatNumber(element?.data[i]?.weight0To6) }}
+                               </tr>
+                            </table>
+                          </td>
+                          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center footer-color">
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].value0To6)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].weight0To6)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].average0To6)}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="value6To12-{{i}}">
+                          <th mat-header-cell *matHeaderCellDef class="text-center">6h-12h</th>
+                          <td mat-cell class="text-center p-0" *matCellDef="let element">
+                            <table cellPadding="0" cellSpacing="0" style="width:100%">
+                               <tr class="border-bottom">
+                                {{ utils.formatNumber(element?.data[i]?.value6To12) }}
+                               </tr>
+                               <tr>
+                                {{ utils.formatNumber(element?.data[i]?.weight6To12) }}
+                               </tr>
+                            </table>
+                          </td>
+                          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center footer-color">
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].value6To12)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].weight6To12)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].average6To12)}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="value12To18-{{i}}">
+                          <th mat-header-cell *matHeaderCellDef class="text-center">12h-18h</th>
+                          <td mat-cell class="text-center p-0" *matCellDef="let element">
+                            <table cellPadding="0" cellSpacing="0" style="width:100%">
+                               <tr class="border-bottom">
+                                {{ utils.formatNumber(element?.data[i]?.value12To18) }}
+                               </tr>
+                               <tr>
+                                {{ utils.formatNumber(element?.data[i]?.weight12To18) }}
+                               </tr>
+                            </table>
+                          </td>
+                          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center footer-color">
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].value12To18)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].weight12To18)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].average12To18)}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="value18To24-{{i}}">
+                          <th mat-header-cell *matHeaderCellDef class="text-center">18h-24h</th>
+                          <td mat-cell class="text-center p-0" *matCellDef="let element">
+                            <table cellPadding="0" cellSpacing="0" style="width:100%">
+                               <tr class="border-bottom">
+                                {{ utils.formatNumber(element?.data[i]?.value18To24) }}
+                               </tr>
+                               <tr>
+                                {{ utils.formatNumber(element?.data[i]?.weight18To24) }}
+                               </tr>
+                            </table>
+                          </td>
+                          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center footer-color">
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].value18To24)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].weight18To24)}}</div>
+                            <div *ngIf="totalValues[i]">{{utils.formatNumber(totalValues[i].average18To24)}}</div>
+                          </td>
+                        </ng-container>
+                      </ng-container>
+
+                      <tr mat-header-row
+                        *matHeaderRowDef="['header-row-index', 'header-row-vehicleNumber', 'header-row-total', 'header-row-time']; sticky: true">
+                      </tr>
+                      <tr mat-header-row *matHeaderRowDef="hearder; sticky: true">
+                      </tr>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                      <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                    </table>
+                    <app-empty *ngIf="!dataSource || dataSource?.length == 0"></app-empty>
+                  </section>
+                  <div class="mt-4" style ="display: none;">
+                    <div>
+                      - Tổng số chuyến đã vận chuyển: <span class="fw-600">{{utils.formatNumber(totalValue)}}</span> chuyến
+                    </div>
+                    <div>
+                      - Tổng khối lượng dăm đã vận chuyển: <span class="fw-600">{{utils.formatNumber(totalWeight)}}</span> Kg
+                    </div>
+                    <div>
+                      - Khối lượng trung bình: <span class="fw-600">{{utils.formatNumber(totalAverage)}}</span> Kg/xe
+                    </div>
+                  </div>
+                </div>
+              </nz-tab>
+              <nz-tab nzTitle="Danh sách phiếu xuất">
+                <div class="row" [appPermission]="ORDER_SELL_RIGHTS.CHI_TIET">
+                  <div class="d-flex flex-wrap d-gap d-space-bw my-2">
+                    <div>
+                      Tổng số phiếu: {{ totalExport }}
+                    </div>
+                    <div class="d-flex d-gap-2 flex-wrap mt-1">
+                      <div class="d-flex flex-row flex-grow-1">
+                        <nz-range-picker nzFormat="dd/MM/yyyy" [nzRanges]="rangePresets" [(ngModel)]="selectedRange"
+                          (ngModelChange)="onDateRangeChange($event)" [nzPlaceHolder]="['Từ ngày', 'Đến ngày']">
+                        </nz-range-picker>
+                      </div>
+
+                      <div class="d-flex flex-row flex-grow-1">
+                        <nz-select (ngModelChange)="onStateChange($event)" [nzMaxTagCount]="maxTagCount"
+                          nzMode="multiple" [nzMaxTagPlaceholder]="tagPlaceHolder" nzPlaceHolder="Trạng thái"
+                          [(ngModel)]="filterExport.States">
+                          <nz-option *ngFor="let item of LIST_NEW_STATE" [nzLabel]="item.name" [nzValue]="item.value">
+                          </nz-option>
+                        </nz-select>
+                        <ng-template #tagPlaceHolder let-selectedList>+{{ selectedList.length }}</ng-template>
+                      </div>
+
+                      <div class="d-flex flex-row flex-grow-1">
+                        <nz-select (ngModelChange)="onVehicleChange($event)" nzShowSearch nzAllowClear
+                          nzPlaceHolder="Biển số xe" [(ngModel)]="filterExport.VehicleCode">
+                          <nz-option *ngFor="let type of listVehicle" [nzLabel]="type.code" [nzValue]="type.code">
+                          </nz-option>
+                        </nz-select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="wraper-table" style="overflow-x: auto;">
+                    <table class="table table-hover" *ngIf="paginationResult && paginationResult.data">
+                      <thead>
+                        <tr>
+                          <th>Mã phiếu</th>
+                          <th>Ngày giờ xuất</th>
+                          <th>Biển số xe</th>
+                          <th class="text-right">Cân lần 1</th>
+                          <th class="text-right">Cân lần 2</th>
+                          <th class="text-right">Khối lượng hàng</th>
+                          <th class="text-right">ĐVT</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of paginationResult?.data">
+                          <td>{{ item.code }}</td>
+                          <td>{{ item?.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                          <td>{{ item?.vehicleCode }}</td>
+                          <td class="text-right">{{ utils.formatNumber(item?.scale?.weight1) }}</td>
+                          <td class="text-right">{{ utils.formatNumber(item?.scale?.weight2) }}</td>
+                          <td class="text-right">{{ utils.formatNumber(item?.scale?.weight) }}</td>
+                          <td class="text-right">
+                            <span *ngFor="let od of item?.orderDetails">
+                              {{od?.unit?.name}}<br />
+                            </span>
+                          </td>
+                          <td>
+                            <div *ngIf="STATE_ORDER_NEW[item?.state]" class="label-status text-center"
+                              [style.background]="STATE_ORDER_NEW[item?.state].background"
+                              [style.color]="STATE_ORDER_NEW[item?.state].color">
+                              {{ STATE_ORDER_NEW[item?.state].name }}
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <app-empty *ngIf="!paginationResult || paginationResult?.data?.length == 0"></app-empty>
+                  </div>
+                  <div class="float-end" *ngIf="paginationResult">
+                    <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+                      [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+                      (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+                  </div>
+                </div>
+              </nz-tab>
+              <nz-tab nzTitle="Theo dõi hành trình">
+                <app-tracking-journey [appPermission]="ORDER_DELIVERY_RIGHTS.CHI_TIET_HANH_TRINH" [batchCode]="code"
+                  [showMap]="showMap"></app-tracking-journey>
+              </nz-tab>
+              <nz-tab nzTitle="Danh sách file">
+                <div class="row" [appPermission]="ORDER_DELIVERY_RIGHTS.CHI_TIET_FILE">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Kiểu</th>
+                        <th>Kích thước</th>
+                        <th>Ngày tạo</th>
+                        <th>Người tạo</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of datafiles;index as i;">
+                        <td>{{i+1}}</td>
+                        <td>
+                          {{  item?.attachment?.name.length > 30 ? item?.attachment?.name.substring(0, 30) + '...' : item?.attachment?.name }}
+                        </td>
+                        <td>{{item?.attachment?.type}}</td>
+                        <td>{{ formatFileSize(item?.attachment?.size)}}</td>
+                        <td>{{item?.attachment?.createDate | date : 'dd/MM/yyyy HH:mm'}}</td>
+                        <td>{{item?.attachment?.createBy}}</td>
+                        <td>
+                          <i (click)="removeFile(item.attachment.id)" class="action-icon bi bi-trash3"
+                            [appPermission]="ORDER_DELIVERY_RIGHTS.DELETE_FILE"></i>
+                          <i (click)="downloadFile(item)" class="action-icon bi bi-download"
+                            [appPermission]="ORDER_DELIVERY_RIGHTS.DOWNLOAD_FILE"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <app-empty *ngIf="!datafiles || datafiles.length == 0"></app-empty>
+                </div>
+              </nz-tab>
+              <nz-tab nzTitle="Dăm xuống tàu">
+                <app-leave-ship *ngIf="selectedRangeShip.length" [selectedRangeShip]="selectedRangeShip"
+                  [startDateChil]="startDateChil" [endDateChil]="endDateChil"
+                  [appPermission]="ORDER_DELIVERY_RIGHTS.CHI_TIET_DAM_XUONG_TAU">
+                </app-leave-ship>
+              </nz-tab>
+            </nz-tabset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

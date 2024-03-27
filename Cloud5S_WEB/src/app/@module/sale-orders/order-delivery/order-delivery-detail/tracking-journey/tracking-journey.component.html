@@ -1,0 +1,95 @@
+<div class="tracking-journey-container" #containerMap>
+  <div class="menu-icon" (click)="toggleMenuMap()">
+    <i class="bi bi-list"></i>
+  </div>
+  <div class="right-panel" [ngClass]="openMenu ? 'open-menu' : 'close-menu'">
+    <div class="hearder-map-menu">
+      <i (click)="toggleMenuMap()" class="bi bi-x-lg"></i>
+      <img src="../../../../assets/img/logo.png" />
+    </div>
+    <div class="content-menu" role="tabpanel" aria-labelledby="info-tab">
+      <div class="mt-2">
+        <nz-select (ngModelChange)="getOrderTracking($event)" nzShowSearch nzAllowClear nzPlaceHolder="Biển số xe"
+          [(ngModel)]="vehicleCode">
+          <nz-option *ngFor="let type of listVehicle" [nzLabel]="type.code" [nzValue]="type.code">
+          </nz-option>
+        </nz-select>
+      </div>
+      <div class="element-content scroll-50">
+        <div class="text-lg fw-bold title-vehicle">
+          <i class="bi-card-checklist"></i>
+          Danh sách đang vận chuyển
+        </div>
+        <div class="wrapper-table">
+          <nz-table #beingTransported [nzShowPagination]="false" [nzPageSize]="20" [nzShowPagination]="true"
+            [nzData]="listData?.being_transported">
+            <thead>
+              <tr>
+                <th>Mã phiếu</th>
+                <th>Biển số xe</th>
+                <th>Trọng lượng</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of beingTransported.data"
+                (click)="getHistory(data, (selected?.code === data?.code && selected?.vehicleCode === data?.vehicleCode))"
+                [ngClass]="(selected?.code === data?.code && selected?.vehicleCode === data?.vehicleCode) ? 'selected-bill' : ''">
+                <td>{{ data.code }}</td>
+                <td>{{ data.vehicleCode }}</td>
+                <td>{{ utils.formatNumber(data.weight) }} Kg</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+
+      </div>
+      <div class="element-content scroll-50">
+        <div class="text-lg fw-bold title-vehicle">
+          <i class="bi-card-list"></i>
+          Danh sách phiếu xuất đã hoàn tất
+        </div>
+        <div class="wrapper-table">
+          <nz-table #finished [nzShowPagination]="false" [nzPageSize]="20" [nzShowPagination]="true"
+            [nzData]="listData?.finished">
+            <thead>
+              <tr>
+                <th>Mã phiếu</th>
+                <th>Biển số xe</th>
+                <th>Trọng lượng</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of finished.data"
+                (click)="getHistory(data, (selected?.code === data?.code && selected?.vehicleCode === data?.vehicleCode))"
+                [ngClass]="(selected?.code === data?.code && selected?.vehicleCode === data?.vehicleCode) ? 'selected-bill' : ''">
+                <td>{{ data.code }}</td>
+                <td>{{ data.vehicleCode }}</td>
+                <td>{{ utils.formatNumber(data.weight) }} Kg</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="relative">
+    <div class="wrapper-btn-locations">
+      <div (click)="drawMarkerLocation('vjc')" class="btn-show-locations"
+        [ngClass]="showLocation.vjc ? 'selected-mixer' : ''">
+        <i class="bi-building"></i>
+        <div>Công ty VJC</div>
+      </div>
+      <div (click)="drawMarkerLocation('tien_sa')" class="btn-show-locations"
+        [ngClass]="showLocation.tien_sa ? 'selected-poured' : ''">
+        <i class="bi-tsunami"></i>
+        <div>Cảng tiên sa</div>
+      </div>
+      <div (click)="drawMarkerLocation('drive_online')" class="btn-show-locations"
+        [ngClass]="showLocation.drive_online ? 'selected-pouring' : ''">
+        <i class="bi-globe"></i>
+        <div>Lái xe online</div>
+      </div>
+    </div>
+    <div [style.width]="width" [style.height]="'calc(100vh - 120px)'" #map></div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+.print-templates {
+    .header {
+        display: flex;
+        justify-content: space-between;
+        .hearder-left {
+            .title {
+                font-weight: 600;
+                font-size: 15px;
+            }
+            .text {
+                font-weight: 400;
+                font-size: 14px;
+            }
+            
+        }
+        
+        .hearder-right {
+           text-align: center;
+            .title {
+                font-weight: 600;
+                font-size: 15px;
+            }
+            .text {
+                font-weight: 400;
+                font-size: 14px;
+            }
+            
+        }
+    }
+}

@@ -1,0 +1,156 @@
+<div class="card" [appPermission]="ORDER_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        {{'content.business.plan_management.list.title' | translate}}
+      </div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button type="button" class="btn btn-primary" (click)="onUpdate()">
+          <i class="bi bi-check-lg"></i>{{'content.business.plan_management.list.save' | translate}}
+        </button>
+        <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          {{'content.business.plan_management.list.download_excel' | translate}}
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-wrap d-gap-2" style="width: 340px;">
+        <nz-range-picker nzFormat="dd/MM/yyyy HH:mm:ss" [nzShowTime]="true" [(ngModel)]="filter.selectedRange"
+          [nzRanges]="rangePresets"
+          [nzPlaceHolder]="['content.common.from_date'| translate, 'content.common.to_date'| translate]">
+        </nz-range-picker>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1 multi-dropdown">
+        <nz-select [nzMaxTagCount]="maxTagCount" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+          [nzPlaceHolder]="'content.business.plan_management.list.status'| translate" [(ngModel)]="filter.States">
+          <nz-option *ngFor="let item of LIST_STATE" [nzLabel]="item.name" [nzValue]="item.value"></nz-option>
+        </nz-select>
+        <ng-template #tagPlaceHolder let-selectedList>+ {{ selectedList.length }}</ng-template>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear [nzPlaceHolder]="'content.business.plan_management.list.mixer'| translate"
+          [(ngModel)]="filter.MixerCode">
+          <nz-option *ngFor="let mixer of listMixerFilter" [nzLabel]="mixer.name" [nzValue]="mixer.name">
+          </nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear [nzPlaceHolder]="'content.business.plan_management.list.client'| translate"
+          [(ngModel)]="filter.PartnerCode">
+          <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name" [nzValue]="partner.code">
+          </nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear
+          [nzPlaceHolder]="'content.business.plan_management.list.product'| translate" [(ngModel)]="filter.ItemCode">
+          <nz-option *ngFor="let item of listItemAll" [nzLabel]="item.name" [nzValue]="item.code">
+          </nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <input (keyup.enter)="search()" type="text" class="form-control" [(ngModel)]="filter.keyWord"
+            [placeholder]="'content.common.placeholder_search' | translate" />
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+      <table mat-table [dataSource]="paginationResult.data"
+        *ngIf="paginationResult && paginationResult.data?.length > 0" class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="mixer">
+          <th mat-header-cell *matHeaderCellDef class="text-center">
+            {{'content.business.plan_management.list.mixer' | translate}}</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <div href="#">
+              <select class="form-select" (change)="onSelectMixer($event, element)"
+                [disabled]="!isEnableSelect(element)">
+                <option value="">Chọn máy trộn</option>
+                <option *ngFor="let item of listMixerAll" [value]="item.code"
+                  [selected]="item.code == element.mixer?.code">{{item.name}}</option>
+              </select>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>{{'content.business.plan_management.list.order_code' | translate}}</th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" (click)="openDetail(element?.code)" class="cursor-pointer text-primary">{{
+              element.code
+            }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createDate">
+          <th mat-header-cell *matHeaderCellDef>{{'content.business.plan_management.list.order_date' | translate}}</th>
+          <td mat-cell *matCellDef="let element">{{ element.createDate | date : 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="pourDate">
+          <th mat-header-cell *matHeaderCellDef>{{'content.business.plan_management.list.pour_date' | translate}}</th>
+          <td mat-cell *matCellDef="let element">{{ element.pourDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="itemName">
+          <th mat-header-cell *matHeaderCellDef>{{'content.business.plan_management.list.product' | translate}}</th>
+          <td mat-cell *matCellDef="let element">{{ element.itemName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="orderNumber">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            {{'content.business.plan_management.list.quantity_ordered' | translate}}</th>
+          <td mat-cell *matCellDef="let element" class="text-right text-danger">{{ element.orderNumber | number }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="pourLocation">
+          <th mat-header-cell *matHeaderCellDef>{{'content.business.plan_management.list.pour_location' | translate}}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.pourLocation }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="partnerName">
+          <th mat-header-cell *matHeaderCellDef>{{'content.business.plan_management.list.client' | translate}}</th>
+          <td mat-cell *matCellDef="let element">{{ element.partnerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef class="text-center">
+            {{'content.business.plan_management.list.status' | translate}}</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <div *ngIf="STATE_ORDER[element?.state]" class="label-status"
+              [style.background]="STATE_ORDER[element?.state].background"
+              [style.color]="STATE_ORDER[element?.state].color">
+              {{ STATE_ORDER[element?.state].name }}
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

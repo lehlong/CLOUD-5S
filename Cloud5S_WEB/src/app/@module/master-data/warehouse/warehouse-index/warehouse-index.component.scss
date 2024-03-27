@@ -1,0 +1,26 @@
+
+
+table {
+  width: 100%;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .search-box{
+      width:93vw!important;
+      min-width:100%!important;
+  }
+  .card-function{
+      justify-content: flex-end;
+      width:100%;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+
+}
+
+
+@media only screen and (min-width: 1025px) {
+
+}

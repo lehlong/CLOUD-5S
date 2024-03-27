@@ -1,0 +1,103 @@
+<div class="print-templates" id="export-print">
+  <h1 style="text-align: center; align-items: center">Bảng Kê Bán Hàng Ngày {{ getDateRange() }}</h1>
+
+  <div class="pb-3 mt-2">
+    <div class="row">
+      <table class="table-print">
+        <thead>
+          <tr>
+            <th><div class="vertical-cell">NT</div></th>
+            <th><div class="vertical-cell">Giờ</div></th>
+
+            <th><div class="vertical-cell abc1">Số phiếu</div></th>
+            <th><div class="vertical-cell">Số PM</div></th>
+            <th><div class="vertical-cell">Tên KH</div></th>
+            <th><div class="vertical-cell abc1">Nhân viên KD</div></th>
+            <th><div class="vertical-cell">BKS</div></th>
+            <th><div class="vertical-cell">Tên LX</div></th>
+            <th><div class="vertical-cell abc">Số lượng theo HĐ</div></th>
+            <th><div class="vertical-cell">Độ sụt</div></th>
+            <th><div class="vertical-cell">ĐVT</div></th>
+            <th><div class="vertical-cell">M100R28</div></th>
+            <th><div class="vertical-cell">M100R28. CDC</div></th>
+            <th><div class="vertical-cell">M150R7</div></th>
+            <th><div class="vertical-cell">M200R7</div></th>
+            <th>Cộng số lượng</th>
+            <th>Đơn giá bán (Chưa VAT)</th>
+            <th>Thành tiền</th>
+            <th>VAT</th>
+            <th>Chiết khấu</th>
+            <th class="abz">Tổng cộng tiền hàng 5</th>
+            <th>Bán công nợ</th>
+            <th>Hạng mục công trình</th>
+            <th>Thị trưởng</th>
+            <th>Xe bơm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of dayExportData?.data || []" [ngClass]="{'total-row': row.date === 'Tổng'}">
+            <td>{{ row.date }}</td>
+            <td>{{ row.time }}</td>
+
+            <td>{{ row?.ordinalNumber | number }}</td>
+            <td>{{ row.pmNumber }}</td>
+            <td>{{ row.customerName }}</td>
+            <td>{{ row.createBy }}</td>
+            <td>{{ row.vehicleCode }}</td>
+            <td>{{ row.driverName }}</td>
+            <td>{{ row?.orderNumber || 0 | number }}</td>
+            <td>{{ row?.slump || '' }}</td>
+            <td>{{ row.unit }}</td>
+            <td>{{ row?.m100R28 || 0 | number }}</td>
+            <td>{{ row?.m100R28_CDC || 0 | number }}</td>
+            <td>{{ row?.m150R7 || 0 | number }}</td>
+            <td>{{ row?.m200R7 || 0 | number }}</td>
+            <td>{{ row?.quantity || 0 | number }}</td>
+            <td>{{ row?.price || 0 | number }}</td>
+            <td>{{ row?.totalPrice || 0 | number }}</td>
+            <td>{{ row.taxVat }}</td>
+            <td>{{ row.discount }}</td>
+            <td>{{ row?.taxedTotalPrice || 0 | number }}</td>
+            <td>{{ row?.debt || 0 | number }}</td>
+            <td>{{ row.orderType }}</td>
+            <td>{{ row.area }}</td>
+            <td>{{ row.pumpVehicle }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer-print">
+    <div class="signature-container">
+      <div class="title-signature">Chủ tịch HĐQT</div>
+      <div class="signature">(Ký, họ tên)</div>
+      <div class="name">Nguyễn Trung Hiếu</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Tổng giám đốc</div>
+      <div class="signature">(Ký, họ tên)</div>
+      <div class="name">Nguyễn Trung Hiếu</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Kế toán trưởng TCT</div>
+      <div class="signature">(Ký, họ tên)</div>
+      <div class="name">Trần Cao Tuệ</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Kế toán trưởng NM</div>
+      <div class="signature">(Ký, họ tên)</div>
+      <div class="name">Nguyễn Tiến Quang</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Kế toán kiểm soát</div>
+      <div class="signature">(Ký, họ tên)</div>
+      <div class="name">Phan Xuân Phát</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Người lập</div>
+      <div class="signature">(Ký, họ tên)</div>
+      <div class="name">Nguyễn Xuân Thịnh</div>
+    </div>
+  </div>
+</div>

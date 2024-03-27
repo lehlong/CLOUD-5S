@@ -1,0 +1,442 @@
+<div class="card container-enter-production-infomation" [style.width.px]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Nhập thông tin sản xuất
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="showButton.cancel && !edit">
+          <button (click)="unLatchData()" type="button" class="btn btn-danger" submitForm>
+            <i class="bi bi-check-circle"></i>Huỷ chốt thông tin
+          </button>
+        </div>
+        <div *ngIf="showButton.confirm && !edit">
+          <button (click)="latchData()" type="button" class="btn btn-success" submitForm>
+            <i class="bi bi-check-circle"></i>Chốt thông tin
+          </button>
+        </div>
+        <div *ngIf="showButton.edit && !edit">
+          <button
+            (click)="handleEdit(true)"
+            [appPermission]="PRODUCTION_MANAGER.CHINH_SUA_CA_SX"
+            type="button"
+            class="btn btn-primary"
+            submitForm>
+            <i class="bi bi-check-circle"></i>Chỉnh sửa thông tin
+          </button>
+        </div>
+        <div *ngIf="edit">
+          <button
+            (click)="saveData()"
+            [appPermission]="PRODUCTION_MANAGER.CHINH_SUA_CA_SX"
+            type="button"
+            class="btn btn-primary"
+            submitForm>
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div *ngIf="edit">
+          <button (click)="handleEdit(false)" type="button" class="btn btn-secondary" submitForm>
+            <i class="bi bi-check-circle"></i>Chi tiết
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="mt-2">
+      <div class="row g-3 detail-container">
+        <div class="d-flex flex-wrap" style="gap: 15px">
+          <div>
+            <label class="form-label">Ngày sản xuất</label>
+            <div>
+              <nz-date-picker
+                [disabled]="edit"
+                [nzStatus]="submittedConfirm && !filter.processDate ? 'error' : ''"
+                nzFormat="dd/MM/yyyy"
+                [(ngModel)]="filter.processDate"
+                nzPlaceHolder="Ngày sản xuất"></nz-date-picker>
+            </div>
+          </div>
+
+          <div style="width: 165px">
+            <label class="form-label">Ca sản xuất</label>
+            <div>
+              <nz-select
+                [disabled]="edit"
+                [nzStatus]="
+                  submittedConfirm && (!filter.WorkingShiftCode || filter.WorkingShiftCode == '') ? 'error' : ''
+                "
+                nzShowSearch
+                nzAllowClear
+                nzPlaceHolder="Ca sản xuất"
+                [(ngModel)]="filter.WorkingShiftCode">
+                <nz-option
+                  *ngFor="let element of listWorkingShift"
+                  [nzLabel]="element?.name"
+                  [nzValue]="element?.code"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Tổng khối lượng sản xuất (kg)</label>
+            <div class="d-flex">
+              <app-input-clear
+                [disabled]="true"
+                style="width: 220px"
+                [value]="sumTotalProduction()"
+                placeholder="Tổng khối lượng sản xuất (kg)"></app-input-clear>
+              <span *ngIf="!edit" (click)="search()" class="input-group-text ms-2"><i class="bi bi-search"></i></span>
+            </div>
+          </div>
+
+          <div *ngIf="edit">
+            <label class="form-label">Ghi chú</label>
+            <div class="d-flex">
+              <app-input-clear style="width: 220px" [(value)]="filter.note" placeholder="Ghi chú"></app-input-clear>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fw-600 mt-3">Lượng sản xuất trực tiếp</div>
+    <div class="mt-2">
+      <nz-table #nzTable [nzPageSize]="2000" [nzShowPagination]="false" [nzData]="dataTable?.choppings || []">
+        <thead>
+          <tr>
+            <th>Mã phiếu</th>
+            <th>Ngày nhập</th>
+            <th>Ca nhập</th>
+            <th>Biển sổ xe</th>
+            <th>Nhà cung cấp</th>
+            <th>Hàng hoá</th>
+            <th>Khu vực</th>
+            <th>Trạng thái</th>
+            <th class="text-right">KL hàng</th>
+            <th class="text-right">Lượng SXTT</th>
+            <!-- <th class="text-right">Lượng hạ bãi</th> -->
+            <th>ĐV tính</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="dataTable?.choppings?.length; else noDataTemplate">
+          <tr *ngFor="let data of nzTable.data">
+            <td>{{ data?.orderCode }}</td>
+            <td>{{ data.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ data?.orderShift }}</td>
+            <td>{{ data?.vehicleCode }}</td>
+            <td>{{ data?.partnerName }}</td>
+            <td>{{ data?.itemName }}</td>
+            <td>{{ data?.areaName }}</td>
+            <td>{{ STATE_LIST_PURCHASE_ORDERS[data?.state].name }}</td>
+            <td class="text-right">{{ utils.formatNumber(data?.orderNumber) }}</td>
+            <td class="text-right">{{ utils.formatNumber(data?.choppingNumber) }}</td>
+            <!-- <td class="text-right">{{utils.formatNumber(data?.pourNumber)}}</td> -->
+            <td>{{ data?.unitName }}</td>
+          </tr>
+          <tr>
+            <td colspan="7"></td>
+            <td class="text-left fw-500">Tổng</td>
+            <td class="text-right fw-500">
+              {{ utils.formatNumber(SumValueNumber(dataTable?.choppings, 'orderNumber')) }}
+            </td>
+            <td class="text-right fw-500">
+              {{ utils.formatNumber(SumValueNumber(dataTable?.choppings, 'choppingNumber')) }}
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="fw-600 mt-3">Lượng sản xuất từ bãi</div>
+    <div class="mt-2">
+      <nz-table
+        class="table-parent"
+        [nzShowPagination]="false"
+        #expandTable
+        [nzPageSize]="2000"
+        [nzData]="dataTable?.pours || []">
+        <thead>
+          <tr>
+            <th style="width: 70px"></th>
+            <th style="width: 60px">Lô</th>
+            <th style="width: 80px">Dãy</th>
+            <th style="width: 150px">Hàng hoá</th>
+            <th>Khu vực</th>
+            <th style="width: 150px" class="text-right">Khối lượng tồn</th>
+            <th style="width: 150px" class="text-right">Khối lượng xuất</th>
+            <th style="width: 150px">ĐV tính</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="dataTable?.pours?.length; else noDataTemplate">
+          <ng-container *ngFor="let data of expandTable.data">
+            <tr>
+              <td style="width: 70px" [nzShowExpand]="!!data.pourLines" [(nzExpand)]="data.expand"></td>
+              <td style="width: 60px">{{ data.pourSectionName }}</td>
+              <td style="width: 80px"></td>
+              <td style="width: 150px"></td>
+              <td></td>
+              <td style="width: 150px" class="text-right fw-500">{{ utils.formatNumber(data.totalPrevAmount) }}</td>
+              <td style="width: 150px" class="text-right fw-500">{{ utils.formatNumber(data.totalAmount) }}</td>
+              <td style="width: 150px">kg</td>
+            </tr>
+            <ng-container *ngFor="let pourLine of data.pourLines">
+              <tr [nzExpand]="data.expand">
+                <td style="width: 70px" [nzShowExpand]="!!pourLine.items" [(nzExpand)]="pourLine.expand"></td>
+                <td style="width: 60px"></td>
+                <td style="width: 80px">{{ pourLine.pourLineName }}</td>
+                <td style="width: 150px"></td>
+                <td [style.width.px]="widthColums" style="max-width: unset !important"></td>
+                <td class="text-right" style="width: 150px">{{ utils.formatNumber(pourLine.totalPrevAmount) }}</td>
+                <td *ngIf="!edit" class="text-right" style="width: 150px">
+                  {{ utils.formatNumber(pourLine.totalAmount) }}
+                </td>
+                <td *ngIf="edit" style="width: 150px">
+                  <div style="display: flex; gap: 5px">
+                    <app-input-number
+                      class="text-right"
+                      [(valueInput)]="pourLine.totalAmount"
+                      (valueInputChange)="changeToTalAmount(data, pourLine, $event)"
+                      [notHandle]="true" />
+                    <span
+                      (click)="fillTotalLine(data, pourLine)"
+                      style="line-height: 2.4; cursor: pointer"
+                      nz-icon
+                      nzType="form"
+                      nzTheme="outline"></span>
+                  </div>
+                </td>
+                <td style="width: 150px">kg</td>
+              </tr>
+              <tr [nzExpand]="pourLine.expand && data.expand">
+                <ng-container *ngFor="let item of pourLine.items">
+                  <tr>
+                    <td style="width: 70px" [nzShowExpand]="!!item.orders" [(nzExpand)]="item.expand"></td>
+                    <td style="width: 60px"></td>
+                    <td style="width: 80px"></td>
+                    <td style="width: 150px">{{ item?.itemName }}</td>
+                    <td [style.width.px]="widthColums" style="max-width: unset !important">{{ item?.areaName }}</td>
+                    <td style="width: 150px" class="text-right">{{ utils.formatNumber(item?.prevAmount) }}</td>
+                    <td *ngIf="!edit" style="width: 150px" class="text-right">
+                      {{ utils.formatNumber(item?.amount) }}
+                    </td>
+                    <td *ngIf="edit" style="width: 150px">
+                      <div style="display: flex; gap: 5px">
+                        <app-input-number
+                          class="text-right"
+                          [(valueInput)]="item.amount"
+                          [notHandle]="true"
+                          (valueInputChange)="changeAmount(item)" />
+                        <span
+                          (click)="fillTotal(item)"
+                          style="line-height: 2.4; cursor: pointer"
+                          nz-icon
+                          nzType="form"
+                          nzTheme="outline"></span>
+                      </div>
+                    </td>
+                    <td style="width: 150px">{{ item?.unitName }}</td>
+                  </tr>
+                  <tr [nzExpand]="item.expand && data.expand && pourLine.expand">
+                    <nz-table
+                      class="table-child"
+                      [nzShowPagination]="false"
+                      [nzPageSize]="2000"
+                      #nestedTableLine
+                      [nzData]="item.orders">
+                      <!-- <thead>
+                        <tr>
+                          <th style="width: 70px"></th>
+                          <th style="min-width: 71px">Ngày nhập</th>
+                          <th style="width: 150px">Tên ca</th>
+                          <th style="width: 150px">Mã đơn</th>
+                          <th style="width: 150px">Biển số xe</th>
+                          <th style="width: 150px" class="text-right">Khối lượng tồn</th>
+                          <th style="width: 150px" class="text-right">Khối lượng xuất</th>
+                          <th style="width: 150px">ĐV tính</th>
+                        </tr>
+                      </thead> -->
+                      <tbody *ngIf="nestedTableLine.data?.length; else noDataTemplate">
+                        <ng-template ngFor let-data [ngForOf]="nestedTableLine.data">
+                          <tr>
+                            <td style="width: 70px"></td>
+                            <td style="text-align: right">{{ data.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                            <td style="width: 130px">{{ data?.shiftName }}</td>
+                            <td style="width: 130px">{{ data?.orderCode }}</td>
+                            <td style="width: 130px">{{ data?.vehicleCode }}</td>
+                            <td style="width: 130px" class="text-right">{{ utils.formatNumber(data?.prevAmount) }}</td>
+                            <td *ngIf="!edit" style="width: 150px" class="text-right">
+                              {{ utils.formatNumber(data?.amount) }}
+                            </td>
+                            <td *ngIf="edit" style="width: 150px">
+                              <div style="display: flex; gap: 5px">
+                                <app-input-number
+                                  class="text-right"
+                                  [(valueInput)]="data.amount"
+                                  [notHandle]="true"
+                                  (valueInputChange)="changeAmountOrder(data)" />
+                                <span
+                                  (click)="fillTotalItem(data)"
+                                  style="line-height: 2.4; cursor: pointer"
+                                  nz-icon
+                                  nzType="form"
+                                  nzTheme="outline"></span>
+                              </div>
+                            </td>
+                            <td style="width: 150px">kg</td>
+                          </tr>
+                        </ng-template>
+                      </tbody>
+                    </nz-table>
+                  </tr>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </ng-container>
+          <ng-container>
+            <tr>
+              <td style="width: 70px"></td>
+              <td style="width: 60px"></td>
+              <td style="width: 80px"></td>
+              <td style="width: 150px"></td>
+              <td class="text-right fw-500">Tổng</td>
+              <td style="width: 150px" class="text-right fw-500">
+                {{ utils.formatNumber(SumValueNumber(dataTable?.pours, 'totalPrevAmount')) }}
+              </td>
+              <td style="width: 150px" class="text-right fw-500">
+                {{ utils.formatNumber(SumValueNumber(dataTable?.pours, 'totalAmount')) }}
+              </td>
+              <td style="width: 150px">kg</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+
+    <!-- Chipper -->
+    <div class="fw-600 mt-3">
+      <p>Tổng khối lượng sản xuất : {{ utils.formatNumber(this.sumTotalProduction()) }}</p>
+    </div>
+    <div class="mt-2">
+      <nz-table #nzTable3 [nzPageSize]="2000" [nzShowPagination]="false" [nzData]="dataTable?.chippers || []">
+        <thead>
+          <tr>
+            <th>Mã máy băm</th>
+            <th>Tên máy băm</th>
+            <th>Số lượng</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="dataTable?.chippers?.length; else noDataTemplate">
+          <tr *ngFor="let data of nzTable3.data">
+            <td>{{ data?.code }}</td>
+            <td>{{ data?.name }}</td>
+            <td *ngIf="!edit">{{ utils.formatNumber(data?.amount) }}</td>
+            <td *ngIf="edit" style="width: 150px">
+              <div style="display: flex; gap: 5px">
+                <app-input-number
+                  class="text-right"
+                  [(valueInput)]="data.amount"
+                  (valueInputChange)="changeChipperAmount()" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td class="text-left fw-500">Tổng</td>
+            <td class="text-left fw-500" *ngIf="!edit">
+              {{ utils.formatNumber(SumValueNumber(dataTable?.chippers, 'amount')) }}
+            </td>
+            <td *ngIf="edit" class="td-showerr">
+              <app-input-number
+                class="text-right fw-500"
+                [disabled]="true"
+                [valueInput]="SumValueNumber(dataTable?.chippers, 'amount')" />
+            </td>
+            <td></td>
+          </tr>
+          <tr *ngIf="edit">
+            <td colspan="3" style="text-align: right">
+              <span *ngIf="sumTotalProduction() - SumValueNumber(dataTable?.chippers, 'amount') > 0">
+                Khối lượng còn lại :
+                {{ utils.formatNumber(sumTotalProduction() - SumValueNumber(dataTable?.chippers, 'amount')) }}
+              </span>
+              <br *ngIf="sumTotalProduction() - SumValueNumber(dataTable?.chippers, 'amount') > 0" />
+              <span *ngIf="showErr" class="showerr-chipper">Tổng lượng ở các máy băm khác tổng lượng sản xuất</span>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <!-- Chipper -->
+
+    <!-- add new -->
+    <div class="fw-600 mt-3">Lượng hạ bãi</div>
+    <div class="mt-2">
+      <nz-table #nzTable2 [nzPageSize]="2000" [nzShowPagination]="false" [nzData]="dataTable?.landZone || []">
+        <thead>
+          <tr>
+            <th>Mã phiếu</th>
+            <th>Ngày nhập</th>
+            <th>Ca nhập</th>
+            <th>Biển sổ xe</th>
+            <th>Nhà cung cấp</th>
+            <th>Hàng hoá</th>
+            <th>Khu vực</th>
+            <th>Trạng thái</th>
+            <th class="text-right">KL hàng</th>
+            <!-- <th class="text-right">Lượng SXTT</th> -->
+            <th class="text-right">Lượng hạ bãi</th>
+            <th class="text-right">Lô</th>
+            <th class="text-right">Dãy</th>
+            <th>ĐV tính</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="dataTable?.landZone?.length; else noDataTemplate">
+          <tr *ngFor="let data of nzTable2.data">
+            <td>{{ data?.orderCode }}</td>
+            <td>{{ data.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ data?.orderShift }}</td>
+            <td>{{ data?.vehicleCode }}</td>
+            <td>{{ data?.partnerName }}</td>
+            <td>{{ data?.itemName }}</td>
+            <td>{{ data?.areaName }}</td>
+            <td>{{ STATE_LIST_PURCHASE_ORDERS[data?.state].name }}</td>
+            <td class="text-right">{{ utils.formatNumber(data?.orderNumber) }}</td>
+            <!-- <td class="text-right">{{utils.formatNumber(data?.choppingNumber)}}</td> -->
+            <td class="text-right">{{ utils.formatNumber(data?.pourNumber) }}</td>
+            <td class="text-right">{{ data?.pourSectionName }}</td>
+            <td class="text-right">{{ data?.pourLineName }}</td>
+            <td>{{ data?.unitName }}</td>
+          </tr>
+          <tr>
+            <td colspan="7"></td>
+            <td class="text-left fw-500">Tổng</td>
+            <td class="text-right fw-500">
+              {{ utils.formatNumber(SumValueNumber(dataTable?.landZone, 'orderNumber')) }}
+            </td>
+            <td class="text-right fw-500">
+              {{ utils.formatNumber(SumValueNumber(dataTable?.landZone, 'pourNumber')) }}
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <!-- add new -->
+  </div>
+</div>
+<ng-template #noDataTemplate>
+  <tbody nz-table-placeholder>
+    <!-- Nội dung hiển thị khi không có dữ liệu -->
+    <tr>
+      <td [colSpan]="14" class="pb-0">
+        <div style="width: 100%; display: flex; justify-content: center; gap: 5px">
+          <div style="line-height: 1.9"><span nz-icon nzType="info-circle" nzTheme="outline"></span></div>
+          <div><span style="font-size: 13px; font-weight: 500; color: gray">Không có dữ liệu !</span></div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</ng-template>

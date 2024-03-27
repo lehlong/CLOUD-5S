@@ -1,0 +1,110 @@
+<div class="card" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-pencil-square"></i>
+        Chỉnh sửa menu
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onEdit()" type="button" class="btn btn-primary" [appPermission]="MENU_RIGHTS.CHINH_SUA">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="onDelete()" class="btn btn-danger" [appPermission]="MENU_RIGHTS.XOA">
+            <i class="bi bi-trash3"></i>Xóa
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selected.value"
+        (selectedIndexChange)="selected.setValue($event)">
+        <mat-tab label="Thông tin">
+          <form [formGroup]="nodeForm" (ngSubmit)="onEdit()">
+            <div>
+              <label for="inputText" class="col-form-label">Mã menu<span class="text-danger ms-1">*</span></label>
+              <div>
+                <input readonly [ngClass]="{'is-invalid': submitted && f['id'].errors}" type="text" class="form-control"
+                  formControlName="id" />
+                <div *ngIf="submitted && f['id'].errors" class="invalid-feedback">
+                  <div *ngIf="f['id']['errors']['required']">Không được để trống</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="inputEmail" class="col-form-label">Tên menu<span class="text-danger ms-1">*</span></label>
+              <div>
+                <input [ngClass]="{'is-invalid': submitted && f['name'].errors}" type="text" class="form-control"
+                  formControlName="name" />
+                <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                  <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="inputText" class="col-form-label">PID<span class="text-danger ms-1">*</span></label>
+              <div>
+                <input [ngClass]="{'is-invalid': submitted && f['pId'].errors}" type="text" class="form-control"
+                  formControlName="pId" readonly />
+                <div *ngIf="submitted && f['pId'].errors" class="invalid-feedback">
+                  <div *ngIf="f['pId']['errors']['required']">Không được để trống</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="inputEmail" class="col-form-label">Đường dẫn<span class="text-danger ms-1">*</span></label>
+              <div>
+                <input [ngClass]="{'is-invalid': submitted && f['url'].errors}" type="text" class="form-control"
+                  formControlName="url" />
+                <div *ngIf="submitted && f['url'].errors" class="invalid-feedback">
+                  <div *ngIf="f['url']['errors']['required']">Không được để trống</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="inputEmail" class="col-form-label">Icon<span class="text-danger ms-1">*</span></label>
+              <div>
+                <input [ngClass]="{'is-invalid': submitted && f['icon'].errors}" type="text" class="form-control"
+                  formControlName="icon" />
+                <div *ngIf="submitted && f['icon'].errors" class="invalid-feedback">
+                  <div *ngIf="f['icon']['errors']['required']">Không được để trống</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </mat-tab>
+        <mat-tab label="Phân quyền">
+          <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [checked]="isChecked(node)"
+                  (change)="todoLeafItemSelectionToggle(node)" />
+                <label class="form-check-label">
+                  {{ node.label }}
+                </label>
+              </div>
+            </mat-tree-node>
+            <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+              <div class="icon-tree" mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+                <i *ngIf="treeControl.isExpanded(node)" class="bi bi-chevron-down"></i>
+                <i *ngIf="!treeControl.isExpanded(node)" class="bi bi-chevron-right"></i>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [checked]="isChecked(node)"
+                  [indeterminate]="descendantsPartiallySelected(node)" (change)="todoItemSelectionToggle(node)" />
+                <label class="form-check-label">
+                  {{ node.label }}
+                </label>
+              </div>
+            </mat-tree-node>
+          </mat-tree>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

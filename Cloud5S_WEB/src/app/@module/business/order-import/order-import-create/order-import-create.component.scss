@@ -1,0 +1,134 @@
+.product-wraper-btn {
+  border: 1px solid transparent;
+  box-shadow: 0 2px rgba(0, 0, 0, 0.0156862745);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  height: 32px;
+  font-size: 13px;
+  border-radius: 2px;
+  color: rgba(0, 0, 0, 0.8509803922);
+  border-color: #d9d9d9;
+  background: #fff;
+  border-style: dashed;
+  width: 35%;
+  text-align: center;
+  line-height: 31px;
+  &:hover {
+    color: #1890ff;
+    border-color: #1890ff;
+  }
+}
+.wraper-table {
+  overflow: auto;
+  border-bottom: 1px solid #dee2e6;
+  border-radius: 3px;
+  table {
+    margin: 0px !important;
+    min-width: unset !important;
+    border-collapse: collapse !important;
+    border-style: hidden;
+    overflow: auto;
+    th {
+      font-weight: 500 !important;
+    }
+    .minus-field {
+      cursor: pointer;
+      color: #999;
+      font-size: 16px;
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+}
+.stock-edit-container {
+  padding-bottom: 80px;
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 155px);
+    .title {
+      margin-bottom: 20px !important;
+    }
+    .wraper-table {
+      overflow: auto;
+      border-bottom: 1px solid #dee2e6;
+      border-radius: 3px;
+      table {
+        margin: 0px !important;
+        min-width: unset !important;
+        border-collapse: collapse !important;
+        border-style: hidden;
+        overflow: auto;
+        th {
+          font-weight: 500 !important;
+        }
+        td {
+          input {
+            width: 60px;
+          }
+          &.money {
+            font-weight: 500 !important;
+          }
+        }
+      }
+    }
+  }
+  .detail-container {
+    .info-content {
+      border-left: 1px solid #dee2e6;
+      padding-bottom: 20px;
+      .label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        align-self: baseline;
+      }
+      .list-info {
+        display: flex;
+        border-bottom: 1px solid #dee2e6;
+        gap: 5px;
+        padding: 15.5px 10px;
+        align-items: baseline;
+
+        .value {
+          font-weight: 400;
+        }
+        &.title {
+          border: none !important;
+        }
+      }
+      .gap-50 {
+        gap: 50px !important;
+      }
+      
+    }
+    .import-input{
+      text-align: right;
+      padding: 5px;
+      label {
+        font-weight: 600;
+      }
+      input {
+        margin-top: 5px;
+        text-align: right;
+        padding-right: 8px;
+      }
+    }
+  }
+}
+.mb-10{
+  margin-bottom:10px;
+}
+.mt-3{
+  margin-top:3px;
+}
+.pr-4{
+  padding-right: 4px;
+}
+.pl-4{
+  padding-left: 4px;
+}

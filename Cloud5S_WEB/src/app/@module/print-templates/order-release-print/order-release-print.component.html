@@ -1,0 +1,159 @@
+<div class="print-templates" id="stock-export-print">
+  <div class="header-print">
+    <div class="hearder-left">
+      <div class="title-left">TỔNG CÔNG TY TNHH TRƯỜNG AN - THÚY DANH</div>
+      <div class="text">34 Nguyễn Sỹ Sách, TP Vinh, Nghệ An</div>
+    </div>
+    <div class="hearder-right">
+      <div class="text">
+        <span>Số serial: GH140777777</span>
+        <br />
+        <span>Số hóa đơn: 012345</span>
+      </div>
+    </div>
+  </div>
+  <div class="title-main">PHIẾU GIAO HÀNG</div>
+  <div class="row-separate">
+    <div class="row-separate-left w-50">
+      <div class="label">- <b>Khách hàng:</b> {{ orderDetail?.partner?.name }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-left w-50">
+      <div class="label">Số điện thoại: {{ orderDetail?.partner?.phoneNumber }}</div>
+      <div class="dot-line"></div>
+    </div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Địa điểm đổ hàng: {{ orderDetail?.pourLocation }}</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-separate">
+    <div class="row-separate-left w-30">
+      <div class="label">- Mác bê tông: {{ itemMain?.itemCode }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right w-30">
+      <div class="label">Độ sụt: {{ itemMain?.slump }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right w-30">
+      <div class="label">Ngày: {{ orderDetail?.pourDate | date : 'dd/MM/yyyy' }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right w-30">
+      <div class="label">Giờ: {{ orderDetail?.pourDate | date : 'hh:mm' }}</div>
+      <div class="dot-line"></div>
+    </div>
+  </div>
+  <div class="row-separate">
+    <div class="row-separate-left w-30">
+      <div class="label">- Số khối: {{ data?.mixNumber | number }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right w-30">
+      <div class="label">Lũy kế: {{ data?.accumulated | number }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right w-30">
+      <div class="label">Xe bồn: {{ data?.mixVehicleCode }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right w-30">
+      <div class="label">Số seal: {{ data?.sealNumber }}</div>
+      <div class="dot-line"></div>
+    </div>
+  </div>
+  <div class="row-separate">
+    <div class="row-separate-right w-50">
+      <div class="label">- Hạng mục: {{ orderDetail?.pourCategory }}</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right w-50">
+      <div class="label">Xe bơm: {{ data?.pumpVehicleCode }}</div>
+      <div class="dot-line"></div>
+    </div>
+  </div>
+  <div class="row-content">
+    <div class="label">- <b>Vật liệu:</b></div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-content">
+    <div class="label">
+      - Khối lượng định mức: Xi măng({{ itemFormula?.cement | number }}) x Đá({{ itemFormula?.stone | number }}) x
+      Cát({{ itemFormula?.sand | number }}) x Nước({{ itemFormula?.water | number }}) x Phụ gia({{
+        itemFormula?.admixture | number
+      }})
+    </div>
+    <div class="dot-line"></div>
+  </div>
+  <div>
+    <b>Chi phí sản phẩm, dịch vụ</b>
+  </div>
+  <table class="table-print">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên mặt hàng</th>
+        <th>Mã số</th>
+        <th>Đơn vị tính</th>
+        <th class="text-right">Số lượng</th>
+        <th class="text-right">Đơn giá</th>
+        <th class="text-right">Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of orderDetail.orderDetails; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ element?.item?.name }}</td>
+        <td>{{ element?.item?.code }}</td>
+        <td>{{ element?.item?.unit?.name }}</td>
+        <td class="text-right">{{ element?.orderNumber | number }}</td>
+        <td class="text-right">{{ element?.price | number }}</td>
+        <td class="text-right">{{ element?.sumMoney | number }}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="fw-600">Cộng:</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-right"></td>
+        <td class="text-right">{{ getTotalMoney() | number }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row-content">
+    <div class="label">- Tổng số tiền (viết bằng chữ):</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Số chứng từ gốc kèm theo:</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="date-sign">
+    <i></i>
+    .....,Ngày.......Tháng.......Năm 2023
+  </div>
+  <div class="footer-print">
+    <div class="signature-container">
+      <div class="title-signature">Khách hàng</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Tư vấn giám sát</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Lái xe</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Kế toán</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Trạm trộn</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+  </div>
+</div>

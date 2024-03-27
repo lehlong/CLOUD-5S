@@ -1,0 +1,172 @@
+<div class="card stock-edit-container" [style.width]="widthDeault">
+  <div class="card-body" [appPermission]="CONTRACT_RIGHTS.CHI_TIET">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Chi tiết hợp đồng
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="showButton.confirm" >
+          <button (click)="ConfirmState()" type="button" [style.color]="STATE_CONTRACT['DA_XAC_NHAN'].color"
+            [style.background]="STATE_CONTRACT['DA_XAC_NHAN'].background" class="btn" submitForm
+            [appPermission]="CONTRACT_RIGHTS.XAC_NHAN">
+            <i class="bi bi-check-circle"></i>Xác nhận
+          </button>
+        </div>
+        <div  *ngIf="showButton.edit">
+          <button (click)="showEdit()" type="button" class="btn btn-primary"
+            [appPermission]="CONTRACT_RIGHTS.CHINH_SUA">
+            <i class="bi bi-pencil-square"></i>Chỉnh sửa
+          </button>
+        </div>
+        <div  *ngIf="showButton.cancel">
+          <button (click)="cancelContract()" type="button" [style.color]="STATE_CONTRACT['DA_BI_HUY'].color"
+            [style.background]="STATE_CONTRACT['DA_BI_HUY'].background" class="btn"
+            [appPermission]="CONTRACT_RIGHTS.HUY">
+            <i class="bi bi-trash"></i>Hủy phiếu
+          </button>
+        </div>
+        <div >
+          <button (click)="printWarehouseReceipt()" type="button" class="btn print-btn">
+            <i class="bi bi-printer"></i>In phiếu
+          </button>
+        </div>
+        <div >
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3">
+      <div class="row g-3 detail-container">
+        <div class="main-content col-md-8 pr-2">
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-box"></i>
+                <span>Danh sách sản phẩm</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th class="text-right">Số lượng</th>
+                    <th>ĐVT</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of detailData?.details">
+                    <td>{{ product?.item?.code || '' }}</td>
+                    <td>{{ product?.item?.name || '' }}</td>
+                    <td class="text-right">{{ utils.formatNumber(product?.orderNumber) || '' }}</td>
+                    <td>{{ product?.item?.unit?.name || '' }}</td>
+                    <td>{{ utils.formatNumber(product?.price) || '' }}</td>
+                    <td>{{ utils.formatNumber(product?.orderNumber * product?.price) }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="4"></td>
+                    <td class="money fw-500">Tổng tiền</td>
+                    <td class="money fw-500">{{ getTotalMoney(detailData) }}</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="list-info d-space-bw mt-3">
+                <div class="label">Nội dung hợp đồng</div>
+                <div class="value">{{ detailData?.content || '' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Ghi chú</div>
+                <div class="value">{{ detailData?.note || '' }}</div>
+              </div>
+
+              <div class="mbf-box">
+                <div class="mbf-box__header">
+                  <div class="mbf-box__title">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Tài liệu liên quan</span>
+                  </div>
+                </div>
+                <div class="mbf-box__body scroll-x-auto">
+                  <app-list-file *ngIf="detailData?.referenceId" [refrenceId]="detailData?.referenceId"
+                    [modueType]="'Contract'" [isEdit]="true" [rightEdit]="CONTRACT_RIGHTS.CHINH_SUA"></app-list-file>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="info-content col-md-4">
+
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-person-circle"></i>
+                Thông tin đối tác
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="list-info d-space-bw">
+                <div class="label">Tên đối tác</div>
+                <div class="value">{{ detailData?.partner?.name }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Địa chỉ</div>
+                <div class="value">{{ detailData?.partner?.address }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Số điện thoại</div>
+                <div class="value">{{ detailData?.partner?.phoneNumber }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-boxes"></i>
+                Thông tin hợp đồng
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="list-info d-space-bw">
+                <div class="label">Ngày ký</div>
+                <div class="value">{{ detailData?.releaseDate | date: 'dd/MM/yyyy' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Loại hợp đồng</div>
+                <!-- <div class="value">{{ STATE_TYPE_CONTRACT[detailData?.type].name }}</div> -->
+                <div class="value">{{ detailData?.type }}</div>
+                
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Ngày bắt đầu</div>
+                <div class="value">{{ detailData?.startDate | date: 'dd/MM/yyyy' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Ngày kết thúc</div>
+                <div class="value">{{ detailData?.endDate | date: 'dd/MM/yyyy' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Trạng thái</div>
+                <div *ngIf="detailData?.state && STATE_CONTRACT[detailData?.state]" class="value label-status status"
+                  [style.background]="STATE_CONTRACT[detailData?.state].background"
+                  [style.color]="STATE_CONTRACT[detailData?.state].color">
+                  {{ STATE_CONTRACT[detailData?.state].name }}
+                </div>
+                <div *ngIf="!detailData?.state || !STATE_CONTRACT[detailData?.state]"></div>
+              </div>
+              <!-- <div class="list-info d-space-bw">
+                <div class="label">Người tạo</div>
+                <div class="value">{{ detailData?.endDate | date: 'dd/MM/yyyy' }}</div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

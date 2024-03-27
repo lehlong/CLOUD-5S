@@ -1,0 +1,209 @@
+<div class="card order-edit-container" [style.width]="widthDeault" style="height: 100vh" [appPermission]="ORDER_SELL_RIGHTS.CHI_TIET">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Chi tiết phiếu xuất hàng
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="showButton.berth">
+          <button type="button" class="btn btn-primary" (click)="onUpdateShip()" [appPermission]="ORDER_SELL_RIGHTS.CHINH_SUA">
+            <i class="bi bi-pencil-square"></i>
+            Cập nhật thông tin hầm tàu
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i> Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3">
+      <div>
+        <div class="tab-content">
+          <div class="fade show active" role="tabpanel" aria-labelledby="info-tab">
+            <div class="row">
+              <div class="main-content col-md-8 pr-10">
+                <div *ngIf="itemDetail" class="">
+                  <div class="mbf-box">
+                    <div class="mbf-box__header">
+                      <div class="mbf-box__title"><i class="bi bi-box"></i> Thông tin sản phẩm</div>
+                    </div>
+                    <div class="mbf-box__body">
+                      <div style="overflow-x: auto">
+                        <table class="table table-hover mb-20" [cellPadding]="0">
+                          <thead>
+                            <tr>
+                              <th style="width: 100px">Mã sản phẩm</th>
+                              <th>Tên sản phẩm</th>
+                              <th style="width: 120px">Khu vực</th>
+                              <th style="width: 120px" class="text-right">Khối lượng vào</th>
+                              <th style="width: 120px" class="text-right">Khối lượng ra</th>
+                              <th style="width: 120px" class="text-right">Khối lượng hàng</th>
+                              <th style="width: 120px" class="text-right">ĐVT</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{{ itemDetail.orderDetails[0]?.item?.code }}</td>
+                              <td>{{ itemDetail.orderDetails[0]?.item?.name }}</td>
+                              <td>{{ itemDetail?.area?.name }}</td>
+                              <td class="text-right">{{ utils.formatNumber(itemDetail?.scale?.weight1) }}</td>
+                              <td class="text-right">{{ utils.formatNumber(itemDetail?.scale?.weight2) }}</td>
+                              <td class="text-right">{{ utils.formatNumber(itemDetail?.scale?.weight) }}</td>
+                              <td class="text-right">{{ itemDetail.orderDetails[0]?.unit?.name }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mbf-box">
+                    <div class="mbf-box__header">
+                      <div class="mbf-box__title">
+                        <i class="bi bi-clock-history"></i>
+                        Lịch sử thực hiện
+                      </div>
+                    </div>
+                    <div class="mbf-box__body">
+                      <div class="wraper-table" style="overflow-x: auto">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Người thực hiện</th>
+                              <th class="text-right">Hành động</th>
+                              <th class="text-right">Thời gian thực hiện</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of itemDetail?.orderProcesses">
+                              <td>{{ item?.account?.fullName }}</td>
+                              <td class="text-right">
+                                {{
+                                  item.actionCode && item.actionCode != '' && ACTION_ORDER_NEW[item.actionCode]
+                                    ? ACTION_ORDER_NEW[item.actionCode].name
+                                    : ''
+                                }}
+                              </td>
+                              <td class="text-right">{{ item?.processDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="info-content col-md-4">
+                <div class="" *ngIf="itemDetail">
+                  <div class="info--export mb-20">
+                    <div class="mbf-box">
+                      <div class="mbf-box__header">
+                        <div class="mbf-box__title">
+                          <i class="bi bi-info-circle"></i>
+                          Thông tin phiếu xuất hàng
+                        </div>
+                      </div>
+                      <div class="mbf-box__body">
+                        <div class="table--custom">
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Mã phiếu xuất</div>
+                            <div>{{ itemDetail.code }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Mã phiếu cân</div>
+                            <div>{{ itemDetail.scale?.code }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Mã đợt xuất hàng</div>
+                            <div>{{ itemDetail.orderBatchCode }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Đợt xuất hàng</div>
+                            <div>
+                              {{ itemDetail.orderBatch?.startDate | date : 'dd/MM/yyyy' }} ->
+                              {{ itemDetail.orderBatch?.endDate | date : 'dd/MM/yyyy' }}
+                            </div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Nhà máy</div>
+                            <div>
+                              {{ itemDetail.company?.name }}
+                            </div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Phương tiện</div>
+                            <div>{{ itemDetail?.vehicleCode }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Ngày giờ xuất</div>
+                            <div>{{ itemDetail?.orderDate | date : 'dd/MM/yyyy HH:mm' }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Khách hàng</div>
+                            <div>{{ itemDetail.partner?.name }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Địa chỉ</div>
+                            <div>{{ itemDetail.partner?.address }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Số điện thoại</div>
+                            <div>{{ itemDetail?.partner?.phoneNumber }}</div>
+                          </div>
+                          <div
+                            *ngIf="itemDetail?.cargoCompartmentNumber"
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Hầm tàu</div>
+                            <div>{{ itemDetail?.cargoCompartmentNumber }}</div>
+                          </div>
+                          <div
+                            *ngIf="itemDetail?.berth"
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Cầu cảng</div>
+                            <div>{{ itemDetail?.berth?.name }}</div>
+                          </div>
+                          <div
+                            *ngIf="itemDetail?.ship?.code"
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Tàu hàng</div>
+                            <div>{{ itemDetail?.ship?.code }}</div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Trạng thái</div>
+                            <div
+                              *ngIf="STATE_ORDER_NEW[itemDetail?.state]"
+                              class="label-status"
+                              [style.background]="STATE_ORDER_NEW[itemDetail?.state].background"
+                              [style.color]="STATE_ORDER_NEW[itemDetail?.state].color">
+                              {{ STATE_ORDER_NEW[itemDetail?.state].name }}
+                            </div>
+                          </div>
+                          <div
+                            class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+                            <div>Ngày tạo</div>
+                            <div>{{ itemDetail?.createDate | date : 'dd/MM/yyyy HH:mm' }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

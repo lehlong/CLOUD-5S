@@ -1,0 +1,28 @@
+.account-group-style {
+  height: 100vh;
+  .icon-tree {
+    padding: 3px 7px;
+    margin: 0px 5px 5px;
+    cursor: pointer;
+    border-radius: 50%;
+    &:hover {
+      background: #f0f3f6;
+    }
+  }
+}
+
+.input-dropdown {
+  position: relative;
+  .btn-down {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    i {
+      font-size: 20px;
+    }
+  }
+}

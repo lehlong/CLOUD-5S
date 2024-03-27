@@ -1,0 +1,127 @@
+<div class="print-templates" id="stock-export-print">
+  <div class="header-print">
+    <div class="hearder-left">
+      <div class="title-left fw-bold">{{data?.company?.name}}</div>
+      <div class="text">{{data?.company?.address}}</div>
+    </div>
+    <div class="hearder-right">
+      <div class="text">
+        <span class="fw-bold">Mẫu số 02 - VT</span>
+        <br>
+        <span>Ban hàn theo thông tư số 133/2016/TT-BTC<br />
+          Ngày 26/08/2016 của bộ tài chính
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="title-main">PHIẾU NHẬP HÀNG</div>
+  <div class="date ">
+    <p class="fw-bold">Ngày {{ detailData?.importDate | date : 'dd' }} tháng {{ detailData?.importDate | date : 'MM' }}
+      năm
+      {{ detailData?.importDate | date : 'yyyy' }}</p>
+    <p>Số : {{detailData?.code}}</p>
+  </div>
+  <div class="row-content">
+    <div class="label">-Họ tên người giao :{{detailData?.partner?.name}}</div>
+    <div class="dot-line"></div>
+    <div class="label">Số điện thoại :{{detailData?.partnerPhoneNumber}}</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Địa chỉ : {{detailData?.partnerAddress}}</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Nhập tại kho: {{detailData?.stock?.name}}</div>
+    <div class="dot-line"></div>
+  </div>
+  <table class="table-print">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên nhãn hiệu, quy cách, phẩm chất vật tư, sản phẩm hàng hóa</th>
+        <th>Mã số</th>
+        <th>Đơn vị tính</th>
+        <th>Số lượng </th>
+        <th>Đơn giá</th>
+        <th>Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of detailData.importDetails; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ element?.item?.name }}</td>
+        <td>{{ element?.item?.code }}</td>
+        <td>{{ element?.item?.unit?.name }}</td>
+        <td class="text-right">{{ element?.number | number }}</td>
+        <td class="text-right">{{ element?.price | number }}</td>
+        <td class="text-right">{{ element?.number * element.price | number }}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-right"></td>
+        <td class="text-right"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row-content-infor">
+    <div class="group">
+      <div class="title">Tổng tiền hàng</div>
+      <div class="value">{{getTotalMoney() | number}}</div>
+    </div>
+    <div class="group">
+      <div class="title">Chiết khấu</div>
+      <div class="value">{{detailData?.discount}}%</div>
+    </div>
+    <div class="group">
+      <div class="title">Thuế VAT</div>
+      <div class="value">{{detailData?.taxVat}}%</div>
+    </div>
+    <div class="group">
+      <div class="title">Thanh toán ngay</div>
+      <div class="value">{{detailData?.payMoney | number}}</div>
+    </div>
+    <div class="group">
+      <div class="title">Tổng tiền thanh toán</div>
+      <div class="value">{{detailData?.sumMoney | number}}</div>
+    </div>
+    <div class="group">
+      <div class="title">Còn nợ</div>
+      <div class="value">{{detailData?.debt | number}}</div>
+    </div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Hình thức chi:</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Số chứng từ gốc kèm theo:</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="date-sign">
+    <i></i>
+    .....,Ngày.......Tháng.......Năm 2023
+  </div>
+  <div class="footer-print">
+    <div class="signature-container">
+      <div class="title-signature">Người lập phiếu</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Người nhận hàng</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Thủ kho</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Kế toán trưởng</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+  </div>
+</div>

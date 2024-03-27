@@ -1,0 +1,26 @@
+.custome-w {
+  min-width: 150px;
+}
+
+.table-bordered {
+  border-collapse: collapse;
+  td,
+  th {
+    border: 1px solid #d9d9d9 !important;
+  }
+}
+
+nz-progress {
+  max-width: 90px;
+  display: block;
+}
+.label-status {
+  white-space: nowrap;
+  padding: 0px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  &.status {
+    padding: 3px 5px !important;
+  }
+}

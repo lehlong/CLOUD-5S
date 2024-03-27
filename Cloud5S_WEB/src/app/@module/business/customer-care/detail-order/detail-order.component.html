@@ -1,0 +1,144 @@
+<div class="card order-detail-container" [style.width]="widthDeault" style="height: 100vh">
+    <div class="card-body">
+        <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+            <div class="card-title">
+                <i class="bi bi-info-circle"></i>
+                Thông tin đơn hàng ({{code}})
+            </div>
+            <div class="d-flex-wrap d-gap">
+                <div>
+                    <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+                </div>
+            </div>
+        </div>
+        <div class="pb-3 mt-2">
+            <div class="row g-3 detail-container">
+                <div class="main-content col-md-8 pr-2">
+                    <div class="text-lg fw-bold title mt-1">
+                        <i class="bi bi-box"></i>
+                        Danh sách sản phẩm
+                    </div>
+                    <div class="wraper-table no-scroll-y">
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Cát</th>
+                                    <th>Đá</th>
+                                    <th>Độ sụt</th>
+                                    <th class="text-right">SL đặt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let order of detailData?.orderDetails">
+                                    <td>{{ order?.item?.name }}</td>
+                                    <td>{{ order?.sand?.name }}</td>
+                                    <td>{{ order?.stone?.name }}</td>
+                                    <td>{{ order?.slump }}</td>
+                                    <td class="text-right" colspan="5">
+                                        {{
+                                        order.orderNumber | number : '1.0-2'
+                                        }}&nbsp;{{order?.item?.unit?.name || ''}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-lg fw-bold title mt-3">
+                        <i class="bi bi-clock-history"></i>
+                        Lịch sử đơn hàng
+                    </div>
+                    <div class="wraper-table">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Người thực hiện</th>
+                                    <th>Hành động</th>
+                                    <th>Thời gian thực hiện</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of detailData?.orderProcesses">
+                                    <td>{{ item?.account?.fullName || item?.createBy }}</td>
+                                    <td>{{ item.actionCode && item.actionCode != '' && ACTION_ORDER[item.actionCode] ?
+                                        ACTION_ORDER[item.actionCode].name
+                                        : '' }}</td>
+                                    <td>{{ item?.createDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="info-content col-md-4">
+                    <div class="list-info text-lg fw-bold title">
+                        Máy trộn
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Tên máy trộn</div>
+                        <div *ngIf="!showButton.editMixer" class="value">{{ detailData.mixer?.name || '' }}</div>
+                    </div>
+                    <div class="list-info text-lg fw-bold title">
+                        Thông tin khách hàng
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Tên Khách hàng</div>
+                        <div class="value">{{ detailData?.partner?.name || '' }}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Số điện thoại</div>
+                        <div class="value">{{ detailData?.partner?.phoneNumber || '' }}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Địa chỉ</div>
+                        <div class="value">
+                            {{detailData?.partner?.address || ''}}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Ghi chú</div>
+                        <div class="value">
+                            {{detailData.partnerNote || ''}}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Trạng thái</div>
+                        <div *ngIf="detailData?.state && STATE_ORDER[detailData?.state]"
+                            [style.color]="STATE_ORDER[detailData?.state].background" class="value">
+                            {{STATE_ORDER[detailData?.state].name || ''}}</div>
+                        <div *ngIf="!detailData?.state || !STATE_ORDER[detailData?.state]">
+
+                        </div>
+                    </div>
+                    <div class="list-info text-lg fw-bold title">
+                        Thông tin công trình
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Thời gian đổ</div>
+                        <div class="value">{{ detailData.pourDate | date: "dd/MM/yyyy" }}&nbsp;{{ detailData.pourDate |
+                            date: "HH:mm" }}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Khu vực</div>
+                        <div class="value">{{ detailData.area?.name || '' }}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Loại công trình</div>
+                        <div class="value">{{ detailData?.orderType?.name || '' }}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Hình thức đổ</div>
+                        <div class="value">{{ detailData?.pourType?.name || ''}}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Hạng mục công trình</div>
+                        <div class="value">{{ detailData?.pourCategory || ''}}</div>
+                    </div>
+                    <div class="list-info d-space-bw">
+                        <div class="label">Địa điểm đổ</div>
+                        <div class="value">
+                            {{detailData.pourLocation}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

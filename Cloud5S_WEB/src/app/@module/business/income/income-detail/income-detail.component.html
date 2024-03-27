@@ -1,0 +1,242 @@
+<div class="card income-detail-container" [style.width]="widthDeault">
+  <div class="card-body">
+      <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+          <div class="card-title">
+              <i class="bi bi-info-circle"></i>
+              Thông tin phiếu thu ({{code}})
+          </div>
+          <div class="d-flex-wrap d-gap">
+              <div *ngIf="showButton.confirm" [appPermission]="PAYMENT_INCOME_RIGHTS.XAC_NHAN">
+                  <button (click)="ConfirmState()" type="button"
+                      [style.color]="STATE_PAYMENT_INCOME['DA_XAC_NHAN'].color"
+                      [style.background]="STATE_PAYMENT_INCOME['DA_XAC_NHAN'].background" class="btn" submitForm>
+                      <i class="bi bi-check-circle"></i>Xác nhận
+                  </button>
+              </div>
+
+              <div *ngIf="showButton.cancel" [appPermission]="PAYMENT_INCOME_RIGHTS.HUY">
+                  <button (click)="CancelState()" type="button"
+                      [style.color]="STATE_PAYMENT_INCOME['DA_BI_HUY'].color"
+                      [style.background]="STATE_PAYMENT_INCOME['DA_BI_HUY'].background" class="btn">
+                      <i class="bi bi-trash"></i>Hủy phiếu
+                  </button>
+              </div>
+              <div *ngIf="showButton.edit" [appPermission]="PAYMENT_INCOME_RIGHTS.CHINH_SUA">
+                  <button (click)="showEdit()" type="button" class="btn btn-primary">
+                      <i class="bi bi-pencil-square"></i>Chỉnh sửa
+                  </button>
+              </div>
+              <div *ngIf="showButton.print">
+                  <button (click)="printPaymentIncome()" type="button" class="btn print-btn">
+                    <i class="bi bi-printer"></i>In phiếu
+                  </button>
+                </div>
+              <div>
+                  <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+              </div>
+          </div>
+      </div>
+      <div class="pb-3 mt-2" [appPermission]="PAYMENT_INCOME_RIGHTS.CHI_TIET">
+          <div class="row g-3 detail-container">
+              <div class="main-content col-md-8 pr-2">
+                  <div class="mbf-box__header">
+                    <div class="mbf-box__title">
+                        <i class="bi bi-person"></i>
+                        <span>Thông tin người thu tiền</span>
+                    </div>
+                </div>
+                    <div class="mbf-box__body">
+                        <div class="row-content">
+                            <div class="label">
+                                Khách hàng
+                            </div>
+                            <div class="value">
+                                {{detailData?.partner?.name}}
+                            </div>
+                        </div>
+                        <div class="row-wrapper">
+                            <div class="row-content">
+                                <div class="label">
+                                    Người nộp
+                                </div>
+                                <div class="value">
+                                    {{detailData?.senderName}}
+                                </div>
+                            </div>
+                            <div class="row-content">
+                                <div class="label">
+                                    Số điện thoại
+                                </div>
+                                <div class="value">
+                                    {{detailData?.senderPhoneNumber}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-content">
+                            <div class="label">
+                                Địa chỉ
+                            </div>
+                            <div class="value">
+                                {{detailData?.senderAddress}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mbf-box">
+                        <div class="mbf-box__header">
+                            <div class="mbf-box__title">
+                                <i class="bi bi-currency-dollar"></i>
+                                <span>Thông tin tiền thu</span>
+                            </div>
+                        </div>
+                        <div class="mbf-box__body">
+                            <div class="row-wrapper">
+                                <div class="row-content">
+                                    <div class="label">
+                                        Hình thức thu
+                                    </div>
+                                    <div class="value">
+                                        {{METHOD_NAME[detailData?.paymentMethod]}}
+                                    </div>
+                                </div>
+                                <div class="row-content">
+                                    <div class="label">
+                                        Ngân hàng
+                                    </div>
+                                    <div class="value">
+                                        {{detailData?.bankAccount?.bankName}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-content">
+                                <div class="label">
+                                    Nội dung thu
+                                </div>
+                                <div class="value">
+                                    {{detailData?.incomeType?.name}}
+                                </div>
+                            </div>
+                            <div class="row-content">
+                                <div class="label">
+                                    Số tiền
+                                </div>
+                                <div class="value">
+                                    {{utils.formatNumber(detailData?.money)}}
+                                </div>
+                            </div>
+                            <div class="row-content">
+                                <div class="label">
+                                    Lý do thu
+                                </div>
+                                <div class="value">
+                                    {{detailData?.reason}}
+                                </div>
+                            </div>
+                            <div class="row-content">
+                                <div class="label">
+                                    Chứng từ gốc
+                                </div>
+                                <div class="value">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mbf-box">
+                        <div class="mbf-box__header mbf-box__header--has-table">
+                            <div class="mbf-box__title">
+                                <i class="bi bi-clipboard"></i>
+                                <span>Tham chiếu phiếu xuất hàng</span>
+                            </div>
+                        </div>
+                        <div class="mbf-box__body">
+                            <div class="list-container mb-1 mt-1">
+                                <table mat-table [dataSource]="dataExport" *ngIf="dataExport?.length > 0"
+                                    class="table table-hover table-click-row mb-0">
+                                    <ng-container matColumnDef="code">
+                                        <th mat-header-cell *matHeaderCellDef>Mã phiếu</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            {{element.code}}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef></td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="exportDate">
+                                        <th mat-header-cell *matHeaderCellDef>Ngày nhập</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.exportDate | date :
+                                            'dd/MM/yyyy' }}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef></td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="partner">
+                                        <th mat-header-cell *matHeaderCellDef>Đối tác</th>
+                                        <td mat-cell *matCellDef="let element">{{ element?.partner?.name }}</td>
+                                        <td mat-footer-cell *matFooterCellDef class="fw-600">Tổng tiền nợ</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="debt">
+                                        <th mat-header-cell *matHeaderCellDef>Tiền nợ</th>
+                                        <td mat-cell *matCellDef="let element">{{ utils.formatNumber(element.debt) }}</td>
+                                        <td mat-footer-cell *matFooterCellDef class="fw-600">{{getTotalExport()}}</td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                                        class="border-bottom">
+                                    </tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                    <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+              </div>
+                <div class="info-content col-md-4">
+                    <div class="mbf-box">
+                        <div class="mbf-box__header">
+                            <div class="mbf-box__title">
+                                <i class="bi bi-info-circle"></i>
+                                <span>Thông tin phiếu thu</span>
+                            </div>
+                        </div>
+                        <div class="mbf-box__body">
+                            <div class="list-info d-space-bw">
+                                <div class="label">Mã phiếu</div>
+                                <div class="value">{{ code || '' }}</div>
+                            </div>
+                            <div class="list-info d-space-bw">
+                                <div class="label">Ngày thu</div>
+                                <div class="value">{{ detailData?.paymentDate | date: 'dd/MM/yyyy' }}</div>
+                            </div>
+                            <div class="list-info d-space-bw">
+                                <div class="label">Người tạo</div>
+                                <div class="value">{{ detailData?.createBy || '' }}</div>
+                            </div>
+                            <div class="list-info d-space-bw">
+                                <div class="label">Ngày tạo</div>
+                                <div class="value">{{ detailData?.createDate | date: 'dd/MM/yyyy' }}</div>
+                            </div>
+                            <div class="list-info d-space-bw">
+                                <div class="label">Trạng thái</div>
+                                <div *ngIf="detailData?.state && STATE_PAYMENT_INCOME[detailData?.state]"
+                                    class="value label-status status"
+                                    [style.background]="STATE_PAYMENT_INCOME[detailData?.state].background"
+                                    [style.color]="STATE_PAYMENT_INCOME[detailData?.state].color">
+                                    {{ STATE_PAYMENT_INCOME[detailData?.state].name }}
+                                </div>
+                                <div *ngIf="!detailData?.state || !STATE_PAYMENT_INCOME[detailData?.state]">
+
+                                </div>
+                            </div>
+                            <div class="list-info d-space-bw">
+                                <div class="label">Ghi chú</div>
+                                <div class="value">
+                                    {{detailData.note || ''}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+      </div>
+  </div>
+</div>

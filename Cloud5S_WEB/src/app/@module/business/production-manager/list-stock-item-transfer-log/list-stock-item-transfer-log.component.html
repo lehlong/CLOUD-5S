@@ -1,0 +1,120 @@
+<div class="container-list-purchase-orders" [appPermission]="PRODUCTION_MANAGER.DANH_SACH_QLSX">
+  <div class="d-flex d-gap-2 flex-wrap">
+    <div class="flex-row flex-grow-2">
+      <nz-range-picker
+        nzFormat="dd/MM/yyyy"
+        [nzRanges]="rangePresets"
+        [(ngModel)]="filter.selectedRange"
+        [nzPlaceHolder]="['Ngày nhập bắt đầu', 'Ngày nhập kết thúc']"></nz-range-picker>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn khu vực" [(ngModel)]="filter.areaCode">
+        <nz-option *ngFor="let element of listArea" [nzLabel]="element?.name" [nzValue]="element?.code"></nz-option>
+      </nz-select>
+    </div>
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn công ty" [(ngModel)]="filter.companyCode">
+        <nz-option *ngFor="let element of listCompany" [nzLabel]="element?.name" [nzValue]="element?.code"></nz-option>
+      </nz-select>
+    </div>
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn sản phẩm" [(ngModel)]="filter.itemCode">
+        <nz-option *ngFor="let element of listItem" [nzLabel]="element?.name" [nzValue]="element?.code"></nz-option>
+      </nz-select>
+    </div>
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn kho" [(ngModel)]="filter.stockCode">
+        <nz-option *ngFor="let element of listStock" [nzLabel]="element?.name" [nzValue]="element?.code"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-3">
+      <div class="input-group search-box">
+        <div class="wrapper-input">
+          <app-input-clear placeholder="Nhập từ khóa tìm kiếm" (searchEvent)="search()" [(value)]="filter.keyWord">
+          </app-input-clear>
+        </div>
+        <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+        <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="list-container border-top border-bottom mb-1 mt-1">
+    <!--  -->
+    <table
+      mat-table
+      [dataSource]="paginationResult.data"
+      *ngIf="paginationResult && paginationResult.data?.length > 0"
+      class="table table-hover table-click-row">
+      <ng-container matColumnDef="index">
+        <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+        <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+          {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Số lượng</th>
+        <td mat-cell *matCellDef="let element" class="text-right">{{ utils.formatNumber(element?.amount) }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="areaName">
+        <th mat-header-cell *matHeaderCellDef>Khu vực</th>
+        <td mat-cell *matCellDef="let element">{{ element?.areaName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container matColumnDef="createBy">
+        <th mat-header-cell *matHeaderCellDef>Người thực hiện </th>
+        <td mat-cell *matCellDef="let element">{{ element?.createBy }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container matColumnDef="createDate">
+        <th mat-header-cell *matHeaderCellDef>Ngày nhập</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element?.createDate | date : 'dd/MM/yyyy HH:mm' }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container matColumnDef="fromSlot">
+        <th mat-header-cell *matHeaderCellDef>Từ Lô - Dãy</th>
+        <td mat-cell *matCellDef="let element" class="from-color">{{ element?.fromPourSection}}-{{changeFormatNum(element?.fromPourLine)}}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container matColumnDef="toSlot">
+        <th mat-header-cell *matHeaderCellDef>Đến Lô - Dãy </th>
+        <td mat-cell *matCellDef="let element" class="to-color">{{ element?.toPourSection}}-{{changeFormatNum(element?.toPourLine)}}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>  
+      <ng-container matColumnDef="itemName">
+        <th mat-header-cell *matHeaderCellDef>Sản phẩm</th>
+        <td mat-cell *matCellDef="let element">{{ element?.itemName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container matColumnDef="stockName">
+        <th mat-header-cell *matHeaderCellDef>Kho</th>
+        <td mat-cell *matCellDef="let element">{{ element?.stockName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+    </table>
+    <!--  -->
+
+    <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+  </div>
+  <div class="float-end" *ngIf="paginationResult">
+    <app-pagination
+      [pageSize]="paginationResult.pageSize"
+      [totalRecord]="paginationResult.totalRecord"
+      [totalPage]="paginationResult.totalPage"
+      [(page)]="paginationResult.currentPage"
+      (pageChange)="onChangePage($event)"
+      (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+  </div>
+</div>

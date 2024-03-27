@@ -1,0 +1,147 @@
+<div class="card account-group-style" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-pencil-square"></i>
+        Chỉnh sửa nhóm tài khoản
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onEdit()" type="button" class="btn btn-primary"
+            [appPermission]="ACCOUNTGROUP_RIGHTS.CHINH_SUA">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form [formGroup]="accountGroupForm" (ngSubmit)="onEdit()">
+        <div>
+          <ul class="nav nav-tabs nav-tabs-bordered d-flex" role="tablist">
+            <li class="nav-item flex-fill" role="presentation">
+              <button (click)="changeTab(1)" class="nav-link w-100" [class.active]="currentTab === 1" type="button"
+                role="tab" aria-selected="false" tabindex="-1">
+                Thông tin
+              </button>
+            </li>
+            <li class="nav-item flex-fill" role="presentation">
+              <button (click)="changeTab(2)" class="nav-link w-100" [class.active]="currentTab === 2" type="button"
+                role="tab" aria-selected="false" tabindex="-1">
+                Phân quyền
+              </button>
+            </li>
+            <li class="nav-item flex-fill" role="presentation">
+              <button (click)="changeTab(3)" class="nav-link w-100" [class.active]="currentTab === 3" type="button"
+                role="tab" aria-selected="true">
+                Thành viên
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content pt-2">
+            <div *ngIf="currentTab === 1" class="fade show active" role="tabpanel" aria-labelledby="info-tab">
+              <div>
+                <label for="inputText" class="col-form-label">Tên nhóm<span class="text-danger ms-1">*</span></label>
+                <div>
+                  <input [ngClass]="{'is-invalid': submitted && f['name'].errors}" type="text" class="form-control"
+                    formControlName="name" />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label for="inputText" class="col-form-label">Vai trò</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Vai trò" formControlName="roleCode">
+                  <nz-option *ngFor="let role of optionsRoleCode" [nzLabel]="role.name" [nzValue]="role.value">
+                  </nz-option>
+                </nz-select>
+              </div>
+              <div>
+                <label for="inputText" class="col-form-label">Ghi chú</label>
+                <div>
+                  <textarea class="form-control" formControlName="notes"></textarea>
+                </div>
+              </div>
+              <div class="mt-1">
+                <label for="inputText" class="col-form-label nowrap">Trạng thái</label>
+                <div class="d-flex d-gap-20 w-100 mt-0">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="isActive" formControlName="isActive"
+                      [value]="true" />
+                    <label class="form-check-label" for="isActive"> Kích hoạt </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="isActive" formControlName="isActive"
+                      [value]="false" />
+                    <label class="form-check-label" for="isActive"> Khoá </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="currentTab === 2" class="fade show active" role="tabpanel" aria-labelledby="rights-tab">
+              <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+                  <div style="width: 38px"></div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [checked]="checklistSelection.isSelected(node)"
+                      (change)="todoLeafItemSelectionToggle(node)" />
+                    <label class="form-check-label">
+                      {{ node.id }} - {{ node.label }}
+                    </label>
+                  </div>
+                </mat-tree-node>
+                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                  <div class="icon-tree" mat-icon-button matTreeNodeToggle
+                    [attr.aria-label]="'toggle ' + node.filename">
+                    <i *ngIf="treeControl.isExpanded(node)" class="bi bi-chevron-down"></i>
+                    <i *ngIf="!treeControl.isExpanded(node)" class="bi bi-chevron-right"></i>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [checked]="descendantsAllSelected(node)"
+                      [indeterminate]="descendantsPartiallySelected(node)" (change)="todoItemSelectionToggle(node)" />
+                    <label class="form-check-label">
+                      {{ node.id }} - {{ node.label }}
+                    </label>
+                  </div>
+                </mat-tree-node>
+              </mat-tree>
+            </div>
+            <div *ngIf="currentTab === 3" class="fade show active pt-3" role="tabpanel" aria-labelledby="list-tab">
+              <nz-transfer [nzTitles]="['Nhóm khác', 'Nhóm ' + name]" [nzDataSource]="listAccount" [nzShowSearch]="true" [nzShowSelectAll]="false"
+                [nzRenderList]="[renderList, renderList]" (nzChange)="change($event)">
+                <ng-template #renderList let-items let-direction="direction" let-stat="stat"
+                  let-onItemSelectAll="onItemSelectAll" let-onItemSelect="onItemSelect">
+                  <nz-table #t [nzData]="items" nzSize="small">
+                    <thead>
+                      <tr>
+                        <th [nzChecked]="stat.checkAll" [nzIndeterminate]="stat.checkHalf"
+                          (nzCheckedChange)="onItemSelectAll($event)"></th>
+                        <th>Tên tài khoản</th>
+                        <th>Họ và tên</th>
+                        <th>Kích hoạt</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let data of t.data" (click)="onItemSelect(data)">
+                        <td [nzChecked]="!!data.checked" (nzCheckedChange)="onItemSelect(data)"></td>
+                        <td>{{ data.userName }}</td>
+                        <td>{{ data.fullName }}</td>
+                        <td>
+                          <i *ngIf="data.isActive" class="bi bi-check-circle-fill text-success"></i>
+                          <i *ngIf="!data.isActive" class="bi bi-x-circle-fill"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </nz-table>
+                </ng-template>
+              </nz-transfer>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

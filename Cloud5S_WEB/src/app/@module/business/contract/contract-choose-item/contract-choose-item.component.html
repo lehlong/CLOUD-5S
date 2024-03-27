@@ -1,0 +1,93 @@
+<div class="card stock-modal-container">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-plus-lg"></i>
+        Chọn sản phẩm
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onSave()" type="button" class="btn btn-primary" submitForm
+            [appPermission]="CONTRACT_RIGHTS.THEM_MOI">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" mat-dialog-close class="btn btn-warning"><i class="bi bi-x-circle"></i>
+            Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <div class="row">
+        <div class="container-modal">
+          <div class="wraper-input mt-4">
+            <div class="import-date-wraper">
+              <nz-select (ngModelChange)="selectTypeCode()" [(ngModel)]="filter.TypeCode" nzAllowClear nzPlaceHolder="Nhóm sản phẩm">
+                <nz-option *ngFor="let item of listItemType" [nzLabel]="item.name" [nzValue]="item.code"></nz-option>
+              </nz-select>
+            </div>
+            <div class="note-wraper">
+              <app-input-clear placeholder="Nhập từ khóa tìm kiếm" [(value)]="filter.keyWord" (input)="enterKeyword($event)"></app-input-clear>
+            </div>
+          </div>
+          <div class="wraper-table mt-3">
+            <table mat-table [dataSource]="paginationResult.data"
+              *ngIf="paginationResult && paginationResult.data?.length > 0" class="table table-hover table-click-row">
+              <ng-container matColumnDef="choose">
+                <th mat-header-cell *matHeaderCellDef class="checkAll">
+                  <mat-checkbox (click)="toggleCheckAll($event)">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <mat-checkbox [checked]="checkSelect(element?.code)" (change)="selectItem($event, element)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+                <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+                  {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="itemTypeName">
+                <th mat-header-cell *matHeaderCellDef>Nhóm sản phẩm</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element?.itemTypeName}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef>Mã sản phẩm</th>
+                <td mat-cell *matCellDef="let element">{{ element.code}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Tên sản phẩm</th>
+                <td mat-cell *matCellDef="let element">{{element?.name}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="unitName">
+                <th mat-header-cell *matHeaderCellDef>ĐVT</th>
+                <td mat-cell *matCellDef="let element">{{element?.unitName}}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom">
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"
+                [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+            </table>
+            <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+          </div>
+          <div class="mt-3" *ngIf="paginationResult">
+            <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+              [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+              (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

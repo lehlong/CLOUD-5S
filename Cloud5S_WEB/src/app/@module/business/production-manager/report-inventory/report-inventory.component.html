@@ -1,0 +1,191 @@
+<div class="report-inventory-container">
+  <div class="d-flex d-gap-2 flex-wrap">
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Lô hàng"
+        (ngModelChange)="changePourSection($event)"
+        [(ngModel)]="filter.PourSectionCode">
+        <nz-option
+          *ngFor="let pourSection of listPourSectionAll"
+          [nzLabel]="pourSection.name"
+          [nzValue]="pourSection.code"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Dãy hàng"
+        [(ngModel)]="filter.PourLineCode"
+        [nzDisabled]="!filter.PourSectionCode">
+        <nz-option
+          *ngFor="let pourLine of listPourLine"
+          [nzLabel]="pourLine.name"
+          [nzValue]="pourLine.code"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khu vực" [(ngModel)]="filter.AreaCode">
+        <nz-option *ngFor="let area of listAreaAll" [nzLabel]="area.name" s [nzValue]="area.code"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Sản phẩm" [(ngModel)]="filter.ItemCode">
+        <nz-option *ngFor="let item of listItemAll" [nzLabel]="item.name" [nzValue]="item.code"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Công ty" [(ngModel)]="filter.CompanyCode">
+        <nz-option *ngFor="let company of listCompanyAll" [nzLabel]="company.name" [nzValue]="company.code"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-1">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Kho hàng" [(ngModel)]="filter.StockCode">
+        <nz-option *ngFor="let stock of listStockAll" [nzLabel]="stock.name" [nzValue]="stock.code"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="d-flex flex-row flex-grow-3">
+      <div class="input-group search-box">
+        <div class="wrapper-input">
+          <app-input-clear
+            placeholder="Nhập từ khóa tìm kiếm"
+            (searchEvent)="search()"
+            [(value)]="filter.keyWord"></app-input-clear>
+        </div>
+        <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+        <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="list-container border-top border-bottom mb-1 mt-1">
+    <nz-table
+      class="table-parent"
+      [nzShowPagination]="false"
+      #expandTable
+      [nzPageSize]="2000"
+      [nzData]="dataTable?.pours || []">
+      <thead>
+        <tr>
+          <th style="width: 70px"></th>
+          <th style="width: 60px">Lô</th>
+          <th style="width: 80px">Dãy</th>
+          <th style="width: 150px">Sản phẩm</th>
+          <th style="width: 150px">Công ty</th>
+          <th>Khu vực</th>
+          <th style="width: 150px" class="text-right">Số lượng</th>
+          <th style="width: 150px">ĐV tính</th>
+          <th style="width: 150px"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="dataTable?.pours?.length; else noDataTemplate">
+        <ng-container *ngFor="let data of expandTable.data">
+          <tr>
+            <td style="width: 70px" [nzShowExpand]="!!data.pourLines" [(nzExpand)]="data.expand"></td>
+            <td style="width: 60px">{{ data.pourSectionName }}</td>
+            <td style="width: 80px"></td>
+            <td style="width: 150px"></td>
+            <td style="width: 150px"></td>
+            <td></td>
+            <td style="width: 150px" class="text-right fw-500">{{ utils.formatNumber(data.totalAmount) }}</td>
+            <td style="width: 150px">KG</td>
+            <td style="width: 150px"></td>
+          </tr>
+          <ng-container *ngFor="let pourLine of data.pourLines">
+            <tr [nzExpand]="data.expand">
+              <td style="width: 70px" [nzShowExpand]="!!pourLine.items" [(nzExpand)]="pourLine.expand"></td>
+              <td style="width: 60px"></td>
+              <td style="width: 80px">{{ pourLine.pourLineName }}</td>
+              <td style="width: 150px"></td>
+              <td style="width: 150px"></td>
+              <td [style.width.px]="widthColums" style="max-width: unset !important"></td>
+              <td class="text-right" style="width: 150px">
+                {{ utils.formatNumber(pourLine.totalAmount) }}
+              </td>
+              <td style="width: 150px">KG</td>
+              <td style="width: 150px"></td>
+            </tr>
+            <tr [nzExpand]="pourLine.expand && data.expand">
+              <ng-container *ngFor="let item of pourLine.items">
+                <tr>
+                  <td style="width: 70px" [nzShowExpand]="!!item.orders" [(nzExpand)]="item.expand"></td>
+                  <td style="width: 60px"></td>
+                  <td style="width: 80px"></td>
+                  <td style="width: 150px">{{ item?.itemName }}</td>
+                  <td style="width: 150px">{{ data?.companyName }}</td>
+                  <td [style.width.px]="widthColums" style="max-width: unset !important">{{ item?.areaName }}</td>
+                  <td style="width: 150px" class="text-right">
+                    {{ utils.formatNumber(item?.amount) }}
+                  </td>
+                  <td style="width: 150px">{{ item?.unitName }}</td>
+                  <td style="width: 150px"></td>
+                </tr>
+                <tr [nzExpand]="item.expand && data.expand && pourLine.expand">
+                  <nz-table
+                    class="table-child"
+                    [nzShowPagination]="false"
+                    [nzPageSize]="2000"
+                    #nestedTableLine
+                    [nzData]="item.orders">
+                    <tbody *ngIf="nestedTableLine.data?.length; else noDataTemplate">
+                      <ng-template ngFor let-data [ngForOf]="nestedTableLine.data">
+                        <tr>
+                          <td style="width: 70px"></td>
+                          <td style="text-align: right">{{ data.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                          <td style="width: 150px">{{ data?.shiftName }}</td>
+                          <td style="width: 150px">{{ data?.orderCode }}</td>
+                          <td style="width: 150px">{{ data?.vehicleCode }}</td>
+                          <td style="width: 150px" class="text-right">
+                            {{ utils.formatNumber(data?.amount) }}
+                          </td>
+                          <td style="width: 150px">KG</td>
+                          <td style="width: 150px">
+                            <button nz-button nzType="dashed">Chuyển dãy</button>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </tbody>
+                  </nz-table>
+                </tr>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </ng-container>
+        <ng-container>
+          <tr>
+            <td style="width: 70px"></td>
+            <td style="width: 60px"></td>
+            <td style="width: 80px"></td>
+            <td style="width: 150px"></td>
+            <td style="width: 150px"></td>
+            <td class="text-right fw-500">Tổng</td>
+            <td style="width: 150px" class="text-right fw-500">
+              {{ utils.formatNumber(SumValueNumber(dataTable?.pours, 'totalAmount')) }}
+            </td>
+            <td style="width: 150px">KG</td>
+            <td style="width: 150px"></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+<ng-template #noDataTemplate>
+  <tbody nz-table-placeholder>
+    <tr>
+      <td [colSpan]="14" class="pb-0">
+        <div style="width: 100%; display: flex; justify-content: center; gap: 5px">
+          <div style="line-height: 1.9"><span nz-icon nzType="info-circle" nzTheme="outline"></span></div>
+          <div><span style="font-size: 13px; font-weight: 500; color: gray">Không có dữ liệu !</span></div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</ng-template>

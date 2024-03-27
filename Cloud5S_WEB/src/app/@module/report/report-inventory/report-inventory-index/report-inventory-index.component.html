@@ -1,0 +1,166 @@
+<div class="card report-inventory-container">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Báo cáo tồn kho
+      </div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+          <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select
+          nzShowSearch
+          nzAllowClear
+          nzPlaceHolder="Lô hàng"
+          (ngModelChange)="changePourSection($event)"
+          [(ngModel)]="filter.PourSectionCode">
+          <nz-option
+            *ngFor="let pourSection of listPourSectionAll"
+            [nzLabel]="pourSection.name"
+            [nzValue]="pourSection.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select
+          nzShowSearch
+          nzAllowClear
+          [nzDisabled]="!filter.PourSectionCode"
+          nzPlaceHolder="Dãy hàng"
+          [(ngModel)]="filter.PourLineCode">
+          <nz-option
+            *ngFor="let pourLine of listPourLine"
+            [nzLabel]="pourLine.name"
+            [nzValue]="pourLine.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khu vực" [(ngModel)]="filter.AreaCode">
+          <nz-option *ngFor="let area of listAreaAll" [nzLabel]="area.name" s [nzValue]="area.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Sản phẩm" [(ngModel)]="filter.ItemCode">
+          <nz-option *ngFor="let item of listItemAll" [nzLabel]="item.name" [nzValue]="item.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Công ty" [(ngModel)]="filter.CompanyCode">
+          <nz-option
+            *ngFor="let company of listCompanyAll"
+            [nzLabel]="company.name"
+            [nzValue]="company.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Kho hàng" [(ngModel)]="filter.StockCode">
+          <nz-option *ngFor="let stock of listStockAll" [nzLabel]="stock.name" [nzValue]="stock.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <div class="wrapper-input">
+            <app-input-clear
+              placeholder="Nhập từ khóa tìm kiếm"
+              (searchEvent)="search()"
+              [(value)]="filter.keyWord"></app-input-clear>
+          </div>
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+      <nz-table
+        class="table-parent"
+        [nzShowPagination]="false"
+        #expandTable
+        [nzPageSize]="2000"
+        [nzData]="listData || []">
+        <thead>
+          <tr>
+            <th style="width: 70px"></th>
+            <th style="width: 60px">Lô</th>
+            <th style="width: 80px">Dãy</th>
+            <th style="width: 150px">Sản phẩm</th>
+            <th style="width: 150px">Công ty</th>
+            <th>Khu vực</th>
+            <th style="width: 150px" class="text-right">Số lượng</th>
+            <th style="width: 150px">Đơn vị tính</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of expandTable.data">
+            <tr>
+              <td style="width: 70px" [nzShowExpand]="!!data.pourLines" [(nzExpand)]="data.expand"></td>
+              <td style="width: 60px">{{ data.pourSectionName }}</td>
+              <td style="width: 80px"></td>
+              <td style="width: 150px"></td>
+              <td style="width: 150px"></td>
+              <td></td>
+              <td style="width: 150px" class="text-right">{{ data.totalAmount | number }}</td>
+              <td style="width: 150px">Kg</td>
+            </tr>
+            <ng-container *ngFor="let pourLine of data.pourLines">
+              <tr [nzExpand]="data.expand">
+                <td style="width: 70px" [nzShowExpand]="!!pourLine.items" [(nzExpand)]="pourLine.expand"></td>
+                <td style="width: 60px"></td>
+                <td style="width: 80px">{{ pourLine.pourLineName }}</td>
+                <td style="width: 150px"></td>
+                <td style="width: 150px"></td>
+                <td [style.width.px]="widthColums" style="max-width: unset !important"></td>
+                <td class="text-right" style="width: 150px">{{ pourLine.totalAmount | number }}</td>
+                <td style="width: 150px">Kg</td>
+              </tr>
+              <tr [nzExpand]="pourLine.expand && data.expand">
+                <nz-table
+                  class="table-child"
+                  [nzShowPagination]="false"
+                  [nzPageSize]="2000"
+                  #nestedTableLine
+                  [nzData]="pourLine.items">
+                  <thead>
+                    <tr>
+                      <th style="width: 70px"></th>
+                      <th style="width: 60px">Lô</th>
+                      <th style="width: 80px">Dãy</th>
+                      <th style="width: 150px">Sản phẩm</th>
+                      <th style="width: 150px">Công ty</th>
+                      <th>Khu vực</th>
+                      <th style="width: 150px" class="text-right">Số lượng</th>
+                      <th style="width: 150px">Đơn vị tính</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-template ngFor let-data [ngForOf]="nestedTableLine.data">
+                      <tr>
+                        <td style="width: 70px"></td>
+                        <td style="width: 60px"></td>
+                        <td style="width: 80px"></td>
+                        <td style="width: 150px">{{ data?.itemName }}</td>
+                        <td style="width: 150px">{{ data?.companyName }}</td>
+                        <td>{{ data?.areaName }}</td>
+                        <td style="width: 150px" class="text-right">{{ data?.amount | number }}</td>
+                        <td style="width: 150px">{{ data?.unitName }}</td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </nz-table>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

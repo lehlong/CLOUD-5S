@@ -1,0 +1,93 @@
+<div class="card" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer mini-form">
+      <div class="card-title">
+        <i class="bi bi-pencil-square"></i>
+        {{ 'content.masterdata.shift.edit.tt' | translate }}
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div [appPermission]="WORKINGSHIFT_RIGHTS.CHINH_SUA">
+          <button (click)="onEdit()" type="button" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i>{{ 'content.common.btn_save' | translate }}
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning">
+            <i class="bi bi-x-circle"></i>{{ 'content.common.btn_close' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form [formGroup]="wksForm" (ngSubmit)="onEdit()">
+        <div class="mt-3">
+          <app-input-clear
+            [initFocus]="true"
+            label="{{ 'content.masterdata.shift.edit.mc' | translate }}"
+            [required]="true"
+            [errorsRequired]="f['code'].errors?.['required']"
+            [showErrors]="submitted && f['code'].errors"
+            [status]="submitted && f['code'].errors ? 'error' : ''"
+            [control]="$any(wksForm).controls['code']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <app-input-clear
+            label="{{ 'content.masterdata.shift.edit.tc' | translate }}"
+            [required]="true"
+            [errorsRequired]="f['name'].errors?.['required']"
+            [showErrors]="submitted && f['name'].errors"
+            [status]="submitted && f['name'].errors ? 'error' : ''"
+            [control]="$any(wksForm).controls['name']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <app-input-number
+            label="Thứ tự ca"
+            [required]="true"
+            [errorsRequired]="f['ordinalNumber'].errors?.['required'] || f['ordinalNumber'].errors?.['min']"
+            [showErrors]="submitted && f['ordinalNumber'].errors"
+            [class]="submitted && f['ordinalNumber'].errors ? 'is-invalid' : ''"
+            [control]="$any(wksForm).controls['ordinalNumber']"></app-input-number>
+        </div>
+        <!--  -->
+        <div class="mt-3">
+          <label for="inputText" class="form-label"
+            >{{ 'content.masterdata.shift.create.clv' | translate }} <span class="text-danger ms-1">*</span></label
+          >
+          <div class="date-group d-flex d-space-bw d-gap">
+            <div class="from-date w-50">
+              <label class="form-label">{{ 'content.masterdata.shift.create.gbd' | translate }}</label>
+              <input type="time" class="form-control" formControlName="startTime" />
+              <div *ngIf="submitted && f['startTime'].errors" class="text-validate">
+                <div *ngIf="f['startTime']['errors']['required']">Không được để trống</div>
+              </div>
+            </div>
+            <div class="to-date w-50">
+              <label class="form-label">{{ 'content.masterdata.shift.create.gkt' | translate }}</label>
+              <input type="time" class="form-control" formControlName="endTime" />
+              <div *ngIf="submitted && f['endTime'].errors" class="text-validate">
+                <div *ngIf="f['endTime']['errors']['required']">Không được để trống</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <label for="inputText" class="form-label">{{ 'content.masterdata.itemtype.edit.state' | translate }}</label>
+          <div class="d-flex d-gap-20 w-100 mt-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="true" />
+              <label class="form-check-label" for="isActive">
+                {{ 'content.masterdata.itemtype.edit.statevalue.Activated' | translate }}</label
+              >
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="false" />
+              <label class="form-check-label" for="isActive">{{
+                'content.masterdata.itemtype.edit.statevalue.Locked' | translate
+              }}</label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+<div class="card" [appPermission]="ORDER_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Lệnh sản xuất
+      </div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button type="button" class="btn btn-primary" (click)="onUpdate()">
+          <i class="bi bi-check-lg"></i>Lưu thông tin
+        </button>
+        <button type="button" 
+              class="btn btn-show-detail" 
+              (click)="showCommandList()"
+              *ngIf="typeFilter !== 'type3'"
+        >
+          <i class="bi bi-menu-button-wide"></i>Danh sách lệnh
+        </button>
+        <button type="button" class="btn btn-success" 
+              (click)="AllCommandList()"    
+              *ngIf="typeFilter === 'type3'"
+        >
+          <i class="bi bi-menu-button-wide"></i>Xem tất cả
+        </button>
+        <button (click)="printManufactureCommandReceipt()" type="button" class="btn print-btn" *ngIf="typeFilter === 'type3'">
+          <i class="bi bi-printer"></i>In phiếu
+        </button>
+        <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+          <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-wrap d-gap-2" style="width: 340px;">
+        <label for="date-range-picker">Ngày đặt hàng</label>
+        <nz-range-picker [nzShowTime]="true" [(ngModel)]="filter.selectedRange_1" [nzRanges]="rangePresets"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+      <div class="d-flex flex-wrap d-gap-2" style="width: 340px;">
+        <label for="date-range-picker">Ngày giờ đổ</label>
+        <nz-range-picker [nzShowTime]="true" [(ngModel)]="filter.selectedRange" [nzRanges]="rangePresets"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+      <div class="d-flex flex-wrap d-gap-2" style="width: 340px;">
+        <label for="date-range-picker">Ngày giờ trộn</label>
+        <nz-range-picker [nzShowTime]="true" [(ngModel)]="filter.selectedRange_2" [nzRanges]="rangePresets"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+      <div class="d-flex flex-wrap d-gap-2 multi-dropdown">
+        <label for="date-range-picker">Trạng thái</label>
+        <nz-select [nzMaxTagCount]="maxTagCount" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+          nzPlaceHolder="Trạng thái" [(ngModel)]="filter.States">
+          <nz-option *ngFor="let item of LIST_STATE" [nzLabel]="item.name" [nzValue]="item.value"></nz-option>
+        </nz-select>
+        <ng-template #tagPlaceHolder let-selectedList>+ {{ selectedList.length }}</ng-template>
+      </div>
+    </div> 
+    <!-- end -->
+    <div class="d-flex d-gap-2 flex-wrap mt-2 box-under">
+      <div class="d-flex flex-row flex-grow-1" style="height: 33px">
+        <mat-checkbox style="padding-bottom: 20px" 
+        [(ngModel)]="filterType"
+        (ngModelChange)="onFilterChange($event)"
+        [disabled]="typeFilter == 'type3'"
+        [checked] = "!(typeFilter == 'type3') && filterType != false"
+        >Chưa đặt lịch</mat-checkbox>
+      </div>
+      <div class="d-flex flex-row flex-grow-1" style="width: 145px;">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Máy trộn" [(ngModel)]="filter.MixerCode">
+          <nz-option
+            *ngFor="let mixer of listMixerAll"
+            [nzLabel]="mixer.name"
+            [nzValue]="mixer.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1" style="width: 145px;">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khách hàng" [(ngModel)]="filter.PartnerCode">
+          <nz-option
+            *ngFor="let partner of listPartnerAll"
+            [nzLabel]="partner.name"
+            [nzValue]="partner.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1" style="width: 145px;">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Sản phẩm" [(ngModel)]="filter.ItemCode">
+          <nz-option
+            *ngFor="let item of listItemAll"
+            [nzLabel]="item.name"
+            [nzValue]="item.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-3" style="width: 145px;">
+        <div class="input-group search-box">
+          <div class="wrapper-input">
+            <app-input-clear placeholder="Nhập từ khóa tìm kiếm" (searchEvent)="search()"
+              [(value)]="filter.keyWord"></app-input-clear>
+          </div>
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+    <div class="list-container container border-top border-bottom mb-1 mt-1">
+     <table class="table table-hover" *ngIf="paginationResult && paginationResult.data?.length > 0">
+      <thead>
+          <tr>
+              <th rowspan="2" class="center-text">STT</th>
+              <th rowspan="2" class="center-text">Mã đơn hàng</th>
+              <th rowspan="2" class="mixer text-center center-text">Chọn máy trộn</th>
+              <th rowspan="2" class="mix-day center-text">Chọn ngày trộn</th>
+              <th rowspan="2" class="mix-hour center-text">Chọn giờ trộn</th>
+              <th rowspan="2" class="center-text">Ngày đặt hàng</th>
+              <th rowspan="2" class="center-text">Ngày giờ đổ</th>
+              <th colspan="3" class="text-center">Khách hàng</th>
+              <th colspan="4" class="text-center">Đơn hàng</th>
+              <th rowspan="2" class="center-text">Nhân viên kinh doanh</th>
+              <th colspan="2" class="text-center center-text">Công trình</th>
+              <th rowspan="2" class="text-center center-text">Trạng thái</th>
+          </tr>
+          <tr>
+              <td class="text-center">Tên</td>
+              <td class="text-center">Điện thoại</td>
+              <td class="text-center">Địa chỉ</td>
+              <td class="text-center">Mác</td>
+              <td class="text-center">Độ sụt</td>
+              <td class="text-center">Phụ gia</td>
+              <td class="text-center">Số lượng</td>
+              <td class="text-center">Hạng mục</td>
+              <td class="text-center">Khối lượng DA</td>
+              <td></td>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let element of paginationResult.data; let i = index">
+              <td class="text-center">{{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}</td>
+              <td>{{element.code}}</td>
+              <td class="mixer">
+                <div href="#">
+                  <select class="form-select" (change)="onSelectMixer($event, element)">
+                    <option value="">Chọn máy trộn</option>
+                    <option *ngFor="let item of listMixerAll" [value]="item.code"
+                      [selected]="item.code == element.mixer?.code">{{item.name}}</option>
+                  </select>
+                </div>
+              </td>
+              <td class="mix-day">
+                <nz-date-picker [(ngModel)]="element.releaseDate" nzFormat="dd/MM/yyyy" class="d-block" 
+                    (ngModelChange)="onSelectMixDay($event, element)">
+                </nz-date-picker>
+              </td>
+              <td class="mix-hour">
+                <nz-time-picker [(ngModel)]="element.releaseDate" nzFormat="HH:mm" (ngModelChange)="onSelectMixHouse($event, element)"></nz-time-picker>
+              </td>
+              <td>{{element.createDate | date : 'dd/MM/yyyy'}}</td>
+              <td>{{element.pourDate | date : 'dd/MM/yyyy'}}</td>
+              <td>{{element.partner.name}}</td>
+              <td>{{element.partner.phoneNumber}}</td>
+              <td>{{element.partner.address}}</td>
+              <td>{{element.itemCode}}</td>    
+              <td>{{element.slump}}</td>    
+              <td>{{element.item?.itemFormula?.admixture}}</td>    
+              <td>{{element.orderNumber}}</td>       
+              <td>{{element.createBy}}</td>       
+              <td>{{element.orderType?.name}}</td>    
+              <td>   </td>    
+              <td>
+                <div *ngIf="STATE_ORDER[element?.state]" class="label-status"
+                  [style.background]="STATE_ORDER[element?.state].background"
+                  [style.color]="STATE_ORDER[element?.state].color">
+                  {{ STATE_ORDER[element?.state].name }}
+                </div>
+              </td> 
+          </tr>
+      </tbody>
+  </table>
+     <!-- table --> 
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

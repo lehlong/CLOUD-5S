@@ -1,0 +1,140 @@
+<!-- <div class="card" [style.width]="widthDeault" style="height: 100%;">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Thông tin chi tiết
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <p class="fw-medium mt-3">
+      Biển số xe: {{itemDetail?.vehicle}}
+    </p>
+    <div class="inOut-body">
+      <div class="row gap-10">
+        <div class="col-md-6 border-right">
+          <p>
+            <span class="fw-medium">Ngày giờ checkIn:</span>
+            {{itemDetail?.checkInTime | date: 'dd/MM/yyyy hh:mm:ss'}}
+          </p>
+          <ng-container *ngIf="imagesCheckIn.length > 0, else imgCheckInEmpty">
+            <div *ngFor="let image of imagesCheckIn" class="inOut-img">
+              <img [srcImg]="image?.attachment?.url" alt="">
+            </div>
+          </ng-container>
+          <ng-template #imgCheckInEmpty>
+            <app-empty></app-empty>
+          </ng-template>
+        </div>
+        <div class="col-md-6">
+          <p>
+            <span class="fw-medium">Ngày giờ checkOut:</span>
+            {{itemDetail?.checkOutTime | date: 'dd/MM/yyyy hh:mm:ss'}}
+          </p>
+          <ng-container *ngIf="imagesCheckOut.length > 0, else imgCheckOutEmpty">
+            <div *ngFor="let image of imagesCheckOut" class="inOut-img">
+              <img [srcImg]="image?.attachment?.url" alt="">
+            </div>
+          </ng-container>
+          <ng-template #imgCheckOutEmpty>
+            <app-empty></app-empty>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="inout-detail-container" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+          Chi tiết vào ra 
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <div class="row g-3 detail-container">
+        <div class="main-content col-md-8 pr-2">
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <span>Hình ảnh vào cổng</span>
+              </div>
+            </div>
+            <div class="mbf-box__body box-image">
+              <ng-container *ngIf="imagesCheckIn.length > 0, else imgCheckInEmpty">
+                <nz-image-group class="group-img">
+                  <div *ngFor="let image of imagesCheckIn" class="inOut-img">
+                    <img nz-image [nzSrc]="imageUrl + image.attachmentId" alt="">
+                  </div>
+                </nz-image-group>
+              </ng-container>
+              <ng-template #imgCheckInEmpty>
+                <app-empty></app-empty>
+              </ng-template>
+            </div>
+          </div>
+          <!-- code new -->
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <span>Hình ảnh ra cổng</span>
+              </div>
+            </div>
+            <div class="mbf-box__body box-image">
+              <ng-container *ngIf="imagesCheckOut.length > 0, else imgCheckOutEmpty">
+                <nz-image-group class="group-img">
+                  <div *ngFor="let image of imagesCheckOut" class="inOut-img">
+                    <img nz-image [nzSrc]="imageUrl + image.attachmentId" alt="">
+                  </div>
+                </nz-image-group>
+              </ng-container>
+              <ng-template #imgCheckOutEmpty>
+                <app-empty></app-empty>
+              </ng-template>
+            </div>
+          </div>      
+        </div>
+        <div class="info-content col-md-4">
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-receipt"></i>
+                <span>Thông tin phiếu cân hàng</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="list-info d-space-bw">
+                <div class="label">Biển số xe</div>
+                <div class="value">{{itemDetail?.vehicleCode}}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">RFID</div>
+                <div class="value">{{itemDetail?.rfId}}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Ngày giờ vào cổng</div>
+                <div class="value">{{itemDetail?.checkInTime | date: 'dd/MM/yyyy hh:mm:ss'}}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">Ngày giờ ra cổng</div>
+                <div class="value">{{itemDetail?.checkOutTime | date: 'dd/MM/yyyy hh:mm:ss'}}</div>
+              </div>                               
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

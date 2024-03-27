@@ -1,0 +1,115 @@
+body,
+html {
+  height: 100% !important;
+}
+
+.apexcharts-legend.apx-legend-position-bottom.apexcharts-align-center,
+.apexcharts-legend.apx-legend-position-top.apexcharts-align-center {
+  justify-content: justify !important;
+}
+
+::ng-deep.ng-star-inserted {
+  stroke-width: unset !important;
+}
+
+::ng-deep.apexcharts-canvas {
+  height: 540px !important;
+}
+::ng-deep.apexcharts-menu-icon {
+  display: none !important;
+}
+::ng-deep.apexcharts-series {
+  &:nth-child(odd) {
+    path {
+      fill: #0060a6 !important;
+    }
+  }
+
+  &:nth-child(even) {
+    path {
+      fill: #ff3e3e !important;
+    }
+  }
+}
+.container {
+  .title {
+    padding: 0 20px;
+  }
+  .box-select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    .title-chart {
+      &.card-title {
+        padding-top: 0 !important;
+      }
+    }
+    .choose-time {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 10px;
+      select.form-select {
+        width: 150px;
+      }
+    }
+  }
+
+  .in-day {
+    display: flex;
+    justify-content: space-evenly;
+    color: white;
+    .import {
+      width: 200px;
+      height: 75px;
+      background-color: #0060a6;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding: 0 10px;
+    }
+    .export {
+      width: 200px;
+      height: 75px;
+      background-color: #ff3e3e;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding: 0 10px;
+    }
+    .total-order {
+      width: 200px;
+      height: 75px;
+      background-color: #198754;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding: 0 10px;
+    }
+    .total-order-not-accepted {
+      width: 200px;
+      height: 75px;
+      background-color: #0dcaf0;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding: 0 10px;
+    }
+    .figure {
+      display: flex;
+      justify-content: space-between;
+      width: 95%;
+    }
+  }
+}
+#chart {
+  width: 100vw;
+}

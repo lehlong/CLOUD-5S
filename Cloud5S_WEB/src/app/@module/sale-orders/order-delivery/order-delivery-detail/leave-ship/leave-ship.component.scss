@@ -1,0 +1,54 @@
+.ls__table {
+  width: 100%;
+  border: 1px solid #d7d7d7;
+  thead {
+    text-align: center;
+  }
+  td {
+    padding: 0px !important;
+  }
+  &-child {
+    width: 100%;
+  }
+}
+.border-right {
+  border-right: 1px solid #d7d7d7;
+}
+.border-bottom {
+  border-bottom: 1px solid #d7d7d7;
+}
+.border-top {
+  border-top: 1px solid #d7d7d7;
+}
+.text__align {
+  &-left {
+    display: block;
+    text-align: left;
+    padding-left: 5px;
+  }
+  &-right {
+    display: block;
+    text-align: right;
+    padding-right: 5px;
+  }
+  &-center {
+    display: block;
+    text-align: center;
+  }
+}
+.text__color {
+  &-red {
+    color: #ff4500;
+  }
+}
+.ls-title {
+  flex: 1;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+.custom-header {
+  font-weight: 500;
+}

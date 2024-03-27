@@ -1,0 +1,114 @@
+<div class="card notify-detail-container" [style.width]="widthDeault" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Thông tin thông báo
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <!--  -->
+      <div class="mbf-box">
+        <div class="mbf-box__header">
+          <div class="mbf-box__title">
+            <i class="bi bi-menu-button-wide"></i>
+            <span>Tiêu đề</span>
+          </div>
+        </div>
+        <div class="mbf-box__body">
+          <div>
+            {{ allDataDetail.subtitle }}
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="mbf-box">
+        <div class="mbf-box__header">
+          <div class="mbf-box__title">
+            <i class="bi bi-clock-history"></i>
+            <span>Ngày giờ thông báo</span>
+          </div>
+        </div>
+        <div class="mbf-box__body">
+          <div >
+            {{ allDataDetail.createDate | date : 'dd/MM/yyyy HH:mm' }}
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="mbf-box">
+        <div class="mbf-box__header">
+          <div class="mbf-box__title">
+            <i class="bi bi-person"></i>
+            <span>Người thông báo</span>
+          </div>
+        </div>
+        <div class="mbf-box__body">
+          <div >
+            {{ allDataDetail.senderName || '' }}
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="mbf-box">
+        <div class="mbf-box__header">
+          <div class="mbf-box__title">
+            <i class="bi bi-receipt"></i>
+            <span>Nội dung</span>
+          </div>
+        </div>
+        <div class="mbf-box__body">
+          <div >
+            <div [innerHTML]="allDataDetail.contents"></div>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="content-group mt-2">
+        <div class="mbf-box">
+          <div class="mbf-box__header">
+            <div class="mbf-box__title">
+              <i class="bi bi-box"></i>
+              <span>Danh sách người thông báo</span>
+            </div>
+          </div>
+          <div class="mbf-box__body">
+            <div class="">
+              <div class="wraper-table mt-3">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Tên người nhận</th>
+                      <th>Họ tên</th>
+                      <th>Nhóm người dùng</th>
+                      <th>Email</th>
+                      <th>Số điện thoại</th>
+                      <th>Trạng thái</th>
+                      <th>Ngày giờ đọc</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let detail of allDataDetail.details; let i = index">
+                      <td>{{ detail.receiverName }}</td>
+                      <td>{{ detail.account.fullName }}</td>
+                      <td>{{ allDataDetail.data2[i] }}</td>
+                      <td>{{ detail.account.email }}</td>
+                      <td>{{ detail.account.phoneNumber }}</td>
+                      <td>{{ detail.isSeen ? 'Đã xem' : 'Chưa xem' }}</td>
+                      <td>{{ detail.isSeen ? (detail.updateDate | date : 'dd/MM/yyyy HH:mm') : '' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

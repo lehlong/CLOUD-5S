@@ -1,0 +1,40 @@
+.report-inventory-container {
+  ::ng-deep.ant-table-expanded-row > td {
+    padding: 0px !important;
+  }
+  .table-parent {
+    ::ng-deep.ant-table-thead {
+      tr {
+        th {
+          border: 1px solid #f0f0f0;
+        }
+      }
+    }
+  }
+  .table-child {
+    ::ng-deep.ant-table {
+      margin: 0px !important;
+    }
+    ::ng-deep.ant-table-tbody {
+      tr {
+        td {
+          border: 1px solid #f0f0f0;
+        }
+      }
+    }
+    ::ng-deep.ant-table-thead {
+      opacity: 0;
+      pointer-events: none;
+      width: 100%;
+      position: absolute;
+      tr {
+        th {
+          padding-top: 0px !important;
+          padding-bottom: 0px !important;
+          height: 2px !important;
+          border: 1px solid #f0f0f0;
+        }
+      }
+    }
+  }
+}

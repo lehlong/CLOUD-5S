@@ -1,0 +1,14 @@
+  nz-progress {
+    max-width: 67px; /* Adjust the width as needed */
+    display: block;
+  }
+  .label-status {
+    white-space: nowrap;
+    padding: 0px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    &.status {
+      padding: 3px 5px !important;
+    }
+  }

@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title p-0 mb-1">
+        <i class="bi bi-journal-text"></i>
+        Quản lý sản xuất
+      </div>
+      <div class="d-flex flex-wrap d-gap">
+        <div *ngIf="tab == 0" [appPermission]="PRODUCTION_MANAGER.CHINH_SUA_NHAP_HANG">
+          <button (click)="saveInfo()" type="button" class="btn btn-primary">
+            <i class="bi-check-circle"></i> Lưu thông tin
+          </button>
+        </div>
+        <div *ngIf="tab == 1">
+          <button
+            (click)="enterProductionInfo()"
+            type="button"
+            class="btn btn-primary"
+            [appPermission]="PRODUCTION_MANAGER.CHI_TIET_CA_SX">
+            <i class="bi bi-edit"></i> Nhập thông tin sản xuất
+          </button>
+        </div>
+        <div *ngIf="tab == 0" [appPermission]="PRODUCTION_MANAGER.EXCEL_NHAP_HANG">
+          <button type="button" class="btn export-excel-btn">
+            <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+            Tải excel
+          </button>
+        </div>
+        <div *ngIf="tab == 1" [appPermission]="PRODUCTION_MANAGER.EXCEL_CA">
+          <button type="button" class="btn export-excel-btn">
+            <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+            Tải excel
+          </button>
+        </div>
+        <div *ngIf="tab == 2" [appPermission]="PRODUCTION_MANAGER.EXCEL_CA">
+          <button (click)="downloadReportExcel()" type="button" class="btn export-excel-btn">
+            <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+            Tải excel
+          </button>
+        </div>
+      </div>
+    </div>
+    <nz-tabset [nzAnimated]="false" (nzSelectChange)="changeTab($event)" [(nzSelectedIndex)]="tab">
+      <nz-tab nzTitle="Danh sách phiếu nhập hàng">
+        <app-list-purchase-orders [tab]="tab"></app-list-purchase-orders>
+      </nz-tab>
+      <nz-tab nzTitle="Quản lý sản xuất theo ca">
+        <app-shift-based-production-management [tab]="tab"></app-shift-based-production-management>
+      </nz-tab>
+      <nz-tab nzTitle="Tồn kho lô và dãy">
+        <app-report-inventory [tab]="tab"></app-report-inventory>
+      </nz-tab>
+      <nz-tab nzTitle="Lịch sử chuyển lô và dãy">
+        <app-list-stock-item-transfer-log [tab]="tab"></app-list-stock-item-transfer-log>
+      </nz-tab>
+      <nz-tab nzTitle="Dữ liệu kho gỗ">
+        <app-data-stock-wood [tab]="tab"></app-data-stock-wood>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>

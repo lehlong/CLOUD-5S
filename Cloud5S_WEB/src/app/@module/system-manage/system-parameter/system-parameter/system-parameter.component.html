@@ -1,0 +1,284 @@
+<div class="card" style="height: 100%">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title"><i class="bi bi-journal-text"></i>Quản trị cấu hình hệ thống</div>
+      <div class="d-flex-wrap d-gap"></div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button type="button" class="btn btn-primary mr-2" (click)="submit()">
+          <i class="bi-check-circle"></i> Cập nhật thông tin
+        </button>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1">
+      <div class="card" style="height: 100%">
+        <div class="card-body">
+          <div class="pr-5 pl-5">
+            <form class="form" [formGroup]="actionFormGroup" (keydown.enter)="$event.preventDefault()">
+              <div class="row">
+                <div class="col-lg-6 col-md-12">
+                  <div class="title">
+                    <span>Cảng</span>
+                  </div>
+                  <div class="row mb-3 ms-5">
+                    <label for="portName" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Tên port <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <input
+                        type="text"
+                        [autofocus]="true"
+                        class="form-control form-control-lg"
+                        id="portName"
+                        formControlName="portName"
+                        placeholder="" />
+                      <div *ngIf="portName!.invalid && (portName!.dirty || portName!.touched)" class="text-danger">
+                        <div *ngIf="portName!.errors!['required']">Vui lòng nhập thông tin</div>
+                        <div *ngIf="!portName!.errors!['required'] && portName!.invalid"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3 ms-5">
+                    <label for="portAddress" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Địa chỉ port <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <input
+                        type="text"
+                        class="form-control form-control-lg"
+                        id="portAddress"
+                        formControlName="portAddress"
+                        placeholder="" />
+                      <div
+                        *ngIf="portAddress!.invalid && (portAddress!.dirty || portAddress!.touched)"
+                        class="text-danger">
+                        <div *ngIf="portAddress!.errors!['required']">Vui lòng nhập thông tin</div>
+                        <div *ngIf="!portAddress!.errors!['required'] && portAddress!.invalid"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3 ms-5">
+                    <label for="portLatitude" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Vĩ độ <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <input
+                        type="text"
+                        class="form-control form-control-lg"
+                        id="portLatitude"
+                        formControlName="portLatitude"
+                        placeholder="" />
+                      <div
+                        *ngIf="portLatitude!.invalid && (portLatitude!.dirty || portLatitude!.touched)"
+                        class="text-danger">
+                        <div *ngIf="portLatitude!.errors!['required']">Vui lòng nhập thông tin</div>
+                        <div *ngIf="!portLatitude!.errors!['required'] && portLatitude!.invalid">Sai định dạng</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3 ms-5">
+                    <label for="portLongitude" class="col-form-p col-lg-3 col-md-4 font-weight-bold">
+                      Kinh độ <span style="color: red">*</span>
+                    </label>
+                    <div class="col-lg-8 col-md-6">
+                      <input
+                        type="text"
+                        class="form-control form-control-lg"
+                        id="portLongitude"
+                        formControlName="portLongitude"
+                        placeholder="" />
+                      <div
+                        *ngIf="portLongitude!.invalid && (portLongitude!.dirty || portLongitude!.touched)"
+                        class="text-danger">
+                        <div *ngIf="portLongitude!.errors!['required']">Vui lòng nhập thông tin</div>
+                        <div *ngIf="!portLongitude!.errors!['required'] && portLongitude!.invalid">Sai định dạng</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="title">
+                    <span>Nhà máy</span>
+                  </div>
+
+                  <div class="row mb-3 ms-5">
+                    <label for="defaultCompanyCode" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Nhà máy mặc định <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <nz-select
+                        [nzStatus]="defaultCompanyCode!.errors ? 'error' : ''"
+                        nzShowSearch
+                        nzAllowClear
+                        nzPlaceHolder="Mã nhà máy mặc định"
+                        formControlName="defaultCompanyCode">
+                        <nz-option
+                          *ngFor="let item of listCompany"
+                          [nzLabel]="item.name"
+                          [nzValue]="item.code"></nz-option>
+                      </nz-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                  <div class="title">
+                    <span>Nguyên liệu</span>
+                  </div>
+                  <div class="row mb-3 ms-5">
+                    <label for="defaultIngredientItemCode" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Nguyên liệu mặc định <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <nz-select
+                        [nzStatus]="defaultIngredientItemCode!.errors ? 'error' : ''"
+                        nzShowSearch
+                        nzAllowClear
+                        nzPlaceHolder="Mã nguyên liệu mặc định"
+                        formControlName="defaultIngredientItemCode">
+                        <nz-option
+                          *ngFor="let item of listItem"
+                          [nzLabel]="item.name"
+                          [nzValue]="item.code"></nz-option>
+                      </nz-select>
+                      <div
+                        *ngIf="
+                          defaultIngredientItemCode!.invalid &&
+                          (defaultIngredientItemCode!.dirty || defaultIngredientItemCode!.touched)
+                        "
+                        class="text-danger">
+                        <div *ngIf="defaultIngredientItemCode!.errors!['required']">Vui lòng nhập thông tin</div>
+                        <div
+                          *ngIf="
+                            !defaultIngredientItemCode!.errors!['required'] && defaultIngredientItemCode!.invalid
+                          "></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3 ms-5">
+                    <label for="defaultProductItemCode" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Thành phẩm mặc định <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <nz-select
+                        [nzStatus]="defaultProductItemCode!.errors ? 'error' : ''"
+                        nzShowSearch
+                        nzAllowClear
+                        nzPlaceHolder="Mã thành phẩm mặc định"
+                        formControlName="defaultProductItemCode">
+                        <nz-option
+                          *ngFor="let item of listItem"
+                          [nzLabel]="item.name"
+                          [nzValue]="item.code"></nz-option>
+                      </nz-select>
+                      <div
+                        *ngIf="
+                          defaultProductItemCode!.invalid &&
+                          (defaultProductItemCode!.dirty || defaultProductItemCode!.touched)
+                        "
+                        class="text-danger">
+                        <div *ngIf="defaultProductItemCode!.errors!['required']">Vui lòng nhập thông tin</div>
+                        <div
+                          *ngIf="!defaultProductItemCode!.errors!['required'] && defaultProductItemCode!.invalid"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3 ms-5">
+                    <label for="unitCode" class="col-form-p col-lg-3 col-md-4 font-weight-bold">
+                      Đơn vị tính <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <nz-select
+                        [nzStatus]="unitCode!.errors ? 'error' : ''"
+                        nzShowSearch
+                        nzAllowClear
+                        nzPlaceHolder="Mã đơn vị tính"
+                        formControlName="unitCode">
+                        <nz-option
+                          *ngFor="let item of listUnit"
+                          [nzLabel]="item.name"
+                          [nzValue]="item.code"></nz-option>
+                      </nz-select>
+                    </div>
+                  </div>
+                  <div class="title">
+                    <span>Kho</span>
+                  </div>
+                  <div class="row mb-3 ms-5">
+                    <label for="defaultIngredientStock" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Kho nguyên liệu mặc định <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <nz-select
+                        [nzStatus]="defaultIngredientStock!.errors ? 'error' : ''"
+                        nzShowSearch
+                        nzAllowClear
+                        nzPlaceHolder="Mã kho nguyên liệu mặc định"
+                        formControlName="defaultIngredientStock">
+                        <nz-option
+                          *ngFor="let item of listStock"
+                          [nzLabel]="item.name"
+                          [nzValue]="item.code"></nz-option>
+                      </nz-select>
+                      <div
+                        *ngIf="
+                          defaultIngredientStock!.invalid &&
+                          (defaultIngredientStock!.dirty || defaultIngredientStock!.touched)
+                        "
+                        class="text-danger">
+                        <div *ngIf="defaultIngredientStock!.errors!['required']">Vui lòng nhập thông tin</div>
+                        <div
+                          *ngIf="!defaultIngredientStock!.errors!['required'] && defaultIngredientStock!.invalid"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3 ms-5">
+                    <label for="defaultProductStock" class="col-form-p col-lg-3 col-md-4 font-weight-bold"
+                      >Kho thành phẩm mặc định <span style="color: red">*</span></label
+                    >
+                    <div class="col-lg-8 col-md-6">
+                      <nz-select
+                        [nzStatus]="defaultProductStock!.errors ? 'error' : ''"
+                        nzShowSearch
+                        nzAllowClear
+                        nzPlaceHolder="Mã kho thành phẩm mặc định"
+                        formControlName="defaultProductStock">
+                        <nz-option
+                          *ngFor="let item of listStock"
+                          [nzLabel]="item.name"
+                          [nzValue]="item.code"></nz-option>
+                      </nz-select>
+                      <div
+                        *ngIf="
+                          defaultProductStock!.invalid && (defaultProductStock!.dirty || defaultProductStock!.touched)
+                        "
+                        class="text-danger">
+                        <div *ngIf="defaultProductStock!.errors!['required']">Vui lòng nhập thông tin</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="row mb-3 p-3">
+              <!-- <div class="col-12 text-right">
+                <button class="btn btn-success p-2" (click)="submit()">
+                  <span class="mdi mdi-content-save"></span>Cập nhật
+                </button>
+                <button class="btn btn-secondary p-2 ms-2"><span class="mdi mdi-cancel"></span>Thoát</button>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

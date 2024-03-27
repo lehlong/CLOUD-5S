@@ -1,0 +1,91 @@
+.product-wraper-btn {
+    border: 1px solid transparent;
+    box-shadow: 0 2px rgba(0, 0, 0, 0.0156862745);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    height: 32px;
+    font-size: 13px;
+    border-radius: 2px;
+    color: rgba(0, 0, 0, 0.8509803922);
+    border-color: #d9d9d9;
+    background: #fff;
+    border-style: dashed;
+    width: 35%;
+    text-align: center;
+    line-height: 31px;
+    &:hover {
+      color: #1890ff;
+      border-color: #1890ff;
+    }
+  }
+  
+  .info-content {
+    border-left: 1px solid #dee2e6;
+    padding-left: 10px;
+  }
+  
+  .export-input {
+    text-align: right;
+    padding: 5px;
+    label {
+      font-weight: 600;
+    }
+    input {
+      margin-top: 5px;
+      text-align: right;
+      padding-right: 8px;
+    }
+  }
+  .flex {
+    &-1 {
+      flex: 1;
+    }
+    &-2 {
+      flex: 2;
+    }
+  }
+  .g-10 {
+    gap: 10px;
+  }
+  
+  .pay-info {
+    &-left {
+      padding: 5px 20px 20px 0px;
+    }
+    &-right {
+      padding: 10px;
+    }
+    &-radio {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      input {
+        margin-right: 5px;
+      }
+    }
+  }
+  
+  [nz-radio] {
+    display: block;
+    height: 32px;
+    line-height: 32px;
+  }
+  .p {
+    &-10 {
+      padding: 10px;
+    }
+  }
+  .order {
+    &--input {
+      :focus {
+        border-color: #40a9ff;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        border-right-width: 1px;
+        outline: 0;
+      }
+    }
+  }
+  

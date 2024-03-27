@@ -1,0 +1,117 @@
+<div class="card" [appPermission]="MESSAGE_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title"><i class="bi bi-journal-text"></i>Quản lý thông báo</div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="filter">
+          <div class="input-group search-box">
+            <div class="wrapper-input">
+              <app-input-clear
+                placeholder="content.common.placeholder_search"
+                (searchEvent)="search()"
+                [(value)]="filter.keyWord"></app-input-clear>
+            </div>
+            <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+            <span (click)="search(1, filter.pageSize, true)" class="input-group-text"
+              ><i class="bi bi-arrow-clockwise"></i
+            ></span>
+            &nbsp;
+          </div>
+        </div>
+        <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="openCreate()"
+            [appPermission]="MESSAGE_RIGHTS.THEM_MOI">
+            <i class="bi bi-plus-lg"></i>{{ 'content.common.btn_create' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1">
+      <table
+        mat-table
+        [dataSource]="paginationResult.data"
+        *ngIf="paginationResult"
+        class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef width="60px" class="align-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="align-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef width="200px">Mã</th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" style="text-align: left">{{ element.code }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>Nội dung</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">
+            <ng-container *ngIf="editingEvent.code !== element.code; else inputTemplate">
+              {{ element.value }}
+            </ng-container>
+            <ng-template #inputTemplate>
+              <form [formGroup]="editForm" (keydown.enter)="saveEdit()" [appPermission]="MESSAGE_RIGHTS.CHINH_SUA">
+                <div>
+                  <input
+                    appSelectOnFocus
+                    #inputField
+                    [ngClass]="{'is-invalid': editingEvent.submitted && editf['value'].errors}"
+                    type="text"
+                    class="form-control"
+                    formControlName="value" />
+                  <div *ngIf="editingEvent.submitted && editf['value'].errors" class="invalid-feedback">
+                    <div *ngIf="editf['value']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </form>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef width="90px">
+            {{ 'content.masterdata.area.list.action' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <div *ngIf="editingEvent.code !== element.code">
+              <i class="action-icon bi bi-pencil-square text-primary cursor-pointer" (click)="openEdit(element)"></i>
+              <i
+                class="action-icon1 bi bi-trash3 text-danger cursor-pointer"
+                (click)="deleteArea(element)"
+                [appPermission]="MESSAGE_RIGHTS.XOA"></i>
+            </div>
+            <div class="input-group" *ngIf="editingEvent.code === element.code">
+              <div class="input-group-append">
+                <button class="btn btn-success btn-i" (click)="saveEdit()">Lưu</button>
+                <button class="btn btn-danger btn-i" (click)="resetEdit()">Hủy</button>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (dblclick)="openEdit(row)"
+          [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

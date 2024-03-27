@@ -1,0 +1,308 @@
+<div class="card order-edit-container" [style.width]="widthDeault" style="height: 100%;">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Chi tiết phiếu xuất hàng
+      </div>
+      <div class="d-flex-wrap d-gap group-btn">
+        <div *ngIf="itemDetail && !isDisableButton()">
+          <button type="button" class="btn btn-primary" (click)="onConfirm()">
+            <i class="bi bi-check-circle"></i>Xác nhận
+          </button>
+        </div>
+        <div *ngIf="itemDetail && !isDisableButton()">
+          <button type="button" class="btn btn-danger" (click)="onCancel()">
+            <i class="bi bi-trash"></i>Hủy
+          </button>
+        </div>
+        <div *ngIf="itemDetail && !isDisableButton()">
+          <button type="button" class="btn btn-success" (click)="onUpdate()">
+            <i class="bi bi-plus-lg"></i>Chỉnh sửa
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn print-btn" (click)="onPrint()">
+            <i class="bi bi-printer"></i>In phiếu
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3">
+      <div>
+        <div class="tab-content">
+          <div class="fade show active" role="tabpanel" aria-labelledby="info-tab">
+            <div class="row g-3 detail-container">
+              <div class="main-content col-md-8">
+                <div *ngIf="itemDetail" class="">
+                  <div class="mbf-box">
+                    <div class="mbf-box__header">
+                      <div class="mbf-box__title">
+                        <i class="bi bi-box"></i> Thông tin sản phẩm
+                      </div>
+                    </div>
+                    <div class="mbf-box__body">
+                      <div style="overflow-x: auto;">
+                        <table class="table table-hover" [cellPadding]="0">
+                          <thead>
+                            <tr>
+                              <th style="width: 100px;">Mã sản phẩm</th>
+                              <th>Tên sản phẩm</th>
+                              <th style="width: 120px;" class="text-right">Lượng đặt</th>
+                              <th style="width: 120px;" class="text-right">Lượng xuất</th>
+                              <th style="width: 120px;" class="text-right">Đơn giá</th>
+                              <th style="width: 120px;" class="text-right">Thành tiền</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of itemDetail.exportDetails">
+                              <td>{{item?.itemCode}}</td>
+                              <td>{{item?.item?.name}}</td>
+                              <td class="text-right">{{item?.orderNumber | number}}</td>
+                              <td class="text-right">{{item?.number | number}}</td>
+                              <td class="text-right">{{item?.price | number}}</td>
+                              <td class="text-right">{{item?.sumMoney | number}}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="5" class="text-right fw-medium" style="padding-right: 20px;">Tổng tiền
+                              </td>
+                              <td class="text-right fw-medium">{{totalMoney() | number }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mbf-box">
+                    <div class="mbf-box__header">
+                      <div class="mbf-box__title">
+                        <i class="bi bi-currency-dollar"></i> Thông tin hóa đơn
+                      </div>
+                    </div>
+                    <div class="mbf-box__body">
+                      <div class="pay-info mb-3" style="gap: 10px;">
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Chiết khấu</div>
+                              <div>{{itemDetail.discount | number}}%</div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Tổng tiền hàng</div>
+                              <div>{{getSummoney() | number}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Thuế VAT</div>
+                              <div>{{itemDetail.taxVat | number}}%</div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Tổng tiền</div>
+                              <div>{{itemDetail.sumMoney | number}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Thanh toán</div>
+                              <div>{{itemDetail.payMoney | number}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Tiền nợ</div>
+                              <div>{{itemDetail.debt | number}}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mbf-box">
+                    <div class="mbf-box__header">
+                      <div class="mbf-box__title">
+                        <i class="bi bi-credit-card"></i> Thông tin thanh toán
+                      </div>
+                    </div>
+                    <div class="mbf-box__body">
+                      <div class="col-lg-12 pay-info-left mb-20">
+                        <nz-radio-group class="d-flex" [(ngModel)]="itemDetail.isPaymentNow">
+                          <label style="pointer-events: none;" nz-radio [nzValue]="false">Chưa thanh toán</label>
+                          <label style="pointer-events: none;" nz-radio [nzValue]="true">Thanh toán ngay</label>
+                        </nz-radio-group>
+                      </div>
+                      <div *ngIf="itemDetail.isPaymentNow" class="pay-info">
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Người nhận</div>
+                              <div>{{itemDetail.senderName}}</div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Số điện thoại</div>
+                              <div>{{itemDetail.senderPhoneNumber}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Địa chỉ</div>
+                              <div>{{itemDetail.senderAddress}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Hình thức thanh toán</div>
+                              <div>{{itemDetail.paymentMethod && PAYMENT_METHODS[itemDetail.paymentMethod].name}}</div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Ngân hàng</div>
+                              <div>{{itemDetail?.bankAccount && itemDetail?.bankAccount?.bankName}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-between line-info">
+                          <div class="col-lg-6">
+                            <div class="d-flex line-input">
+                              <div class="fw-medium">Nội dung thanh toán</div>
+                              <div>{{itemDetail?.incomeType && itemDetail?.incomeType?.name}}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="info-content col-md-4">
+                <div class="" *ngIf="itemDetail">
+                  <div class="info--export mb-20">
+                    <div class="mbf-box">
+                      <div class="mbf-box__header">
+                        <div class="mbf-box__title">
+                          <i class="bi bi-info-circle"></i>
+                          Thông tin phiếu xuất
+                        </div>
+                      </div>
+                      <div class="mbf-box__body">
+                        <div class="list-info d-space-bw">
+                          <div class="label">Mã phiếu xuất</div>
+                          <div>{{itemDetail.code}}</div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Loại phiếu</div>
+                          <div>{{ORDER_EXPORT_TYPE[itemDetail.type].name}}</div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Ngày xuất</div>
+                          <div>{{itemDetail.exportDate | date: 'dd/MM/yyyy HH:mm'}}</div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Khách hàng</div>
+                          <div>{{itemDetail?.partner?.name}}</div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Số điện thoại</div>
+                          <div>
+                            {{itemDetail?.partnerPhoneNumber ? itemDetail?.partnerPhoneNumber : itemDetail?.partner?.phoneNumber}}
+                          </div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Địa chỉ</div>
+                          <div>
+                            {{itemDetail?.partnerAddress ? itemDetail?.partnerAddress : itemDetail?.partner?.address}}
+                          </div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Phương tiện</div>
+                          <div>{{itemDetail?.vehicleCode}}</div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Lái xe</div>
+                          <div>{{itemDetail?.driverName}}</div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Kho xuất</div>
+                          <div>{{itemDetail?.stock?.name}}</div>
+                        </div>
+                        <div class="list-info d-space-bw">
+                          <div class="label">Trạng thái</div>
+                          <div *ngIf="STATE_ORDER_EXPORT[itemDetail?.state]" class="label-status"
+                            [style.background]="STATE_ORDER_EXPORT[itemDetail?.state].background"
+                            [style.color]="STATE_ORDER_EXPORT[itemDetail?.state].color">
+                            {{ STATE_ORDER_EXPORT[itemDetail?.state].name }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="itemDetail.type != 'TM'" class="info--order">
+                    <div class="mbf-box">
+                      <div class="mbf-box__header">
+                        <div class="mbf-box__title">
+                          <i class="bi bi-info-circle"></i>
+                          Thông tin đơn hàng
+                        </div>
+                      </div>
+                      <div class="mbf-box__body">
+                        <div class="table--custom">
+                          <div class="list-info d-space-bw">
+                            <div>Mã đơn hàng</div>
+                            <div>{{itemDetail?.order?.code}}</div>
+                          </div>
+                          <div class="list-info d-space-bw">
+                            <div>Ngày đặt hàng</div>
+                            <div>{{itemDetail.order?.createDate | date: 'dd/MM/yyyy HH:mm'}}</div>
+                          </div>
+                          <div class="list-info d-space-bw">
+                            <div>Ngày đổ</div>
+                            <div>{{itemDetail.order?.pourDate | date: 'dd/MM/yyyy HH:mm'}}</div>
+                          </div>
+                          <div class="list-info d-space-bw">
+                            <div>Địa điểm đổ</div>
+                            <div>{{itemDetail.order?.pourLocation}}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

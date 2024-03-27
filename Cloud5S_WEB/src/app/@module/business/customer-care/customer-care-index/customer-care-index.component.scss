@@ -1,0 +1,33 @@
+    .container{
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        max-width: 100%;
+        overflow: auto;
+        .list-infor {
+            width: 25%;
+            padding: 0 0 0 8px;
+        }
+        .list-cskh{
+            width: 74%;
+            .care-list-infor{
+                margin-top: 36px;
+                display: flex;
+                justify-content: end;
+            }
+            .list-container {
+                height: calc(100vh - 240px);
+                max-height: calc(100vh - 240px);
+                width: 100%;
+            }     
+            table {
+                width: 100%;
+                tr{
+                    &:last-child {
+                        border-bottom: none;
+                    }
+                }
+            }
+        }
+    }
+

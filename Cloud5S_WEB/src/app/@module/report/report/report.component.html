@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="container">
+      <div class="row pt-3">
+        <span class="title card-title">Thống kê trong ngày</span>
+        <div class="in-day row">
+          <div class="import col-md-3 col-sm-6 col-xs-12 mt-1">
+            <span>Tổng sản lượng đặt</span>
+            <div class="figure">
+              <b>{{ formatNumber(order) }}</b>
+              <b>M3</b>
+            </div>
+          </div>
+          <div class="export col-md-3 col-sm-6 col-xs-12 mt-1">
+            <span>Tổng sản lượng xuất</span>
+            <div class="figure">
+              <b>{{ formatNumber(export) }}</b>
+              <b>M3</b>
+            </div>
+          </div>
+          <div class="total-order col-md-3 col-sm-6 col-xs-12 mt-1">
+            <span>Tổng số đơn đặt</span>
+            <div class="figure">
+              <b>{{ formatNumber(totalOrder) }}</b>
+              <b>Đơn</b>
+            </div>
+          </div>
+          <div class="total-order-not-accepted col-md-3 col-sm-6 col-xs-12 mt-1">
+            <span>Tổng số đơn bị huỷ</span>
+            <div class="figure">
+              <b>{{ formatNumber(totalOrderNotAccepted) }}</b>
+              <b>Đơn</b>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="box-select">
+          <span class="title-chart card-title">Biểu đồ sản lượng</span>
+          <div class="choose-time col-2">
+            <select (change)="selectTypeCode($event)" class="form-select" aria-label="Nhóm sản phẩm">
+              <option *ngFor="let item of listTimeRange" [value]="item.code">{{ item.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="chart" style="padding: 0px" class="col-12">
+          <apx-chart
+            *ngIf="chartOptions"
+            [series]="chartOptions?.series"
+            [chart]="chartOptions?.chart"
+            [dataLabels]="chartOptions?.dataLabels"
+            [colors]="chartOptions?.colors"
+            [xaxis]="chartOptions?.xaxis"
+            [yaxis]="chartOptions?.yaxis"></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

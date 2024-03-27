@@ -1,0 +1,135 @@
+<div class="card stock-create-container" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-plus-lg"></i>Tạo mới phiếu nhập kho
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onCreate()" type="button" class="btn btn-primary" submitForm>
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <form [formGroup]="stockForm" (ngSubmit)="onCreate()">
+        <div class="row g-3 detail-container">
+          <div class="main-content col-md-8 pr-2">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-box"></i>
+                  Thông tin sản phẩm
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div (click)="openChooseItem()" class="product-wraper-btn">
+                  <i class="bi bi-plus-lg me-1"></i> Chọn sản phẩm
+                </div>
+                <div class="wraper-table mt-3">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th class="fw-normal">Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th class="text-right">Số lượng</th>
+                        <th>ĐVT</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                        <th>Ghi chú</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container formArrayName="importDetails">
+                        <ng-container *ngFor="let dateTimeGroup of importDetails.controls; let i = index"
+                          [formGroupName]="i">
+                          <tr>
+                            <td>{{ listItemDetails[i].code || '' }}</td>
+                            <td>{{ listItemDetails[i].name || '' }}</td>
+                            <td>
+                              <app-input-number [requiredNotlabel]="true" (input)="textQuantity($event, i)"
+                                [required]="true"
+                                [showErrors]="submitted && dateTimeGroup?.get('amount')?.hasError('required')"
+                                [control]="$any(dateTimeGroup).controls['amount']"></app-input-number>
+                            </td>
+                            <td>{{ listItemDetails[i].unit.name || '' }}</td>
+                            <td>
+                              <app-input-number [requiredNotlabel]="true" (input)="textPrice($event, i)"
+                                [required]="true"
+                                [showErrors]="submitted && dateTimeGroup?.get('price')?.hasError('required')"
+                                [control]="$any(dateTimeGroup).controls['price']"></app-input-number>
+                            </td>
+                            <td>{{ utils.formatNumber(moneyTotal[i]?.totalMoney) }}</td>
+                            <td><app-input-clear
+                                [control]="$any(dateTimeGroup).controls['note']"></app-input-clear>
+                            </td>
+                            <td><i (click)="removeImportDetails(i)" class="bi bi-dash-circle minus-field"></i>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-content col-md-4">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-boxes"></i>
+                  Thông tin kho
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="import-date-wraper">
+                  <label class="form-label">Ngày nhập kho<span class="text-danger ms-1">*</span></label>
+                  <nz-date-picker nzFormat="dd/MM/yyyy" class="d-block"
+                    [nzStatus]="submitted && f['importDate'].errors ? 'error' : ''"
+                    formControlName="importDate"></nz-date-picker>
+                  <div *ngIf="submitted && f['importDate'].errors" class="text-validate">
+                    <div *ngIf="f['importDate']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+                <!--  -->
+                <div class="import-date-wraper col-12 mt-3">
+                  <label class="form-label">Đối tác<span class="text-danger ms-1">*</span></label>
+                  <nz-select [nzStatus]="submitted && f['partnerCode'].errors ? 'error' : ''" nzAllowClear nzShowSearch
+                    nzPlaceHolder="Đối tác" formControlName="partnerCode">
+                    <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name"
+                      [nzValue]="partner.code"></nz-option>
+                  </nz-select>
+                  <div *ngIf="submitted && f['partnerCode'].errors" class="text-validate">
+                    <div *ngIf="f['partnerCode']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+                <div class="import-date-wraper col-12 mt-3">
+                  <label class="form-label">Kho nhập<span class="text-danger ms-1">*</span></label>
+                  <nz-select (ngModelChange)="selectStock($event)"
+                    [nzStatus]="submitted && f['stockCode'].errors ? 'error' : ''" nzAllowClear nzShowSearch
+                    nzPlaceHolder="Kho nhập" formControlName="stockCode">
+                    <nz-option *ngFor="let stock of listStockAll" [nzLabel]="stock.name"
+                      [nzValue]="stock.code"></nz-option>
+                  </nz-select>
+                  <div *ngIf="submitted && f['stockCode'].errors" class="text-validate">
+                    <div *ngIf="f['stockCode']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+                <div class="note-wraper mt-3">
+                  <app-input-clear [textArea]="true" placeholder="Ghi chú" label="Ghi chú"
+                    [control]="$any(stockForm).controls['note']"></app-input-clear>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

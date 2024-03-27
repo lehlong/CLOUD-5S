@@ -1,0 +1,232 @@
+<div class="container-list-purchase-orders" [appPermission]="PRODUCTION_MANAGER.DANH_SACH_QLSX">
+    <div class="d-flex d-gap-2 flex-wrap">
+        <div class="flex-row flex-grow-2">
+            <nz-range-picker nzFormat="dd/MM/yyyy" [nzRanges]="rangePresets" [(ngModel)]="filter.selectedRange"
+                [nzPlaceHolder]="['Ngày nhập bắt đầu', 'Ngày nhập kết thúc']"></nz-range-picker>
+        </div>
+
+        <div class="d-flex flex-row flex-grow-1">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn ca nhập" [(ngModel)]="filter.workingShiftCode">
+                <nz-option *ngFor="let element of listWorkingShift" [nzLabel]="element?.name"
+                    [nzValue]="element?.code"></nz-option>
+            </nz-select>
+        </div>
+
+        <div class="d-flex flex-row flex-grow-1">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Biển số xe" [(ngModel)]="filter.vehicleCode">
+                <nz-option *ngFor="let type of listVehicle" [nzLabel]="type.code" [nzValue]="type.code">
+                </nz-option>
+            </nz-select>
+        </div>
+
+        <div class="flex-row flex-grow-1 multi-dropdown">
+            <nz-select [nzMaxTagCount]="maxTagCount" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+                nzPlaceHolder="Trạng thái" [(ngModel)]="filter.state">
+                <nz-option *ngFor="let item of LIST_PURCHASE_ORDERS_STATE" [nzLabel]="item.name"
+                    [nzValue]="item.value"></nz-option>
+            </nz-select>
+            <ng-template #tagPlaceHolder let-selectedList>+{{ selectedList.length }}</ng-template>
+        </div>
+
+        <div class="d-flex flex-row flex-grow-1">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Nhà cung cấp" [(ngModel)]="filter.partnerCode">
+                <nz-option *ngFor="let partner of listPartner" [nzLabel]="partner.name" [nzValue]="partner.code">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div class="d-flex flex-row flex-grow-3">
+            <div class="input-group search-box">
+                <div class="wrapper-input">
+                    <app-input-clear placeholder="Nhập từ khóa tìm kiếm" (searchEvent)="search()"
+                        [(value)]="filter.keyWord">
+                    </app-input-clear>
+                </div>
+                <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+                <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+        <table mat-table [dataSource]="paginationResult.data"
+            *ngIf="paginationResult && paginationResult.data?.length > 0" class="table table-hover table-click-row">
+            <ng-container matColumnDef="lock">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Khoá</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                    <span style="color: red;" *ngIf="element.latchState === STATE_SHIFT['DA_CHOT'].value" nz-popover
+                        nzType="primary" nzPopoverContent="Đã chốt thông tin ca sản xuất" nz-icon nzType="lock"
+                        nzTheme="outline"></span>
+                    <span *ngIf="element.latchState !== STATE_SHIFT['DA_CHOT'].value" nz-icon nzType="unlock"
+                        nzTheme="outline"></span>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+                <td [ngStyle]="{color: element.empty ? 'red' : 'balck'}" mat-cell
+                    *matCellDef="let element; let i = index" class="text-center">
+                    {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef>Mã phiếu</th>
+                <td mat-cell *matCellDef="let element">
+                    <span (click)="openDetail(element?.code)" class="cursor-pointer text-primary">{{
+                        element.code
+                        }}</span>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="orderDate">
+                <th mat-header-cell *matHeaderCellDef>Ngày nhập
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.orderDate | date : 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="goodsIntakeShift">
+                <th mat-header-cell *matHeaderCellDef>Ca nhập</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element?.workingShift?.name}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="vehicleCode">
+                <th mat-header-cell *matHeaderCellDef>Biển số xe</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.vehicleCode }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="partnerName">
+                <th mat-header-cell *matHeaderCellDef style="min-width: 200px;">Nhà cung cấp</th>
+                <td mat-cell *matCellDef="let element" class="long-content">{{ element?.partner?.name }}</td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="itemName">
+                <th mat-header-cell *matHeaderCellDef>Hàng hoá</th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngFor="let order of element?.orderDetails">
+                        {{order?.item?.name}}<br />
+                    </span>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="area">
+                <th mat-header-cell *matHeaderCellDef>Khu vực</th>
+                <td mat-cell *matCellDef="let element">{{ element?.area?.name }}</td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="orderNumber">
+                <th mat-header-cell *matHeaderCellDef class="text-right">KL hàng</th>
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    <span *ngFor="let order of element?.orderDetails">
+                        {{utils.formatNumber(order?.orderNumber)}} Kg<br />
+                    </span>
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">
+                    {{getTotalOrderNumber()}} Kg</td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Trạng thái</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                    <div *ngIf="STATE_LIST_PURCHASE_ORDERS[element?.state]" class="label-status"
+                        [style.background]="STATE_LIST_PURCHASE_ORDERS[element?.state].background"
+                        [style.color]="STATE_LIST_PURCHASE_ORDERS[element?.state].color">
+                        {{ STATE_LIST_PURCHASE_ORDERS[element?.state].name }}
+                    </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="choppingNumber">
+                <th mat-header-cell *matHeaderCellDef style="min-width: 120px;" class="text-center">Lượng SXTT</th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngIf="!element?.hide" style="display: flex; gap: 5px;">
+                        <div class="wrapper-pour" style="display: flex; gap: 5px; margin-bottom: 5px;">
+                            <app-input-number class="text-right sxtt" [disabled]="element?.disable"
+                            [(valueInput)]="element.choppingNumber" [requiredNotlabel]="element?.volumeError"
+                            [required]="element?.volumeError" [showErrors]="element?.volumeError" />
+                            <!--  -->
+                            <nz-select  *ngIf="!element.hide"
+                                nzAllowClear nzPlaceHolder="Chọn cách gắp"
+                                [(ngModel)]="element.pickUpMethod"
+                                [nzStatus]="submitted && !element.pickUpMethod && !!element.choppingNumber ? 'error' : ''"
+                                >
+                                <nz-option *ngFor="let method of listMethod" [nzLabel]="method.name"
+                                    [nzValue]="method.code">
+                                </nz-option>
+                            </nz-select>
+                            <!--  -->
+                        </div>
+                        <span (click)="fillAllChoppingNumber(element)" style="line-height: 2.4; cursor: pointer;"
+                            *ngIf="!element?.disable" nz-icon nzType="form" nzTheme="outline"></span>
+                    </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Lượng hạ bãi</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="wrapper-pour" style="display: flex; gap: 5px; margin-bottom: 5px;"
+                        *ngFor="let item of element?.manufactures; let i = index">
+                        <span (click)="removeManufactures(element?.code, i)"
+                            *ngIf="(i > 0 || (i == 0 && element?.manufactures?.length > 1)) && !element.disable" nz-icon
+                            nzType="minus-circle" nzTheme="outline"></span>
+                        <span style="opacity: 0;" *ngIf="(i == 0 && element?.manufactures?.length <= 1) || element.disable" nz-icon
+                            nzType="minus-circle" nzTheme="outline"></span>
+                        <nz-select (ngModelChange)="changePourSection($event, element?.code, i)" *ngIf="!element.hide"
+                            nzShowSearch nzAllowClear nzPlaceHolder="Chọn lô"
+                            [nzStatus]="submitted && item.amount && !item.pourSectionCode ? 'error' : ''"
+                            [(ngModel)]="item.pourSectionCode" [nzDisabled]="item.disable">
+                            <nz-option *ngFor="let pourSection of listPourSection" [nzLabel]="pourSection.name"
+                                [nzValue]="pourSection.code">
+                            </nz-option>
+                        </nz-select>
+
+                        <nz-select *ngIf="!element.hide" nzShowSearch nzAllowClear nzPlaceHolder="Chọn dãy"
+                            [nzStatus]="submitted && item.amount && !item.pourLineCode ? 'error' : ''"
+                            [(ngModel)]="item.pourLineCode" [nzDisabled]="item.disablePourLineCode || item.disable">
+                            <nz-option *ngFor="let pourLine of item?.listPourLine" [nzLabel]="pourLine.name"
+                                [nzValue]="pourLine.code">
+                            </nz-option>
+                        </nz-select>
+                        <app-input-number style="min-width: 95px;" *ngIf="!element.hide" class="text-right"
+                            [(valueInput)]="item.amount" [requiredNotlabel]="element?.volumeError"
+                            [required]="element?.volumeError" [showErrors]="element?.volumeError"
+                            [disabled]="item?.disable" />
+                        <span (click)="fillAllManufactures(element, i)" style="line-height: 2.4; cursor: pointer; margin-right: 2px;"
+                            *ngIf="!element?.disable && !element.hide" nz-icon nzType="form"
+                            nzTheme="outline"></span>
+                        <span (click)="addManufactures(element?.code)"
+                            *ngIf="i == element?.manufactures?.length - 1 && !element.hide && !item.disable" nz-icon
+                            nzType="plus-circle" nzTheme="outline"></span>
+                        <span style="width: 60px;" *ngIf="i !== element?.manufactures?.length - 1 || element.disable"></span>
+                    </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+        </table>
+        <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+        <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+            [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+            (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+</div>

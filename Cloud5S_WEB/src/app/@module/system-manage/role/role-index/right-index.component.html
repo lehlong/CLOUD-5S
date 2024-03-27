@@ -1,0 +1,76 @@
+<div class="card" [appPermission]="ROLE_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw border-bottom">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>Danh sách quyền
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="submitOrderTree()"
+            [appPermission]="ROLE_RIGHTS.CAP_NHAT_THU_TU">
+            <i class="bi bi-check-lg"></i> Cập nhật thứ tự
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-success" (click)="createRight()" [appPermission]="ROLE_RIGHTS.THEM_MOI">
+            <i class="bi bi-plus-lg"></i>Thêm mới
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <mat-tree-node
+          *matTreeNodeDef="let node"
+          matTreeNodeToggle
+          matTreeNodePadding
+          (click)="clickNode(node, $event)"
+          [ngClass]="node.selected ? 'mat-tree-node-selected' : ''">
+          <button mat-icon-button disabled></button>
+          <span
+            class="checklist-leaf-node"
+            [ngClass]="{
+              'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+              'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
+            }"
+            draggable="true"
+            (dragstart)="handleDragStart($event, node)"
+            (dragover)="handleDragOver($event, node)"
+            (drop)="handleDrop($event, node)"
+            (dragend)="handleDragEnd($event)"
+            >{{node.id}} - {{ node.name }}</span
+          >
+        </mat-tree-node>
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: hasChild"
+          (click)="clickNode(node, $event)"
+          matTreeNodePadding
+          [ngClass]="node.selected ? 'mat-tree-node-selected' : ''">
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+            </mat-icon>
+          </button>
+          <span
+            [ngClass]="{
+              'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+              'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
+            }"
+            draggable="true"
+            (dragstart)="handleDragStart($event, node)"
+            (dragover)="handleDragOver($event, node)"
+            (drop)="handleDrop($event, node)"
+            (dragend)="handleDragEnd($event)"
+            >{{node.id}} - {{ node.name }}</span
+          >
+        </mat-tree-node>
+      </mat-tree>
+      <span #emptyItem></span>
+    </div>
+  </div>
+</div>

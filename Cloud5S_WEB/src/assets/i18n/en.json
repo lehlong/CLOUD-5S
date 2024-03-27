@@ -1,0 +1,708 @@
+{
+  "navbar": {},
+  "sidebar": {},
+  "content": {
+    "common": {
+      "btn_print":"Print",
+      "btn_choose":"Choose product",
+      "btn_save": "Save",
+      "btn_create": "Create",
+      "btn_edit": "Edit",
+      "btn_confirm": "Confirm",
+      "btn_refuse": "Refuse",
+      "btn_cancel": "Cancel",
+      "btn_close": "Close",
+      "btn_detail": "Detail",
+      "download_excel": "Download Excel",
+      "from_date": "From date",
+      "to_date": "To date",
+      "placeholder_search": "Enter search keyword",
+      "total_recorl": "Total {{total}} record",
+      "page": "Page",
+      "go_to": "Go to",
+      "reply_to": "Reply to",
+      "empty_notify": "Must not be left empty",
+      "number_notify": "Enter a number other than 0",
+      "wrong_format": "Wrong format",
+      "comment": {
+        "title": "Comment",
+        "placeholder": "Write a comment ...",
+        "reply_to": "Reply to",
+        "delete_confirmation": {
+          "title": "Delete this comment?",
+          "text": "This action cannot be undone!",
+          "confirmButtonText": "Delete",
+          "cancelButtonText": "Cancel"
+        }
+      }
+    },
+    "business": {
+      "order": {
+        "list": {
+          "breadcrumb": "Order Management",
+          "title": "Order list",
+          "status": "Status",
+          "client": "Customer",
+          "product": "Product",
+          "order_code": "Order Code",
+          "order_date": "Order Date",
+          "delivery_date": "Delivery Date",
+          "delivery_location": "Delivery Location",
+          "quantity_ordered": "Ordered Quantity",
+          "phone_number": "Phone Number",
+          "state": {
+            "initialization": "Initialization",
+            "confirmed": "Confirmed",
+            "in_progress": "In Progress",
+            "mixing_completed": "Mixing Completed",
+            "cancelled": "Cancelled",
+            "rejected": "Rejected",
+            "completed": "Completed"
+          },
+          "action": {
+            "create_new": "Create New",
+            "confirm": "Confirm",
+            "create_mixing_order": "Create Mixing Order",
+            "weighing": "Weighing",
+            "cancel": "Cancel",
+            "reject": "Reject",
+            "edit": "Edit",
+            "close_accounts": "Close Accounts",
+            "mixing_completed": "Mixing Completed",
+            "completion": "Completion"
+          }
+        },
+        "create": {
+          "title": "Add new Order",
+          "client": "Client",
+          "note": "Note",
+          "address": "Address",
+          "phone_number": "Phone Number",
+          "project_information": "Project Information",
+          "pouring_date": "Pouring Date",
+          "pouring_time": "Pouring Time",
+          "area": "Area",
+          "type_of_construction": "Type of Construction",
+          "pouring_method": "Pouring Method",
+          "construction_item": "Construction Item",
+          "pouring_location": "Pouring Location",
+          "add_field": "Add field",
+          "main_product": "Main Product",
+          "product": "Product",
+          "unit_of_measurement": "Unit of Measurement",
+          "main_sand_component": "Main Sand Component",
+          "main_stone_component": "Main Stone Component",
+          "placed_volume": "Placed Volume",
+          "slump": "Slump",
+          "additional_services": "Additional Services",
+          "quantity": "Quantity"
+        },
+        "detail": {
+          "title": "Order information",
+          "product_list": "Product list",
+          "product_name": "Product name",
+          "sand": "Sand",
+          "stone": "Stone",
+          "slump": "Slump",
+          "quantity_ordered": "Quantity ordered",
+          "order_history": "Order history",
+          "executor": "Executor",
+          "action": "Action",
+          "execution_time": "Execution time",
+          "list_documents": "List of Documents",
+          "mixer": "Mixer",
+          "mixer_name": "Mixer name",
+          "select_mixer": "Select mixer",
+          "order_information": "Order Information",
+          "order_code": "Order code",
+          "creator": "Creator",
+          "creation_date": "Creation date",
+          "status": "Status",
+          "customer_information": "Customer information",
+          "customer_name": "Customer name",
+          "phone_number": "Phone number",
+          "address": "Address",
+          "note": "Note",
+          "project_information": "Project information",
+          "pouring_time": "Pouring time",
+          "area": "Area",
+          "project_type": "Project type",
+          "pouring_method": "Pouring method",
+          "project_category": "Project category",
+          "pouring_location": "Pouring location",
+          "modal": {
+            "title_confirm": "Confirm Order?",
+            "title_reject": "Reject Order?",
+            "title_cancel": "Cancel Order?",
+            "text": "This action cannot be undone!",
+            "confirmButtonText": "Delete",
+            "cancelButtonText": "Cancel"
+          }
+        },
+        "edit": {
+          "title": "Edit an Order",
+          "mixing_machine": "Mixing machine",
+          "select_mixing_machine": "Select a mixing machine",
+          "client": "Client",
+          "note": "Note",
+          "address": "Address",
+          "phone_number": "Phone Number",
+          "project_information": "Project Information",
+          "pouring_date": "Pouring Date",
+          "pouring_time": "Pouring Time",
+          "area": "Area",
+          "type_of_construction": "Type of Construction",
+          "pouring_method": "Pouring Method",
+          "construction_item": "Construction Item",
+          "pouring_location": "Pouring Location",
+          "main_product": "Main Product",
+          "product": "Product",
+          "unit_of_measurement": "Unit of Measurement",
+          "main_sand_component": "Main Sand Component",
+          "main_stone_component": "Main Stone Component",
+          "placed_volume": "Placed Volume",
+          "slump": "Slump",
+          "additional_services": "Additional Services",
+          "quantity": "Quantity"
+        }
+      },
+      "order_release": {
+        "list": {
+          "breadcrumb": "Mix ticket management",
+          "title": "Batching - Order management",
+          "status": "Status",
+          "client": "Customer",
+          "product": "Product",
+          "order_code": "Order Code",
+          "order_date": "Order Date",
+          "delivery_date": "Delivery Date",
+          "delivery_location": "Delivery Location",
+          "quantity_ordered": "Ordered Quantity",
+          "phone_number": "Phone Number",
+          "save": "Save",
+          "download_excel": "Download excel",
+          "mixer": "Mixer"
+        },
+        "create": {},
+        "detail": {},
+        "edit": {}
+      },
+      "plan_management": {
+        "list": {
+          "breadcrumb": "Plan Management",
+          "title": "List plan",
+          "status": "Status",
+          "client": "Customer",
+          "product": "Product",
+          "order_code": "Order Code",
+          "order_date": "Order Date",
+          "delivery_date": "Delivery Date",
+          "delivery_location": "Delivery Location",
+          "quantity_ordered": "Ordered Quantity",
+          "pour_date": "Pour date",
+          "pour_location": "Pour location",
+          "phone_number": "Phone Number",
+          "save": "Save",
+          "download_excel": "Download excel",
+          "mixer": "Mixer"
+        },
+        "create": {},
+        "detail": {},
+        "edit": {}
+      },
+      "in_out": {
+        "list": {
+          "breadcrumb": "In and out management",
+          "title": "List in and out",
+          "status": "Status",
+          "client": "Customer",
+          "product": "Product",
+          "order_code": "Order Code",
+          "order_date": "Order Date",
+          "delivery_date": "Delivery Date",
+          "delivery_location": "Delivery Location",
+          "quantity_ordered": "Ordered Quantity",
+          "pour_date": "Pour date",
+          "pour_location": "Pour location",
+          "phone_number": "Phone Number",
+          "save": "Save",
+          "download_excel": "Download excel",
+          "see_detail": "Detail",
+          "album": "View album",
+          "camera": "View camera",
+          "vehicle": "License plates",
+          "check_in": "Check in",
+          "check_out": "Check out"
+        },
+        "detail": {},
+        "edit": {}
+      },
+      "order_import": {
+        "message_empty":"Cannot empty value",
+        "not_zero":"enter a number other than 0",
+        "great_than_zero":"enter a larger number 0",
+        "list": {
+          "breadcrumb": "Order import Management",
+          "title": "ORDER IMPORT LIST",
+          "number": "No.",
+          "code": "Code",
+          "order_import_date": "Import date",
+          "partner": "Partner",
+          "stock": "Import stock",
+          "total_money": "Total money",
+          "creator": "Creator",
+          "create_date": "Creation date",
+          "status": "Status"
+        },
+        "detail": {
+          "title": "ORDER IMPORT DETAILS",
+          "product_infor": {
+            "title": "PRODUCT INFORMATION",
+            "product_code": "Product code",
+            "product_name": "Product name",
+            "number": "Quantity",
+            "unit": "Unit",
+            "price": "Price",
+            "total_money": "Into money"
+          },
+          "bill_infor": {
+            "title": "INVOICE INFORMATION",
+            "discount": "Discount",
+            "vat_tax": "VAT tax",
+            "total_money_item": "Into money total",
+            "total_money_pay": "Total payment",
+            "pay_now": "Pay now",
+            "debt": "Debt"
+          },
+          "payment_infor": {
+            "title": "PAYMENT INFORMATION",
+            "unpaid": "Unpaid",
+            "pay_now": "Pay now",
+            "receiver":"Receiver",
+            "address":"Address",
+            "pay_method":"Payment method",
+            "content":"Content",
+            "phone_number":"Phone number",
+            "bank":"Bank"
+          },
+          "order_import_infor": {
+            "title": "ORDER IMPORT INFORMATION",
+            "code": "Code",
+            "import_date": "Import Date",
+            "stock": "Import Stock",
+            "partner": "Partner",
+            "driver": "Driver",
+            "vehicle": "Vehicle"
+          },
+          "state": {
+            "initialization": "Initialized",
+            "confirmed": "Confirmed",
+            "in_progress": "In progress",
+            "mixing_completed": "Mixing completed",
+            "cancelled": "Cancelled",
+            "rejected": "Rejected",
+            "completed": "Completed"
+          }
+        },
+        "create": {
+          "title": "CREATE NEW ORDER IMPORT",
+          "product_infor": {
+            "title": "PRODUCT INFORMATION",
+            "product_code": "Product Code",
+            "product_name": "Product Name",
+            "number": "Quantity",
+            "unit": "Unit",
+            "price": "Unit Price",
+            "total_money": "Into money",
+            "empty_product": "No products selected yet"
+          },
+          "bill_infor": {
+            "title": "INVOICE INFORMATION",
+            "discount": "Discount",
+            "vat_tax": "VAT Tax",
+            "total_money_pay": "Total Payment Amount",
+            "debt": "Debt"
+          },
+          "payment_infor": {
+            "title": "PAYMENT INFORMATION",
+            "unpaid": "Unpaid",
+            "pay_now": "Pay Now",
+            "receiver": "Receiver",
+            "address": "Address",
+            "pay_method": "Payment Method",
+            "content": "Payment Content",
+            "phone_number": "Phone Number",
+            "bank": "Bank",
+            "money_pay_now": "Amount Paid Now"
+          },
+          "order_import_infor": {
+            "title": "ORDER IMPORT INFORMATION",
+            "import_date": "Import Date",
+            "stock": "Import Stock",
+            "partner": "Partner",
+            "address": "Address",
+            "phone_number": "Phone Number",
+            "vehicle": "Vehicle",
+            "note": "Note",
+            "driver": "Driver",
+            "attach": "Attached Documents"
+          }
+        }
+      }
+    },
+
+    "masterdata": {
+      "unit": {
+        "list": {
+          "breadcrumb": "Unit List",
+          "title": "Unit List",
+          "status": "Status",
+          "code": "Unit code",
+          "name": "Unit name",
+          "action": "Action"
+        },
+        "create": {
+          "title": "Add Unit",
+          "code": "Unit code",
+          "name": "Unit name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Unit",
+          "code": "Unit code",
+          "name": "Unit name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "stock": {
+        "list": {
+          "breadcrumb": "Stock List",
+          "title": "Stock List",
+          "status": "Status",
+          "code": "Stock code",
+          "name": "Stock name",
+          "action": "Action"
+        },
+        "create": {
+          "title": "Add Stock",
+          "code": "Stock code",
+          "name": "Stock name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Stock",
+          "code": "Stock code",
+          "name": "Stock name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "partner": {
+        "list": {
+          "breadcrumb": "Partner List",
+          "title": "Partner List",
+          "status": "Status",
+          "code": "Partner code",
+          "name": "Partner name",
+          "action": "Action",
+          "taxcode": "Tax code",
+          "address": "Address",
+          "phone_number": "Phone Number",
+          "email": "Email",
+          "KH": "Customer",
+          "NCC": "Provider",
+          "client": "Partner group"
+        },
+        "create": {
+          "title": "Add Partner",
+          "code": "Partner code",
+          "name": "Partner name",
+          "taxcode": "Tax code",
+          "address": "Address",
+          "phone_number": "Phone Number",
+          "state": "State",
+          "email": "Email",
+          "isCustomer": "is Customer",
+          "isProvider": "is Provider",
+
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Partner",
+          "code": "Partner code",
+          "name": "Partner name",
+          "taxcode": "Tax code",
+          "address": "Address",
+          "phone_number": "Phone Number",
+          "state": "State",
+          "email": "Email",
+          "isCustomer": "is Customer?",
+          "isProvider": "is Provider?",
+
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "itemtype": {
+        "list": {
+          "breadcrumb": "Item Type List",
+          "title": "Item Type List",
+          "status": "Status",
+          "code": "Itemtype code",
+          "name": "Itemtype name ",
+          "action": "Action"
+        },
+        "create": {
+          "title": "Add Item Type",
+          "code": "Itemtype code",
+          "name": " Itemtype name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Item Type",
+          "code": "Itemtype code",
+          "name": "Itemtype name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "area": {
+        "list": {
+          "breadcrumb": "Area List",
+          "title": "Area List",
+          "status": "Status",
+          "code": "Area code",
+          "name": "Area name",
+          "action": "Action"
+        },
+        "create": {
+          "title": "Add Area",
+          "code": "Area code",
+          "name": "Area name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Area",
+          "code": "Area code",
+          "name": "Area name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "mixer": {
+        "list": {
+          "breadcrumb": "Mixer List",
+          "title": "Mixer List",
+          "status": "Status",
+          "code": "Mixer code",
+          "name": "Mixer name",
+          "action": "Action"
+        },
+        "create": {
+          "title": "Add Mixer",
+          "code": "Mixer code",
+          "name": "Mixer name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Mixer",
+          "code": "Mixer code",
+          "name": "Mixer name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "pourtype": {
+        "list": {
+          "breadcrumb": "Pour Type List",
+          "title": "Pour Type  List",
+          "status": "Status",
+          "code": "Pourtype  code",
+          "name": "Pourtype  name",
+          "action": "Action"
+        },
+        "create": {
+          "title": "Add Pour Type",
+          "code": "Pourtype code",
+          "name": "Pourtype name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Pour Type",
+          "code": "Pourtype code",
+          "name": "Pourtype name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "ordertype": {
+        "list": {
+          "breadcrumb": "Order Type List",
+          "title": "Order Type   List",
+          "status": "Status",
+          "code": "Ordertype  code",
+          "name": "Ordertype   name",
+          "action": "Action"
+        },
+        "create": {
+          "title": "Add Order Type ",
+          "code": "Ordertype code",
+          "name": "Ordertype name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        },
+        "edit": {
+          "title": "Edit Order Type ",
+          "code": "Ordertype code",
+          "name": "Ordertype name",
+          "state": "State",
+          "statevalue": {
+            "Activated": "Activated",
+            "Locked": "Locked"
+          }
+        }
+      },
+      "chipper":{
+        "list":{
+          "breadcrumb": "Chipper list",
+          "tt":"List chipper",
+          "stt":"No.",
+          "tmb":"Chipper name",
+          "trt":"Status",
+          "hd":"Action"
+        },
+        "edit":{
+           "tt":"Edit chipper",
+           "tmb":"Chipper name",
+           "trt":"Status"
+        },
+        "create":{
+         "tt":"Add new chipper",
+         "tmb":"Chipper name",
+         "trt":"Status"
+        }
+     },
+     "ship":{
+      "list":{
+        "breadcrumb": "Ship list",
+        "tt":"List ship",
+        "stt":"No.",
+        "mt":"Code",
+        "trt":"Tonage",
+        "trgth":"Status",
+        "hd":"Action"
+      },
+      "create":{
+         "tt":"Create new ship",
+         "mt":"Code",
+         "trt":"Tonage",
+         "trgth":"Status"
+      },
+      "edit":{
+         "tt":"Edit ship",
+         "mt":"Code",
+         "trt":"Tonage",
+         "trgth":"Status"
+      }
+    },
+    "shift":{
+      "list":{
+         "tt":"List working shift",
+         "stt":"No.",
+         "mc":"Code",
+         "tc":"Name",
+         "gbd":"Time start",
+         "gkt":"Time end",
+         "trt":"Status",
+         "hd":"Action"
+      },
+      "create":{
+        "tt":"Add new working shift",
+        "mc":"Code",
+        "tc":"Name",
+        "clv":"Working shift",
+        "gbd":"Time start",
+        "gkt":"Time end",
+        "gc":"Note",
+        "statevalue": {
+          "Activated": "Activated",
+          "Locked": "Locked"
+        }
+      },
+      "edit":{
+        "tt":"Edit working shift",
+        "mc":"Code",
+        "tc":"Name",
+        "clv":"Working shift",
+        "gbd":"Time start",
+        "gkt":"Time end",
+        "gc":"Note",
+        "statevalue": {
+          "Activated": "Activated",
+          "Locked": "Locked"
+        }
+      }
+    }
+    },
+    "category": {},
+    "report": {
+      "dashboard": {
+        "breadcrumb": "Home"
+      }
+    },
+    "device_configuration": {},
+    "system_administration": {}
+  },
+  "footer": {}
+}

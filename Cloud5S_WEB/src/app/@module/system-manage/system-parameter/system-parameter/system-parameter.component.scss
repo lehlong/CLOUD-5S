@@ -1,0 +1,40 @@
+.action-icon{
+  font-size: 16px;
+  margin-right: 10px;
+  color: black !important;
+  transition: all 0.1s ease-in;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.action-icon:hover{
+  color: blue!important;
+  opacity: 1;
+}
+
+.action-icon1{
+  font-size: 16px;
+  margin-right: 10px;
+  color: red !important;
+  transition: all 0.1s ease-in;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.action-icon1:hover{
+  color: blue!important;
+  opacity: 1;
+}
+.btn-i{
+  margin-right: 10px;
+}
+.input-group-append{
+  padding-left: 10px;
+}
+.card-body{
+  padding:1rem !important;
+}
+
+.title{
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}

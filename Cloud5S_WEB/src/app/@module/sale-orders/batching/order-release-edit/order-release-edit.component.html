@@ -1,0 +1,309 @@
+<div class="card" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-pencil-square"></i>
+        Chỉnh sửa phiếu trộn
+      </div>
+      <div class="d-flex-wrap d-gap-10" [appPermission]="ORDER_RELEASE_RIGHTS.CHINH_SUA">
+        <div *ngIf="itemDetail && !isDisableButton()">
+          <button (click)="onEdit()" type="button" class="d-flex align-items-center btn btn-primary w-100">
+            <mat-icon>save</mat-icon> Lưu thông tin
+          </button>
+        </div>
+        <div class="">
+          <button type="button" (click)="close()" class="btn btn-warning w-100">
+            <i class="bi bi-x-circle"></i>Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form [formGroup]="orderReleaseForm" (ngSubmit)="onEdit()">
+        <div class="d-flex">
+          <div class="info-left pr-10 col-md-8">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-box"></i>
+                  Thông tin sản phẩm
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="wrap-table" style="overflow-x: auto">
+                  <table class="table table-hover or-table">
+                    <thead>
+                      <tr>
+                        <th style="width: 120px">Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th class="text-center" style="width: 100px">Độ sụt</th>
+                        <th style="width: 100px">Đá</th>
+                        <th style="width: 100px">Cát</th>
+                        <th style="width: 80px" class="text-right">Số lượng</th>
+                        <th class="text-right" style="width: 80px">ĐVT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let od of orderDetail.orderDetails">
+                        <td>{{ od?.itemCode }}</td>
+                        <td>{{ od?.item?.name }}</td>
+                        <td class="text-center">
+                          <span *ngIf="od?.slump">{{ od?.slump }}</span>
+                          <span *ngIf="!od?.slump">-/-</span>
+                        </td>
+                        <td>
+                          <span *ngIf="od?.stone?.name">{{ od?.stone?.name }}</span>
+                          <span *ngIf="!od?.stone?.name">-/-</span>
+                        </td>
+                        <td>
+                          <span *ngIf="od?.sand?.name">{{ od?.sand?.name }}</span>
+                          <span *ngIf="!od?.sand?.name">-/-</span>
+                        </td>
+                        <td class="text-right">{{ od?.orderNumber | number }}</td>
+                        <td class="text-right">{{ od?.item?.unit?.name }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-paint-bucket"></i>
+                  Thông tin trộn
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div style="overflow-x: auto;">
+                  <table class="table or-table">
+                    <thead>
+                      <tr>
+                        <th class="text-right">Lượng trộn<span class="text-danger ms-1">*</span></th>
+                        <th class="text-right" style="width: 100px">Lượng lũy kế</th>
+                        <th class="text-right" style="width: 100px">Xi măng</th>
+                        <th class="text-right" style="width: 100px">Đá</th>
+                        <th class="text-right" style="width: 100px">Cát</th>
+                        <th class="text-right" style="width: 100px">Phụ gia</th>
+                        <th class="text-right" style="width: 100px">Nước</th>
+                      </tr>
+                    </thead>
+                    <tbody class="or-body-table">
+                      <tr>
+                        <td class="text-right">
+                          <input [ngClass]="{'is-invalid': submitted && f['mixNumber'].errors}" type="text"
+                            class="form-control text-right table--input" formControlName="mixNumber"
+                            appCommaSeparated />
+                          <div *ngIf="submitted && f['mixNumber'].errors" class="invalid-feedback">
+                            <div *ngIf="f['mixNumber']['errors']['min'] || f['mixNumber']['errors']['required']">
+                              Nhập khối lượng lớn hơn 0
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-right">
+                          <input type="text" class="form-control text-right" [value]="accumulatedNumber() | number"
+                            disabled />
+                        </td>
+                        <td class="text-right">
+                          <app-input-number class="formcreate" [errorsRequired]="f['cement'].errors?.['required']"
+                            [showErrors]="submitted && f['cement'].errors"
+                            [class]="submitted && f['cement'].errors ? 'is-invalid' : ''"
+                            [control]="$any(orderReleaseForm).controls['cement']"></app-input-number>
+                        </td>
+                        <td class="text-right">
+                          <app-input-number class="formcreate" [errorsRequired]="f['stone'].errors?.['required']"
+                            [showErrors]="submitted && f['stone'].errors"
+                            [class]="submitted && f['stone'].errors ? 'is-invalid' : ''"
+                            [control]="$any(orderReleaseForm).controls['stone']"></app-input-number>
+                        </td>
+                        <td class="text-right">
+                          <app-input-number class="formcreate" [errorsRequired]="f['sand'].errors?.['required']"
+                            [showErrors]="submitted && f['sand'].errors"
+                            [class]="submitted && f['sand'].errors ? 'is-invalid' : ''"
+                            [control]="$any(orderReleaseForm).controls['sand']"></app-input-number>
+                        </td>
+                        <td class="text-right">
+                          <app-input-number class="formcreate" [errorsRequired]="f['admixture'].errors?.['required']"
+                            [showErrors]="submitted && f['admixture'].errors"
+                            [class]="submitted && f['admixture'].errors ? 'is-invalid' : ''"
+                            [control]="$any(orderReleaseForm).controls['admixture']"></app-input-number>
+                        </td>
+                        <td class="text-right">
+                          <app-input-number class="formcreate" [errorsRequired]="f['water'].errors?.['required']"
+                            [showErrors]="submitted && f['water'].errors"
+                            [class]="submitted && f['water'].errors ? 'is-invalid' : ''"
+                            [control]="$any(orderReleaseForm).controls['water']"></app-input-number>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-truck"></i>
+                  Thông tin vận tải
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row align-item-center justify-content-between">
+                  <div class="col-lg-4">
+                    <label for="inputEmail" class="col-form-label fw-medium">Biển số xe bồn<span
+                        class="text-danger ms-1">*</span></label>
+                    <div>
+                      <app-input-custom [className]="{'is-invalid': submitted && f['mixVehicleCode'].errors}"
+                        [defaultValue]="orderReleaseForm.value?.mixVehicleCode" [options]="optionsVehicle"
+                        [prop]="'code'" (valueChange)="onChange($event)" (selectItem)="onSelectItem($event)">
+                      </app-input-custom>
+                      <div *ngIf="submitted && f['mixVehicleCode'].errors" class="text-error">
+                        <div *ngIf="f['mixVehicleCode']['errors']['required']">Không được để trống</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-8">
+                    <label for="inputEmail" class="col-form-label fw-medium">Lái xe bồn</label>
+                    <div>
+                      <app-input-custom [className]="{'is-invalid': submitted && f['mixDriverUserName'].errors}"
+                        [inputValue]="orderReleaseForm.value?.mixDriverFullName"
+                        [defaultValue]="orderReleaseForm.value?.mixDriverFullName" [options]="optionsAccount"
+                        [prop]="'fullName'" (valueChange)="onChangeAccountMix($event)"
+                        (selectItem)="onSelectAccountMix($event)">
+                      </app-input-custom>
+                      <div *ngIf="submitted && f['mixDriverUserName'].errors" class="text-error">
+                        <div *ngIf="f['mixDriverUserName']['errors']['required']">Không được để trống</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <label for="inputEmail" class="col-form-label fw-medium">Biển số xe bơm</label>
+                    <div>
+                      <app-input-custom [className]="{'is-invalid': submitted && f['pumpVehicleCode'].errors}"
+                        [defaultValue]="orderReleaseForm.value?.pumpVehicleCode" [options]="optionsVehicle"
+                        [prop]="'code'" (valueChange)="onChangePump($event)" (selectItem)="onSelectPump($event)">
+                      </app-input-custom>
+                      <div *ngIf="submitted && f['pumpVehicleCode'].errors" class="text-error">
+                        <div *ngIf="f['pumpVehicleCode']['errors']['required']">Không được để trống</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-8">
+                    <label for="inputEmail" class="col-form-label fw-medium">Lái xe bơm</label>
+                    <div>
+                      <app-input-custom [className]="{'is-invalid': submitted && f['pumpDriverUserName'].errors}"
+                        [inputValue]="orderReleaseForm.value?.pumpDriverFullName"
+                        [defaultValue]="orderReleaseForm.value?.pumpDriverFullName" [options]="optionsAccount"
+                        [prop]="'fullName'" (valueChange)="onChangeAccountPump($event)"
+                        (selectItem)="onSelectAccountPump($event)">
+                      </app-input-custom>
+                      <div *ngIf="submitted && f['pumpDriverUserName'].errors" class="text-error">
+                        <div *ngIf="f['pumpDriverUserName']['errors']['required']">Không được để trống</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="input-upload">
+              <app-input-upload></app-input-upload>
+            </div> -->
+          </div>
+
+          <div class="pl-10 col-md-4">
+            <div class="info--order">
+              <div class="mbf-box">
+                <div class="mbf-box__header">
+                  <div class="mbf-box__title">
+                    <i class="bi bi-info-circle icon"></i>Thông tin phiếu trộn
+                  </div>
+                </div>
+                <div class="mbf-box__body">
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="">Máy trộn<span class="text-danger ms-1">*</span></div>
+                    <div class="value">
+                      <app-input-custom [className]="{'is-invalid': submitted && f['mixerCode'].errors}"
+                        [defaultValue]="mixer?.name || ''" [options]="optionsMixer" [prop]="'name'"
+                        (valueChange)="onChangeMix($event)" (selectItem)="onSelectMix($event)">
+                      </app-input-custom>
+                      <div *ngIf="submitted && f['mixerCode'].errors" class="text-error">
+                        <div *ngIf="f['mixerCode']['errors']['required']">Không được để trống</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div>Ngày giờ xuất</div>
+                    <nz-date-picker [nzShowTime]="true" formControlName="mixDate" nzFormat="dd-MM-YYYY HH:mm:ss">
+                    </nz-date-picker>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div>Số seal</div>
+                    <div class="value">
+                      <input [ngClass]="{'is-invalid': submitted && f['sealNumber'].errors}" type="text"
+                        class="form-control" formControlName="sealNumber" />
+                      <div *ngIf="submitted && f['sealNumber'].errors" class="invalid-feedback">
+                        <div *ngIf="f['sealNumber']['errors']['required']">Không được để trống</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mbf-box">
+                <div class="mbf-box__header">
+                  <div class="mbf-box__title">
+                    <i class="bi bi-info-circle icon"></i>Thông tin đơn hàng
+                  </div>
+                </div>
+                <div class="mbf-box__body">
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Mã đơn hàng</div>
+                    <div class="value">{{ orderDetail.code }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Khách hàng</div>
+                    <div class="value">{{ orderDetail?.partner?.name }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Số điện thoại</div>
+                    <div class="value">{{ orderDetail?.partner?.phoneNumber }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Ngày giờ đổ</div>
+                    <div class="value">{{ orderDetail.pourDate | date : 'dd/MM/yyyy HH:mm' }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Địa điểm đổ</div>
+                    <div class="value">{{ orderDetail.pourLocation }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Khu vực</div>
+                    <div class="value">{{ orderDetail.area?.name }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Hình thức đổ</div>
+                    <div class="value">{{ orderDetail.pourType?.name }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Loại đơn hàng</div>
+                    <div class="value">{{ orderDetail.orderType?.name }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Hạng mục công trình</div>
+                    <div class="value">{{ orderDetail.pourCategory }}</div>
+                  </div>
+                  <div class="list-info d-space-bw gap-50">
+                    <div class="label">Trạng thái đơn hàng</div>
+                    <div class="value">{{ state_order[orderDetail?.state].name }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Common\**" />
+    <Compile Remove="Controllers\HF\**" />
+    <Compile Remove="Models\**" />
+    <Compile Remove="Service\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="Controllers\Common\**" />
+    <Content Remove="Controllers\HF\**" />
+    <Content Remove="Models\**" />
+    <Content Remove="Service\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Controllers\Common\**" />
+    <EmbeddedResource Remove="Controllers\HF\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Controllers\Common\**" />
+    <None Remove="Controllers\HF\**" />
+    <None Remove="Models\**" />
+    <None Remove="Service\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="AppCode\Extensions\ExceptionMiddleware.cs" />
+    <Compile Remove="AppCode\Extensions\ExceptionMiddlewareExtension.cs" />
+    <Compile Remove="Controllers\AD\ConfigTextElementController.cs" />
+    <Compile Remove="Controllers\AD\HistoryController.cs" />
+    <Compile Remove="Controllers\AD\RoleController.cs" />
+    <Compile Remove="Controllers\AD\UserGroupController.cs" />
+    <Compile Remove="Controllers\AD\UserGroupRoleController.cs" />
+    <Compile Remove="Controllers\AD\UserUserGroupController.cs" />
+    <Compile Remove="Controllers\UploadFileController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="6.0.4" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
+    <PackageReference Include="EPPlus" Version="6.2.6" />
+    <PackageReference Include="Hangfire" Version="1.8.3" />
+    <PackageReference Include="JWT" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.0" />
+    <PackageReference Include="Spire.Doc" Version="11.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
+    <PackageReference Include="UAParser" Version="3.1.47" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DMS.Core\DMS.CORE.csproj" />
+    <ProjectReference Include="..\DMS.Business\DMS.BUSINESS.csproj" />
+  </ItemGroup>
+
+</Project>

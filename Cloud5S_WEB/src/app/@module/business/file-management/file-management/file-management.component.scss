@@ -1,0 +1,33 @@
+.action-icon{
+  font-size: 16px;
+  margin-right: 10px;
+  color: black !important;
+  transition: all 0.1s ease-in;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.action-icon:hover{
+  color: blue!important;
+  opacity: 1;
+}
+.folder-icon{
+  color: rgb(251, 198, 5)!important;
+}
+a.folder-name{
+  color: black!important;
+  font-weight: 450;
+}
+.return-button{
+  background-color: orange!important;
+  color: white;
+  height: 33.5px;
+  margin: 10px 0 ;
+  overflow: hidden;
+  width: 80px;
+}
+
+
+.ant-input-fix-wrapper{
+  border: 0!important;
+  border-bottom: solid black 1px!important;
+}

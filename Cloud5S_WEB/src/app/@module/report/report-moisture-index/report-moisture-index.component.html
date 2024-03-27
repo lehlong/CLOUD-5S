@@ -1,0 +1,167 @@
+<div class="card" [appPermission]="REPORT_MOISTURE_RIGHTS.DANH_SACH">
+    <div class="card-body container-page">
+      <div class="d-flex flex-wrap d-gap d-space-bw">
+        <div class="card-title">
+          <i class="bi bi-journal-text"></i>
+          Báo cáo quản lý độ ẩm
+        </div>
+        <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+          <button 
+            [appPermission]="REPORT_MOISTURE_RIGHTS.EXCEL"
+            type="button"
+            class="btn export-excel-btn"
+            (click)="exportExcel()">
+              <fa-icon [icon]="faFileExcel"></fa-icon> {{ 'content.common.download_excel' | translate }}
+            </button>
+        </div>
+      </div>
+      <div class="d-flex d-gap-2 flex-wrap mt-1 mb-3">
+        <div class="d-flex flex-wrap d-gap-2">
+          <nz-range-picker
+            nzFormat="dd-MM-yyyy"
+            [(ngModel)]="filter.selectedRange"
+            [nzRanges]="rangePresets"
+            [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+        </div>
+  
+        <!-- <div class="d-flex flex-row flex-grow-1">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Biển số xe" [(ngModel)]="filter.VehicleCode">
+            <nz-option *ngFor="let type of listVehicle" [nzLabel]="type.code" [nzValue]="type.code"> </nz-option>
+          </nz-select>
+        </div>
+  
+        <div class="d-flex flex-row flex-grow-1">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khách hàng" [(ngModel)]="filter.PartnerCode">
+            <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name" [nzValue]="partner.code">
+            </nz-option>
+          </nz-select>
+        </div> -->
+  
+        <div class="d-flex flex-row flex-grow-1">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khu vực" [(ngModel)]="filter.AreaCode">
+            <nz-option *ngFor="let type of listArea" [nzLabel]="type.name" [nzValue]="type.code"> </nz-option>
+          </nz-select>
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+      <div class="list-container border-top border-bottom">
+        <!-- table -->
+        <table
+          mat-table
+          *ngIf="paginationResult"
+          [dataSource]="paginationResult.data"
+          class="table table-hover table-click-row table-bordered">
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+            <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="importDate">
+            <th mat-header-cell *matHeaderCellDef>Ngày giờ nhập</th>
+            <td mat-cell *matCellDef="let element">
+              {{
+                element.orderDate | date : 'dd/MM/yyyy HH:mm'
+              }}
+            </td>
+          </ng-container>
+  
+  
+          <ng-container matColumnDef="processBy">
+            <th mat-header-cell *matHeaderCellDef>Thực hiện bởi</th>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.areaCode !== 'Total' && element.areaCode !== 'Sum'">{{ element.processBy }}</span>
+              <span *ngIf="element.areaCode == 'Total'"><span class="w-500">Total</span></span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="vehicleCode">
+            <th mat-header-cell *matHeaderCellDef>Biển số xe</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.vehicleCode }}   
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="area">
+            <th mat-header-cell *matHeaderCellDef>Khu vực</th>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.areaCode !== 'Total' && element.areaCode !== 'Sum'">{{ element.areaName }}</span>
+                <span *ngIf="element.areaCode == 'Total'"><span class="w-500">{{ element.areaName}}</span></span>
+                <span *ngIf="element.areaCode == 'Sum'"><b>ΣVJC</b></span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="trayWeight">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Trọng lượng khay</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              <span class="cursor-pointer" [ngClass]="{'w-500': element.areaCode === 'Total' , 'w-bold': element.areaCode === 'Sum'}">{{ utils.formatNumber(element.trayWeight) }}</span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="trayWeightAndFreshwood">
+            <th mat-header-cell *matHeaderCellDef>Trọng lượng khay + gỗ tươi</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              <span class="cursor-pointer" [ngClass]="{'w-500': element.areaCode === 'Total', 'w-bold': element.areaCode === 'Sum'}">{{ utils.formatNumber(element.trayWetWeight) }}</span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="freshWood">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Trọng lượng gỗ tươi</th>
+            <td mat-cell *matCellDef="let element; let i = index" class="text-right">
+              <span class="cursor-pointer" [ngClass]="{'w-500': element.areaCode === 'Total', 'w-bold': element.areaCode === 'Sum'}"> {{ utils.formatNumber(element.wetWeight) }}</span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="trayWeightAndDrywood">
+            <th mat-header-cell *matHeaderCellDef>Trọng lượng khay + gỗ khô</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              <span class="cursor-pointer" [ngClass]="{'w-500': element.areaCode === 'Total', 'w-bold': element.areaCode === 'Sum'}">{{ utils.formatNumber(element.trayDryWeight) }}</span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="dryWood">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Trọng lượng gỗ khô</th>
+            <td mat-cell *matCellDef="let element; let i = index" class="text-right">
+              <span class="cursor-pointer" [ngClass]="{'w-500': element.areaCode === 'Total', 'w-bold': element.areaCode === 'Sum'}"> {{ utils.formatNumber(element.dryWeight) }}</span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="averageHumidity">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Độ ẩm trung bình</th>
+            <td mat-cell *matCellDef="let element; let i = index" class="text-right" [ngClass]="{'w-500': element.areaCode === 'Total', 'w-bold': element.areaCode === 'Sum'}">
+              <nz-progress [nzPercent]="element.moisture" nzSize="small"></nz-progress>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="evaluate">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Đánh giá</th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <div
+                *ngIf="EVALUATE_MOISTURE[element.remark]"
+                class="label-status"
+                [style.background]="EVALUATE_MOISTURE[element.remark].background"
+                [style.color]="EVALUATE_MOISTURE[element.remark].color">
+                {{ EVALUATE_MOISTURE[element.remark].name }}
+              </div>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"  [ngClass]="{'selected-row': row.areaCode === 'Total' , 'sum-row': row.areaCode === 'Sum'}"></tr>
+        </table>
+        <!-- table -->
+      </div>
+      <div class="float-end" *ngIf="paginationResult" style="display: none;">
+        <app-pagination
+          [pageSize]="paginationResult.pageSize"
+          [totalRecord]="paginationResult.totalRecord"
+          [totalPage]="paginationResult.totalPage"
+          [(page)]="paginationResult.currentPage"
+          (pageChange)="onChangePage($event)"
+          (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+      </div>
+    </div>
+  </div>
+  

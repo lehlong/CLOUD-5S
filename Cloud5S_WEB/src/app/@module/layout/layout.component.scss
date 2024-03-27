@@ -1,0 +1,36 @@
+.wrapper {
+  position: relative;
+  .sidebar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  .main-panel {
+    .content {
+      position: absolute;
+      right: 0px;
+      width: calc(100% - 250px);
+      top: 60px;
+      padding-left: 10px;
+      padding-right: 10px !important;
+      transition: width 0.3s ease-in-out;
+      background: #f2f4f5;
+      min-height: calc(100vh - 60px);
+      &.large-width {
+        width: 100%;
+        //padding-left: 0px !important;
+      }
+    }
+    @media (max-width: 820px) {
+      .content {
+        width: 100%;
+        padding-left: 0px !important;
+      }
+    }
+  }
+}
+
+#overlay {
+  width: calc(100% - 250px) !important;
+  left: auto !important;
+}

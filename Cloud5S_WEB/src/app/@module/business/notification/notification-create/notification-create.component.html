@@ -1,0 +1,97 @@
+<div class="card stock-create-container">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-plus-lg"></i>Tạo mới đợt thông báo
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onCreate()" type="button" class="btn btn-primary" submitForm
+            [appPermission]="NOTIFY_RIGHTS.THEM_MOI">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <form [formGroup]="notifyForm" (ngSubmit)="onCreate()">
+        <div class="row">
+          <div class="container-edit">
+            <div class="wraper-input mt-2">
+              <div class="title-wraper">
+                <label class="form-label">Tiêu đề</label>
+                <!-- <input [ngClass]="{'is-invalid': submitted && f['subtitle'].errors}" type="text" class="form-control"
+                  formControlName="subtitle" />
+                <div *ngIf="submitted && f['subtitle'].errors" class="invalid-feedback">
+                  <div *ngIf="f['subtitle']['errors']['required']">Không được để trống</div>
+                </div> -->
+                <app-input-clear  [required]="true"
+                  [errorsRequired]="f['subtitle'].errors?.['required']"
+                  [showErrors]="submitted && f['subtitle'].errors"
+                  [status]="submitted && f['subtitle'].errors ? 'error' : ''"
+                  [control]="$any(notifyForm).controls['subtitle']"></app-input-clear>
+              </div>
+              <div class="content-wraper">
+                <label class="form-label">Nội dung</label>
+                <div style="padding-top: 15px; position: relative;">
+                  <ckeditor (change)="onEditorChange($event)" [(ngModel)]="content" [editor]="Editor"
+                     class="checker-editor"
+                    data="" formControlName="contents" [ngClass]="{'is-invalid': submitted && f['contents'].errors}" ></ckeditor>
+                    <div *ngIf="submitted && f['contents'].errors" class="invalid-feedback">
+                      <div *ngIf="f['contents']['errors']['required']">Không được để trống</div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-box"></i>
+                  <span>Chọn người thông báo</span>
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row g-3">
+                  <div (click)="openChooseItem()" class="product-wraper-btn mt-2">
+                    <i class="bi bi-plus-lg me-1"></i> Chọn từ danh sách
+                  </div>
+                  <div class="wraper-table mt-3">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th class="fw-normal">Tài khoản</th>
+                          <th>Họ tên</th>
+                          <th>Nhóm người dùng</th>
+                          <th>Email</th>
+                          <th>Số điện thoại</th>
+                          <td></td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container formArrayName="details">
+                          <ng-container *ngFor="let dateTimeGroup of details.controls; let i = index" [formGroupName]="i">
+                            <tr>
+                              <td>{{ listItemDetails[i].userName || '' }}</td>
+                              <td>{{ listItemDetails[i].name || '' }}</td>
+                              <td>{{ listItemDetails[i].nameAccountGroup || '' }}</td>
+                              <td>{{ listItemDetails[i].email || '' }}</td>
+                              <td>{{ listItemDetails[i].phoneNumber || '' }}</td>
+                              <td><i (click)="removedetails(i)" class="bi bi-dash-circle minus-field"></i></td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

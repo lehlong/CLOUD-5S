@@ -1,0 +1,29 @@
+.p-10 {
+  padding: 10px;
+}
+.inout-image {
+  padding: 5px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #cecece;
+  cursor: pointer;
+  height: 100%;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+}
+.mt-10 {
+  margin-top: 10px;
+}
+.pr-15 {
+  padding-right: 15px;
+}
+.pb-10 {
+  padding-bottom: 10px;
+}
+.page-container {
+  padding: 10px 0;
+}

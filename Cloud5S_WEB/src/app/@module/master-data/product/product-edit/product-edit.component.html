@@ -1,0 +1,285 @@
+<div class="card" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-pencil-square"></i>
+        Chỉnh sửa sản phẩm
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onEdit()" type="button" class="btn btn-primary" [appPermission]="PRODUCT_RIGHTS.CHINH_SUA">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3">
+      <form [formGroup]="productForm" (ngSubmit)="onEdit()">
+        <!-- <div>
+          <label for="inputText" class="col-form-label">Mã</label>
+          <div>
+            <input type="text" class="form-control" formControlName="code" />
+          </div>
+        </div>
+        <div>
+          <label for="inputEmail" class="col-form-label">Tên sản phẩm<span class="text-danger ms-1">*</span></label>
+          <div>
+            <input
+              [ngClass]="{'is-invalid': submitted && f['name'].errors}"
+              type="text"
+              class="form-control"
+              formControlName="name" />
+            <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+              <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="inputUnitcode" class="col-form-label">Đơn vị tính<span class="text-danger ms-1">*</span></label>
+          <select formControlName="unitCode" class="form-select" aria-label="Default select example">
+            <option
+              *ngFor="let unitCode of unitCodes"
+              [value]="unitCode.code"
+              [selected]="selectedItem === unitCode.code">
+              {{ unitCode.code }} - {{ unitCode.name }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="inputTypecode" class="col-form-label">Nhóm sản phẩm<span class="text-danger ms-1">*</span></label>
+          <select formControlName="typeCode" class="form-select" aria-label="Default select example">
+            <option
+              *ngFor="let itemType of itemTypes"
+              [value]="itemType.code"
+              [selected]="selectedItem === itemType.code">
+              {{ itemType.code }} - {{ itemType.name }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="inputText" class="col-form-label nowrap">Trạng thái</label>
+          <div class="d-flex d-gap-20 w-100 mt-0">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="state" formControlName="state" [value]="true" />
+              <label class="form-check-label" for="state"> Kích hoạt </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="state" formControlName="state" [value]="false" />
+              <label class="form-check-label" for="state"> Khoá </label>
+            </div>
+          </div>
+        </div> -->
+
+        <div>
+          <ul class="nav nav-tabs nav-tabs-bordered d-flex" role="tablist">
+            <li class="nav-item flex-fill" role="presentation">
+              <button
+                (click)="changeTab(1)"
+                class="nav-link w-100"
+                [class.active]="currentTab === 1"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                tabindex="-1">
+                Thông tin
+              </button>
+            </li>
+            <li class="nav-item flex-fill" role="presentation">
+              <button
+                (click)="changeTab(2)"
+                class="nav-link w-100"
+                [class.active]="currentTab === 2"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                tabindex="-1">
+                Công thức
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content pt-2">
+            <div *ngIf="currentTab === 1" class="fade show active" role="tabpanel" aria-labelledby="info-tab">
+              <div>
+                <label for="inputText" class="col-form-label">Mã sản phẩm</label>
+                <div>
+                  <input type="text" class="form-control" formControlName="code" />
+                </div>
+              </div>
+
+              <div>
+                <label for="inputEmail" class="col-form-label"
+                  >Tên sản phẩm<span class="text-danger ms-1">*</span></label
+                >
+                <div>
+                  <input
+
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors}"
+                    type="text"
+                    class="form-control"
+                    formControlName="name" />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="inputUnitcode" class="col-form-label"
+                  >Đơn vị tính<span class="text-danger ms-1">*</span></label
+                >
+                <select formControlName="unitCode" class="form-select" aria-label="Default select example">
+                  <option
+                    *ngFor="let unitCode of unitCodes"
+                    [value]="unitCode.code"
+                    [selected]="selectedItem === unitCode.code">
+                    {{ unitCode.code }} - {{ unitCode.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label for="inputTypecode" class="col-form-label"
+                  >Nhóm sản phẩm<span class="text-danger ms-1">*</span></label
+                >
+                <select formControlName="typeCode" class="form-select" aria-label="Default select example">
+                  <option
+                    *ngFor="let itemType of itemTypes"
+                    [value]="itemType.code"
+                    [selected]="selectedItem === itemType.code">
+                    {{ itemType.code }} - {{ itemType.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="mt-1">
+                <label for="inputText" class="col-form-label nowrap">Tình trạng sản xuất</label>
+                <div class="d-flex d-gap-20 w-100 mt-0">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="isManufacture"
+                      formControlName="isManufacture"
+                      [value]="true" />
+                    <label class="form-check-label" for="isManufacture"> Đưa vào sản xuất </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="isManufacture"
+                      formControlName="isManufacture"
+                      [value]="false" />
+                    <label class="form-check-label" for="isManufacture"> Không đưa vào sản xuất </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-1">
+                <label for="inputText" class="col-form-label nowrap">Trạng thái</label>
+                <div class="d-flex d-gap-20 w-100 mt-0">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="isActive"
+                      formControlName="isActive"
+                      [value]="true" />
+                    <label class="form-check-label" for="isActive"> Kích hoạt </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="isActive"
+                      formControlName="isActive"
+                      [value]="false" />
+                    <label class="form-check-label" for="isActive"> Khoá </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="currentTab === 2" class="fade show active" role="tabpanel" aria-labelledby="info-tab">
+              <div>
+                <label for="inputEmail" class="col-form-label">Đá <span class="text-danger ms-1">*</span></label>
+                <div>
+                  <input
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors}"
+                    type="text"
+                    class="form-control"
+                    formControlName="name" />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="inputEmail" class="col-form-label">cát <span class="text-danger ms-1">*</span></label>
+                <div>
+                  <input
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors}"
+                    type="text"
+                    class="form-control"
+                    formControlName="name" />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="inputEmail" class="col-form-label"> Xi măng <span class="text-danger ms-1">*</span></label>
+                <div>
+                  <input
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors}"
+                    type="text"
+                    class="form-control"
+                    formControlName="name" />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="inputEmail" class="col-form-label">Sỏi <span class="text-danger ms-1">*</span></label>
+                <div>
+                  <input
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors}"
+                    type="text"
+                    class="form-control"
+                    formControlName="name" />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="inputEmail" class="col-form-label">Nước <span class="text-danger ms-1">*</span></label>
+                <div>
+                  <input
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors}"
+                    type="text"
+                    class="form-control"
+                    formControlName="name" />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

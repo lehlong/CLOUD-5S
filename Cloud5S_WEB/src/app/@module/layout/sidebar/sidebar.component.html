@@ -1,0 +1,51 @@
+<aside [ngClass]="{'sidebar-hidden': !show, 'sidebar-visible': show}" id="sidebar" class="sidebar">
+	<div class="header-sidebar">
+		<img src="../assets/img/logo.png" alt="">
+		<i *ngIf="haveScroll !== null" (click)="sidebarToggle()" class="bi-list"></i>
+	</div>
+	<ul class="sidebar-nav" (scroll)="onScrollSidebar($event)" #sidebarNav
+		[ngClass]="isHovering ? 'showScroll' : ''" id="sidebar-nav">
+		<li *ngFor="let item of dataSource; index as i" class="nav-item">
+			<a style="width: 250px;" *ngIf="!item?.children || item?.children?.length == 0" [ngClass]="item?.openDefault ? '' : 'collapsed'"
+				class="nav-link" routerLink="{{ item.url || '#' }}" routerLinkActive="active">
+				<i class="bi" [ngClass]="item.icon || ''"></i>
+				<span>{{ item.name }}</span>
+			</a>
+			<a style="width: 250px;" *ngIf="item?.children?.length > 0" [ngClass]="item?.openDefault ? '' : 'collapsed'" class="nav-link"
+				[attr.data-bs-target]="'#po-dcch' + i" data-bs-toggle="collapse">
+				<i class="bi" [ngClass]="item.icon || ''"></i>
+				<span>{{ item.name }}</span>
+				<i class="bi bi-chevron-down ms-auto"></i>
+			</a>
+			<ul *ngIf="item?.children?.length > 0" [id]="'po-dcch' + i" [ngClass]="item?.openDefault ? 'show' : ''"
+				class="nav-content collapse sidebar-nav-child" data-bs-parent="#sidebar-nav" id="sidebar-nav-child">
+				<li *ngFor="let child of item.children; index as j">
+					<a *ngIf="!child.children || child?.children?.length == 0" routerLink="{{ child.url }}"
+						routerLinkActive="active"><i class="bi bi-circle"></i><span>{{ child.name }}</span></a>
+
+
+					<a *ngIf="child?.children?.length > 0" [ngClass]="child?.openDefault ? '' : 'collapsed'"
+						class="nav-link" [attr.data-bs-target]="'#po-dcch' + i + j" data-bs-toggle="collapse">
+						<i class="bi bi-circle"></i>
+						<span>{{ child.name }}</span>
+						<i class="bi bi-chevron-down ms-auto" style="font-size: 11px; margin-right: 15px;"></i>
+					</a>
+					<ul *ngIf="child?.children?.length > 0" [id]="'po-dcch' + i + j"
+						[ngClass]="child?.openDefault ? 'show' : ''" class="nav-content collapse"
+						data-bs-parent="#sidebar-nav-child">
+						<li *ngFor="let child of child.children; index as i">
+							<a style="padding-left: 55px;" *ngIf="!child.children || child?.children?.length == 0"
+								routerLink="{{ child.url }}" routerLinkActive="active"><i
+									class="bi bi-circle"></i><span>{{ child.name }}</span></a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<div class="legal">
+		<div class="copyright">
+			<span>©</span> <a href="javascript:void(0);">copyright - Mobifone</a>
+		</div>
+	</div>
+</aside>

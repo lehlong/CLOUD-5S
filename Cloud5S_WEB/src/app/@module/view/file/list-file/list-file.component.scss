@@ -1,0 +1,27 @@
+.icon {
+  cursor: pointer;
+  &-delete {
+    color: rgb(255, 0, 0);
+  }
+  &-view {
+    color: rgb(34, 139, 34);
+  }
+}
+
+.mr {
+  &-8 {
+    margin-right: 8px;
+  }
+}
+
+.mb {
+  &-10 {
+    margin-bottom: 10px;
+  }
+}
+
+.icon-type {
+  i {
+    font-size: 20px;
+  }
+}

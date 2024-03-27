@@ -1,0 +1,29 @@
+td {
+  padding: 0;
+  font-size: 12px;
+}
+th {
+  font-size: 12px;
+  padding: 0;
+
+}
+.abz{
+  width: 1px !important;
+}
+.vertical-cell{
+  transform: rotate(-90deg);display: inline-block;
+  text-align: center;
+  transform-origin: center;
+width: auto;
+  height: 100%;
+  margin: auto;
+}
+.abc {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+
+.total-row td{
+  font-weight: 600;
+}

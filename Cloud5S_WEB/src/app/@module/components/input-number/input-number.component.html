@@ -1,0 +1,12 @@
+<ng-container>
+    <label class="form-label">{{label | translate}}<span *ngIf="required && !requiredNotlabel"
+            [ngClass]="labelBold ? 'fw-500' : ''" class="text-danger ms-1">*</span></label>
+    <app-input-clear (click)="onClick($event)" [disabled]="disabled" [initFocus]="initFocus" [focus]="focus"
+        [class]="class" [onlyNumber]="true" [status]="showErrors && required ? 'error' : ''" (click)="clearZero()"
+        (input)="writeValue()" (blur)="onBlur()" [(value)]="value" [placeholder]="placeholder"></app-input-clear>
+    <input type="text" *ngIf="control" class="hide" type="text" [formControl]="control" />
+    <input type="text" *ngIf="!control" class="hide" type="text" [(ngModel)]="valueInput" />
+    <div *ngIf="showErrors && required" class="text-validate">
+        <div *ngIf="errorsRequired">{{'content.common.number_notify' | translate}}</div>
+    </div>
+</ng-container>

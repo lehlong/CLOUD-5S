@@ -1,0 +1,122 @@
+<div class="card" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-plus-lg"></i>{{ 'content.masterdata.partner.create.title' | translate }}
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onCreate()" type="button" class="btn btn-primary" [appPermission]="PARTNER_RIGHTS.THEM_MOI">
+            <i class="bi bi-check-circle"></i>{{ 'content.common.btn_save' | translate }}
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning">
+            <i class="bi bi-x-circle"></i>{{ 'content.common.btn_close' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form [formGroup]="partnerForm" (ngSubmit)="onCreate()">
+        <!-- <div>
+          <label for="inputText" class="col-form-label">Mã đối tác<span class="text-danger ms-1">*</span></label>
+          <div>
+            <input
+              [ngClass]="{'is-invalid': submitted && f['code'].errors}"
+              type="text"
+              class="form-control"
+              formControlName="code" />
+            <div *ngIf="submitted && f['code'].errors" class="invalid-feedback">
+              <div *ngIf="f['code']['errors']['required']">Không được để trống</div>
+            </div>
+          </div>
+        </div> -->
+        <div class="mt-3">
+          <app-input-clear
+            [initFocus]="true"
+            label="{{ 'content.masterdata.partner.create.name' | translate }}"
+            [required]="true"
+            [errorsRequired]="f['name'].errors?.['required']"
+            [showErrors]="submitted && f['name'].errors"
+            [status]="submitted && f['name'].errors ? 'error' : ''"
+            [control]="$any(partnerForm).controls['name']"></app-input-clear>
+        </div>
+
+        <div class="mt-3">
+          <app-input-clear
+            label="{{ 'content.masterdata.partner.create.taxcode' | translate }}"
+            [required]="true"
+            [errorsRequired]="f['taxCode'].errors?.['required']"
+            [errorsWrongFormat]="f['taxCode'].errors?.['pattern']"
+            [showErrors]="submitted && f['taxCode'].errors"
+            [status]="submitted && f['taxCode'].errors ? 'error' : ''"
+            [control]="$any(partnerForm).controls['taxCode']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <app-input-clear
+            label="{{ 'content.masterdata.partner.create.address' | translate }}"
+            [required]="true"
+            [errorsRequired]="f['address'].errors?.['required']"
+            [showErrors]="submitted && f['address'].errors"
+            [status]="submitted && f['address'].errors ? 'error' : ''"
+            [control]="$any(partnerForm).controls['address']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <app-input-clear
+            type="number"
+            label="{{ 'content.masterdata.partner.create.phone_number' | translate }}"
+            [required]="true"
+            [errorsRequired]="f['phoneNumber'].errors?.['required']"
+            [showErrors]="submitted && f['phoneNumber'].errors"
+            [status]="submitted && f['phoneNumber'].errors ? 'error' : ''"
+            [control]="$any(partnerForm).controls['phoneNumber']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <app-input-clear
+            label="{{ 'content.masterdata.partner.create.email' | translate }}"
+            [required]="true"
+            [errorsRequired]="f['email'].errors?.['required']"
+            [showErrors]="submitted && f['email'].errors"
+            [status]="submitted && f['email'].errors ? 'error' : ''"
+            [control]="$any(partnerForm).controls['email']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <div class="d-flex d-gap-20 w-100 mt-0">
+            <div class="form-check mt-3">
+              <input formControlName="isCustomer" class="form-check-input" type="checkbox" />
+              <label class="form-check-label" for="gridCheck2">
+                {{ 'content.masterdata.partner.create.isCustomer' | translate }}</label
+              >
+            </div>
+
+            <div class="form-check mt-3">
+              <input formControlName="isProvider" class="form-check-input" type="checkbox" />
+              <label class="form-check-label" for="gridCheck2">
+                {{ 'content.masterdata.partner.create.isProvider' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <label for="inputText" class="form-label">{{ 'content.masterdata.partner.create.state' | translate }}</label>
+          <div class="d-flex d-gap-20 w-100 mt-0">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="true" />
+              <label class="form-check-label" for="isActive">
+                {{ 'content.masterdata.partner.create.statevalue.Activated' | translate }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="false" />
+              <label class="form-check-label" for="isActive">
+                {{ 'content.masterdata.partner.create.statevalue.Locked' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,221 @@
+<div class="card income-create-container">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-plus-lg"></i>Thêm mới phiếu thu
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div [appPermission]="PAYMENT_INCOME_RIGHTS.THEM_MOI">
+          <button (click)="onCreate()" type="button" class="btn btn-primary" submitForm>
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3">
+      <form *ngIf="incomeForm" [formGroup]="incomeForm" (ngSubmit)="onCreate()">
+          <div class="row mt-3">
+            <div class="col-sm-12 col-md-8 wrapper-content">
+              <div class="row g-3">
+                <div class="mbf-box">
+                  <div class="mbf-box__header">
+                    <div class="mbf-box__title">
+                      <i class="bi bi-person"></i>
+                      <span>Thông tin người nộp tiền</span>
+                    </div>
+                  </div>
+                  <div class="mbf-box__body">
+                    <div class="row g-3">
+                      <div class="col-md-12">
+                        <label class="form-label">Khách hàng<span class="text-danger ms-1">*</span></label>
+                        <div class="wrapper-choose">
+                          <nz-select (ngModelChange)="selectPartner($event)"
+                              [nzStatus]="submitted && f['partnerCode'].errors ? 'error' : ''" nzShowSearch
+                              nzAllowClear nzPlaceHolder="Khách hàng" formControlName="partnerCode">
+                              <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name"
+                                  [nzValue]="partner.code"></nz-option>
+                          </nz-select>
+                          <span (click)="openChoosePartner()" nz-icon nzType="ellipsis"
+                              nzTheme="outline"></span>
+                      </div>
+                      <div *ngIf="submitted && f['partnerCode'].errors" class="text-validate">
+                          <div *ngIf="f['partnerCode']['errors']['required'] || true">Không được để trống
+                          </div>
+                      </div>
+                      </div>
+                      <div class="col-md-6">
+                        <app-input-clear label="Người nộp tiền" [required]="true"
+                                          [errorsRequired]="f['senderName'].errors?.['required']"
+                                          [showErrors]="submitted && f['senderName'].errors"
+                                          [status]="submitted && f['senderName'].errors ? 'error' : ''"
+                                          [control]="$any(incomeForm).controls['senderName']"></app-input-clear>
+                      </div>
+                      <div class="col-md-6">
+                        <app-input-clear label="Số điện thoại" type="number"
+                                          [control]="$any(incomeForm).controls['senderPhoneNumber']"></app-input-clear>
+                      </div>
+                      <div class="col-md-12">
+                        <app-input-clear label="Địa chỉ"
+                                          [control]="$any(incomeForm).controls['senderAddress']"></app-input-clear>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="mbf-box">
+                  <div class="mbf-box__header">
+                    <div class="mbf-box__title">
+                      <i class="bi bi-currency-dollar"></i>
+                      <span>Thông tin tiền thu</span>
+                    </div>
+                  </div>
+                  <div class="mbf-box__body">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label class="form-label">Hình thức thu<span class="text-danger ms-1">*</span></label>
+                        <nz-select (ngModelChange)="selectPaymentMethod($event)" [nzStatus]="submitted && f['paymentMethod'].errors ? 'error' : ''"
+                            nzAllowClear nzPlaceHolder="Hình thức thu" formControlName="paymentMethod">
+                            <nz-option *ngFor="let method of PAYMENT_METHOD" [nzLabel]="method.name"
+                                [nzValue]="method.value"></nz-option>
+                        </nz-select>
+                        <div *ngIf="submitted && f['paymentMethod'].errors" class="text-validate">
+                            <div *ngIf="f['paymentMethod']['errors']['required']">Không được để trống
+                            </div>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+                        <label class="form-label">Ngân hàng</label>
+                        <nz-select [nzStatus]="submitted && f['bankAccountId'].errors ? 'error' : ''"
+                            nzShowSearch nzAllowClear nzPlaceHolder="Ngân hàng" formControlName="bankAccountId">
+                            <nz-option *ngFor="let bank of listBankAccount" [nzLabel]="bank.bankName"
+                                [nzValue]="bank.id"></nz-option>
+                        </nz-select>
+                      </div>
+          
+                      <div class="col-md-6">
+                        <label class="form-label">Nội dung thu<span class="text-danger ms-1">*</span></label>
+                        <nz-select [nzStatus]="submitted && f['type'].errors ? 'error' : ''" nzShowSearch nzAllowClear nzPlaceHolder="Nội dung thu" formControlName="type">
+                          <nz-option *ngFor="let item of listContentAll" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </nz-select>
+                        <div *ngIf="submitted && f['type'].errors" class="text-validate">
+                          <div *ngIf="f['type']['errors']['required']">Không được để trống</div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <app-input-number label="Số tiền" [required]="true"
+                          [errorsRequired]="f['money'].errors?.['min'] || f['money'].errors?.['required']"
+                          [showErrors]="submitted && f['money'].errors"
+                          [class]="submitted && f['money'].errors ? 'is-invalid' : ''"
+                          [control]="$any(incomeForm).controls['money']"></app-input-number>
+                      </div>
+          
+                      <div class="col-md-12">
+                        <app-input-clear label="Lý do"
+                                          [control]="$any(incomeForm).controls['reason']"></app-input-clear>
+                      </div>
+          
+                      <div class="col-md-12">
+                        <app-input-clear label="Chứng từ gốc"
+                        [control]="$any(incomeForm).controls['originalDoc']"></app-input-clear>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mbf-box">
+                  <div class="mbf-box__header">
+                    <div class="mbf-box__title">
+                      <i class="bi bi-clipboard"></i>
+                      <span>Tham chiếu phiếu xuất hàng</span>
+                    </div>
+                  </div>
+                  <div class="mbf-box__body">
+                    <div class="row g-3">
+                      <div class="col-md-12">
+                          <button (click)="openChooseExport()" nz-button nzType="dashed" type="button"> <span nz-icon nzType="plus"
+                              nzTheme="outline"></span> Chọn phiếu xuất hàng</button>
+                      </div>
+                      <div class="list-container mb-1 mt-1">
+                        <table mat-table [dataSource]="dataExport" *ngIf="dataExport?.length > 0"
+                            class="table table-hover table-click-row">
+                            <ng-container matColumnDef="code">
+                                <th mat-header-cell *matHeaderCellDef>Mã phiếu</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.code}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="exportDate">
+                                <th mat-header-cell *matHeaderCellDef>Ngày xuất</th>
+                                <td mat-cell *matCellDef="let element">{{ element.exportDate | date :
+                                    'dd/MM/yyyy' }}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="partner">
+                                <th mat-header-cell *matHeaderCellDef>Đối tác</th>
+                                <td mat-cell *matCellDef="let element">{{ element.partner.name }}</td>
+                                <td mat-footer-cell *matFooterCellDef class="fw-500">Tổng tiền nợ</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="debt">
+                                <th mat-header-cell *matHeaderCellDef>Tiền nợ</th>
+                                <td mat-cell *matCellDef="let element">{{ utils.formatNumber(element.debt) }}</td>
+                                <td mat-footer-cell *matFooterCellDef class="fw-500">{{getTotalExport()}}</td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                                class="border-bottom">
+                            </tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="row g-3">
+                <div class="mbf-box">
+                  <div class="mbf-box__header">
+                    <div class="mbf-box__title">
+                        <i class="bi bi-receipt"></i>
+                        <span>Thông tin phiếu thu</span>
+                    </div>
+                  </div>
+                  <div class="mbf-box__body">
+                    <div class="row g-3">
+                      <div class="col-sm-12">
+                          <label class="form-label">Ngày thu<span class="text-danger ms-1">*</span></label>
+                          <nz-date-picker nzFormat="dd/MM/yyyy" class="d-block"
+                              [nzStatus]="submitted && f['paymentDate'].errors ? 'error' : ''"
+                              formControlName="paymentDate"></nz-date-picker>
+                          <div *ngIf="submitted && f['paymentDate'].errors" class="text-validate">
+                              <div *ngIf="f['paymentDate']['errors']['required']">Không được để trống
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-12">
+                          <app-input-clear label="Ghi chú" placeholder="Ghi chú" [textArea]="true"
+                              [control]="$any(incomeForm).controls['note']"></app-input-clear>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

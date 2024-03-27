@@ -1,0 +1,100 @@
+<div class="card stock-edit-container" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        {{ title }}
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="printWarehouseReceipt()" type="button" class="btn print-btn">
+            <i class="bi bi-printer"></i>In phiếu
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <div class="row g-3 detail-container">
+        <div class="main-content col-md-8 pr-2">
+          <!--  -->
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-box"></i>
+                <span>Thông tin sản phẩm</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="wraper-table">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Mã sản phẩm</th>
+                      <th>Tên sản phẩm</th>
+                      <th>Kho xuất</th>
+                      <th class="text-right">Số lượng</th>
+                      <th>ĐVT</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of detailData?.exportDetails">
+                      <td>{{ product?.item?.code || '' }}</td>
+                      <td>{{ product?.item?.name || '' }}</td>
+                      <td>{{ product?.stock?.name || '' }}</td>
+                      <td class="text-right">{{ formatNumber(product?.amount) || '' }}</td>
+                      <td>{{ product?.item?.unit?.name || '' }}</td>
+                      <td>{{ product?.note || '' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+        <div class="info-content col-md-4">
+          <!--  -->
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-info-circle"></i>
+                <span> Thông tin phiếu xuất kho</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="list-info d-space-bw">
+                <div class="form-label">Mã phiếu</div>
+                <div class="value">{{ detailData.code }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Ngày xuất kho</div>
+                <div class="value">{{ detailData?.exportDate | date : 'dd/MM/yyyy' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Đối tác</div>
+                <div class="value">{{ detailData?.partner?.name }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Kho xuất</div>
+                <div class="value">{{ detailData?.stock?.name }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Ghi chú</div>
+                <div class="value">{{ detailData?.note || '' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Người thực hiện</div>
+                <div class="value">{{ detailData?.createBy || '' }}</div>
+              </div>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

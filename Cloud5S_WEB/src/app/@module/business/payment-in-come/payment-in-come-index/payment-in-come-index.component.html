@@ -1,0 +1,123 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Công nợ cần thu
+      </div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+          <fa-icon [icon]="faFileExcel"></fa-icon> Xuất Excel
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-row flex-grow-1" style="height: 33px">
+        <mat-checkbox style="padding-bottom: 20px" [(ngModel)]="filter.isAll">Hiện tất cả </mat-checkbox>
+      </div>
+      <div class="d-flex flex-row flex-grow-1" style="width: 340px; height: 33px">
+        <nz-range-picker
+          nzFormat="dd/MM/yyyy"
+          [(ngModel)]="filter.selectedRange"
+          [nzRanges]="rangePresets"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khách hàng" [(ngModel)]="filter.PartnerCode">
+          <nz-option
+            *ngFor="let partner of listPartnerAll"
+            [nzLabel]="partner.name"
+            [nzValue]="partner.code"></nz-option>
+        </nz-select>
+      </div>
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <div class="wrapper-input">
+            <app-input-clear
+              placeholder="Nội dung tìm kiếm"
+              (searchEvent)="search()"
+              [(value)]="filter.keyWord"></app-input-clear>
+          </div>
+          <span style="height: 34px" (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span style="height: 34px" (click)="reload()" class="input-group-text"
+            ><i class="bi bi-arrow-clockwise"></i
+          ></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+      <table
+        mat-table
+        [dataSource]="paginationResult.data"
+        *ngIf="paginationResult && paginationResult.data?.length > 0"
+        class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="partnerCode">
+          <th mat-header-cell *matHeaderCellDef>Mã khách hàng</th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" (click)="openDetail(element)" class="cursor-pointer text-primary">{{
+              element.partnerCode
+            }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="partnerName">
+          <th mat-header-cell *matHeaderCellDef>Tên khách hàng</th>
+          <td mat-cell *matCellDef="let element">{{ element.partnerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phoneNumber">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Số điện thoại</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.phoneNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef>Địa chỉ</th>
+          <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstPeriod">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Đầu kỳ</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.firstPeriod | number }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="inPeriod">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Nợ trong kỳ</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.inPeriod | number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="payInPeriod">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Trả trong kỳ</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.payInPeriod | number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="lastPeriod">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Cuối kỳ</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.lastPeriod | number }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (dblclick)="openDetail(row)"
+          [ngClass]="{'selected-row': row?.partnerCode === filter.partnerCode}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

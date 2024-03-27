@@ -1,0 +1,86 @@
+<ng-container>
+  <label *ngIf="control" class="form-label"
+    >{{ label | translate }}<span *ngIf="required" class="text-danger ms-1">*</span></label
+  >
+  <ng-container>
+    <nz-input-group
+      [ngClass]="textArea ? 'ant-input-affix-wrapper-textarea-with-clear-btn' : ''"
+      [nzSuffix]="inputClearTpl3"
+      [nzStatus]="status">
+      <input
+        #inputNoControl
+        [disabled]="disabled"
+        *ngIf="!control && !textArea"
+        (input)="onInput($event)"
+        (click)="onClick($event)"
+        (blur)="onBlur()"
+        [appAutofocus]="focus"
+        [type]="type"
+        [ngClass]="class"
+        (keyup.enter)="onSearch()"
+        nz-input
+        [ngModel]="value"
+        (ngModelChange)="onValueChange($event)"
+        [placeholder]="placeholder | translate" />
+      <input
+        #inputControl
+        [disabled]="disabled"
+        *ngIf="control && !textArea"
+        (input)="onInput($event)"
+        (click)="onClick($event)"
+        (blur)="onBlur()"
+        [appAutofocus]="focus"
+        [type]="type"
+        [ngClass]="class"
+        [formControl]="control"
+        nz-input
+        [placeholder]="placeholder | translate" />
+      <textarea
+        [disabled]="disabled"
+        [nzAutosize]="nzAutosize"
+        (input)="onInput($event)"
+        (click)="onClick($event)"
+        (blur)="onBlur()"
+        [appAutofocus]="focus"
+        *ngIf="!control && textArea"
+        [ngClass]="class"
+        (keyup.enter)="onSearch()"
+        nz-input
+        [ngModel]="value"
+        (ngModelChange)="onValueChange($event)"
+        [placeholder]="placeholder | translate"></textarea>
+      <textarea
+        [disabled]="disabled"
+        [nzAutosize]="nzAutosize"
+        (input)="onInput($event)"
+        (click)="onClick($event)"
+        (blur)="onBlur()"
+        [appAutofocus]="focus"
+        *ngIf="control && textArea"
+        [ngClass]="class"
+        [formControl]="control"
+        nz-input
+        [placeholder]="placeholder | translate"></textarea>
+    </nz-input-group>
+    <ng-template #inputClearTpl3>
+      <span
+        nz-icon
+        class="ant-input-clear-icon"
+        nzTheme="fill"
+        nzType="close-circle"
+        *ngIf="!control && value && value != '' && !disabled"
+        (click)="onValueChange('')"></span>
+      <span
+        *ngIf="control && value && value != '' && !disabled"
+        nz-icon
+        class="ant-input-clear-icon"
+        nzTheme="fill"
+        nzType="close-circle"
+        (click)="ClearAll('')"></span>
+    </ng-template>
+  </ng-container>
+  <div *ngIf="showErrors && control" class="text-validate">
+    <div *ngIf="errorsRequired">{{ 'content.common.empty_notify' | translate }}</div>
+    <div *ngIf="errorsWrongFormat">{{ 'content.common.wrong_format' | translate }}</div>
+  </div>
+</ng-container>

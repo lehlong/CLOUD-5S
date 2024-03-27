@@ -1,0 +1,393 @@
+<div class="card" [appPermission]="ORDER_DELIVERY_MANAGEMENT_RIGHTS.THONG_TIN">
+  <div class="card-body container-page-delivery">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title p-0 mb-1" *ngIf="dataDeliveryManagement.length; else noData">
+        <i class="bi bi-journal-text"></i>
+        Thông tin đợt giao hàng đang diễn ra
+      </div>
+      <ng-template #noData>
+          <div class="fw-500 text-uppercase text-danger">
+            Thông báo: hiện tại không có đợt xuất hàng nào đang diễn ra
+          </div>
+      </ng-template>
+    </div>
+    <div class="mb-1 mt-1">
+      <div *ngIf="dataDeliveryManagement.length; else noDataTemplate">
+        <div>
+          <table class="table table-hover table-custom">
+            <thead style="display: none;">
+              <tr>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="fw-500">Mã đợt: </span>
+                  <span href="#" (click)="openDetail(dataDeliveryManagement[0]?.code)" class="cursor-pointer text-primary">{{ dataDeliveryManagement[0]?.code }}</span>
+                </td>
+                <td>
+                  <span class="fw-500">Từ ngày:</span>
+                    {{ dataDeliveryManagement[0]?.startDate | date : 'dd/MM/yyyy HH:mm:ss' }}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="fw-500">Tàu xuất hàng:</span>
+                  {{ dataDeliveryManagement[0]?.shipCode }}
+                </td>
+                <td>
+                  <span class="fw-500">Đến ngày:</span>
+                    {{ dataDeliveryManagement[0]?.endDate | date : 'dd/MM/yyyy HH:mm:ss' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-2" style="overflow-x: auto;display: flex;flex-wrap: wrap;">
+          <div class="box-container-custom">
+            <div>
+              Khối lượng dự kiến
+            </div> 
+            <span>{{ utils.formatNumber(dataDeliveryManagement[0]?.expectNumber) }} {{ dataDeliveryManagement[0]?.orderBatchDetails[0]?.unit?.name }}</span>
+          </div>
+
+          <div class="box-container-custom">
+            <div>
+              Khối lượng đã xuất
+            </div> 
+            <span>{{ utils.formatNumber(dataDeliveryManagement[0]?.releaseNumber) }} {{ dataDeliveryManagement[0]?.orderBatchDetails[0]?.unit?.name }}({{toPercent(dataDeliveryManagement[0]?.releaseNumber,dataDeliveryManagement[0]?.expectNumber)}}) </span>
+          </div>
+
+          <div class="box-container-custom">
+            <div>
+              Khối lượng đã xuống tàu
+            </div> 
+            <span>{{ utils.formatNumber(dataDeliveryManagement[0]?.completeNumber) }} {{ dataDeliveryManagement[0]?.orderBatchDetails[0]?.unit?.name }}</span>
+          </div>
+
+          <div class="box-container-custom">
+            <div>
+              Số lượng xe tham gia
+            </div> 
+            <span>{{ utils.formatNumber(dataDeliveryManagement[0]?.totalVehicle) }} xe</span>
+          </div>
+
+          <div class="box-container-custom">
+            <div>
+              Số chuyến đã xuất
+            </div> 
+            <span>{{ utils.formatNumber(dataDeliveryManagement[0]?.deliveryNumber) }} chuyến</span>
+          </div>
+
+          <div class="box-container-custom">
+            <div>
+              Số chuyến đã đến cảng
+            </div> 
+            <span>{{ utils.formatNumber(dataDeliveryManagement[0]?.completeDeliveryNumber) }} chuyến</span>
+          </div>
+
+          <div class="box-container-custom">
+            <div>
+              Số chuyến trên đường
+            </div> 
+            <span>{{ utils.formatNumber(dataDeliveryManagement[0]?.deliveringNumber) }} chuyến</span>
+          </div>
+        </div>
+        <div class="mt-3 list-container" [appPermission]="ORDER_DELIVERY_MANAGEMENT_RIGHTS.DANH_SACH_CHO">
+          <div class="d-flex justify-content-between my-2">
+            <div class="card-title" style="margin: auto 0">
+              <i class="bi bi-journal-text"></i>
+              Danh sách phiếu xuất chờ đổ hàng
+            </div>
+            <div class="d-flex">
+              <div class="d-flex flex-row flex-grow-1">
+                <nz-select (ngModelChange)="onVehicleChange($event)" nzShowSearch nzAllowClear nzPlaceHolder="Biển số xe" [(ngModel)]="filterExport.VehicleCode">
+                  <nz-option *ngFor="let type of listVehicle" [nzLabel]="type.code" [nzValue]="type.code">
+                  </nz-option>
+                </nz-select>
+              </div>
+            </div>
+          </div>
+          <div class="list-container">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>Mã phiếu</th>
+                  <th>Ngày giờ xuất</th>
+                  <th>Biển số xe</th>
+                  <th class="text-right">Cân lần 1</th>
+                  <th class="text-right">Cân lần 2</th>
+                  <th class="text-right">Khối lượng hàng</th>
+                  <th class="text-center">ĐVT</th>
+                  <th class="text-center">Trạng thái</th>
+                  <th class="text-center">Cầu cảng</th>
+                  <th class="text-center">Hầm tàu</th>
+                  <th class="text-center">Thời gian xuống tàu</th>
+                  <th class="text-center">#</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of paginationShipResult?.data; let i = index">
+                  <td>
+                    <span href="#" (click)="openDetailSell(item.code)" class="cursor-pointer text-primary">{{
+                      item.code
+                      }}</span>
+                  </td>
+                  <td>{{ item?.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ item?.vehicleCode }}</td>
+                  <td class="text-right">{{ utils.formatNumber(item?.scale?.weight1) }}</td>
+                  <td class="text-right">{{ utils.formatNumber(item?.scale?.weight2) }}</td>
+                  <td class="text-right">{{ utils.formatNumber(item?.scale?.weight) }}</td>
+                  <td class="text-center">
+                    <span *ngFor="let od of item?.orderDetails">
+                      {{od?.unit?.name}}<br />
+                    </span>
+                  </td>
+                  <td>
+                    <div
+                      *ngIf="STATE_ORDER_NEW[item?.state]"
+                      class="label-status text-center"
+                      [style.background]="STATE_ORDER_NEW[item?.state].background"
+                      [style.color]="STATE_ORDER_NEW[item?.state].color">
+                      {{ STATE_ORDER_NEW[item?.state].name }}
+                    </div>
+                  </td>
+                  <td>
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Cầu cảng" [(ngModel)]="shipForm[i].berthCode">
+                      <nz-option *ngFor="let type of listBerth" [nzLabel]="type.name" [nzValue]="type.code">
+                      </nz-option>
+                    </nz-select>
+                  </td>
+                  <td class="text-center">
+                    <app-input-clear class="input-ship" type="number" [required]="true" [(value)]="shipForm[i].cargoCompartmentNumber"></app-input-clear>
+                  </td>
+                  <td class="text=center">
+                    <nz-date-picker style="width: 190px" class="form-control" nzShowTime [(ngModel)]="shipForm[i].getOffTime">
+                    </nz-date-picker>
+                  </td>
+                  <td class="text-center">
+                    <button
+                      (click)="onSave(item.code, i)"
+                      type="button"
+                      class="btn btn-primary"
+                      [appPermission]="ORDER_DELIVERY_MANAGEMENT_RIGHTS.XAC_NHAN">
+                      <i class="bi bi-check-circle"></i>Xác nhận đổ hàng
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="my-auto">
+              <span class="fw-500">Tổng cộng:</span> {{utils.formatNumber(totalPendingShip)}} phiếu, <span class="fw-500">Tổng khối lượng:</span> {{utils.formatNumber(totalWeightPendingShip)}} {{unitNameShip}}
+            </div>
+            <div *ngIf="paginationShipResult">
+              <app-pagination
+                [pageSize]="paginationShipResult.pageSize"
+                [totalRecord]="paginationShipResult.totalRecord"
+                [totalPage]="paginationShipResult.totalPage"
+                [(page)]="paginationShipResult.currentPage"
+                (pageChange)="onChangePageShip($event)"
+                (pageSizeChange)="pageSizeChangeShip($event)"></app-pagination>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 list-container" [appPermission]="ORDER_DELIVERY_MANAGEMENT_RIGHTS.DANH_SACH_HOAN_THANH">
+          <div class="d-flex justify-content-between my-2">
+            <div class="card-title" style="margin: auto 0">
+              <i class="bi bi-journal-text"></i>
+              Danh sách phiếu xuất đã hoàn thành
+            </div>
+            <div class="d-flex">
+              <div class="d-flex flex-wrap d-gap-2" style="margin-right: 5px">
+                <nz-range-picker
+                  nzFormat="dd/MM/yyyy"
+                  [nzRanges]="rangePresets"
+                  [(ngModel)]="selectedRange"
+                  (ngModelChange)="onDateRangeChange($event)"
+                  [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+              </div>
+              <div class="d-flex flex-row flex-grow-1">
+                <nz-select (ngModelChange)="onVehicleDeliveryChange($event)" nzShowSearch nzAllowClear nzPlaceHolder="Biển số xe" [(ngModel)]="filterExport.VehicleCode">
+                  <nz-option *ngFor="let type of listVehicle" [nzLabel]="type.code" [nzValue]="type.code">
+                  </nz-option>
+                </nz-select>
+              </div>
+            </div>
+          </div>
+          <div class="list-container">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>Mã phiếu</th>
+                  <th>Ngày giờ xuất</th>
+                  <th>Biển số xe</th>
+                  <th class="text-right">Cân lần 1</th>
+                  <th class="text-right">Cân lần 2</th>
+                  <th class="text-right">Khối lượng hàng</th>
+                  <th class="text-right">ĐVT</th>
+                  <th>Trạng thái</th>
+                  <th>Cầu cảng</th>
+                  <th>Hầm tàu</th>
+                  <th>Thời gian xuống tàu</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of paginationCompletedResult?.data; let i = index">
+                  <td>
+                    <span href="#" (click)="openDetailSell(item.code)" class="cursor-pointer text-primary">{{
+                      item.code
+                      }}</span>
+                  </td>
+                  <td>{{ item?.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ item?.vehicleCode }}</td>
+                  <td class="text-right">{{ utils.formatNumber(item?.scale?.weight1) }}</td>
+                  <td class="text-right">{{ utils.formatNumber(item?.scale?.weight2) }}</td>
+                  <td class="text-right">{{ utils.formatNumber(item?.scale?.weight) }}</td>
+                  <td class="text-right">
+                    <span *ngFor="let od of item?.orderDetails">
+                      {{od?.unit?.name}}<br />
+                    </span>
+                  </td>
+                  <td>
+                    <div
+                      *ngIf="STATE_ORDER_NEW[item?.state]"
+                      class="label-status text-center"
+                      [style.background]="STATE_ORDER_NEW[item?.state].background"
+                      [style.color]="STATE_ORDER_NEW[item?.state].color">
+                      {{ STATE_ORDER_NEW[item?.state].name }}
+                    </div>
+                  </td>
+                  <td>
+                    {{item?.berth?.name}}
+                  </td>
+                  <td>
+                    {{item?.cargoCompartmentNumber}}
+                  </td>
+                  <td>{{item?.getOffTime | date : 'dd/MM/yyyy HH:mm'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="my-auto">
+              <span class="fw-500">Tổng cộng:</span> {{utils.formatNumber(totalCompletedDelivery)}} phiếu, <span class="fw-500">Tổng khối lượng:</span> {{utils.formatNumber(totalWeightCompletedDelivery)}} {{unitNameDelivery}}
+            </div>
+            <div *ngIf="paginationCompletedResult">
+              <app-pagination
+                      [pageSize]="paginationCompletedResult.pageSize"
+                      [totalRecord]="paginationCompletedResult.totalRecord"
+                      [totalPage]="paginationCompletedResult.totalPage"
+                      [(page)]="paginationCompletedResult.currentPage"
+                      (pageChange)="onChangePageCompleted($event)"
+                      (pageSizeChange)="pageSizeChangeCompleted($event)"></app-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #noDataTemplate>
+        <div class="list-container mb-1 mt-1">
+          <div class="card-title p-0 mb-1">
+            <i class="bi bi-journal-text"></i>
+            Danh sách đợt xuất hàng gần nhất
+          </div>
+          <table
+            mat-table
+            [dataSource]="paginationResult.data"
+            *ngIf="paginationResult && paginationResult.data?.length > 0"
+            class="table table-hover table-click-row">
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+              <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+                {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef>Mã đợt</th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  element.code
+                }}
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef>Từ ngày</th>
+              <td mat-cell *matCellDef="let element">{{ element.startDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+            </ng-container>
+    
+            <ng-container matColumnDef="endDate">
+              <th mat-header-cell *matHeaderCellDef>Đến ngày</th>
+              <td mat-cell *matCellDef="let element">{{ element.endDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+            </ng-container>
+    
+            <ng-container matColumnDef="orderBatchDetails">
+              <th mat-header-cell *matHeaderCellDef>Hàng hóa</th>
+              <td mat-cell *matCellDef="let element">
+                <span *ngFor="let od of element.orderBatchDetails"> {{ od?.item?.name }}<br /> </span>
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="exportShip">
+              <th mat-header-cell *matHeaderCellDef>Tàu xuất hàng</th>
+              <td mat-cell *matCellDef="let element">{{ element.shipCode }}</td>
+            </ng-container>
+    
+            <ng-container matColumnDef="totalVehicle">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Số lượng phương tiện</th>
+              <td mat-cell *matCellDef="let element" class="text-right">{{ utils.formatNumber(element?.totalVehicle) }}</td>
+            </ng-container>
+    
+            <ng-container matColumnDef="expectedWeight">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Khối lượng dự kiến</th>
+              <td mat-cell *matCellDef="let element" class="text-right">{{ utils.formatNumber(element?.expectNumber) }} {{ element.orderBatchDetails[0]?.unit?.name }}</td>
+    
+            </ng-container>
+    
+            <ng-container matColumnDef="exportedWeight">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Khối lượng đã xuất</th>
+              <td mat-cell *matCellDef="let element" class="text-right">{{ utils.formatNumber(element.releaseNumber) }} {{ element.orderBatchDetails[0]?.unit?.name }}</td>
+            </ng-container>
+    
+            <ng-container matColumnDef="deliveryNumber">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Số chuyến đã xuất</th>
+              <td mat-cell *matCellDef="let element" class="text-right">{{ utils.formatNumber(element.deliveryNumber) }}</td>
+            </ng-container>
+    
+            <ng-container matColumnDef="progress">
+              <th mat-header-cell *matHeaderCellDef>% Thực hiện</th>
+              <td mat-cell *matCellDef="let element">
+                <nz-progress [nzPercent]="toFixed(element.releaseNumber,element.expectNumber)" nzSize="small"></nz-progress>
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="state">
+              <th mat-header-cell *matHeaderCellDef class="text-center">Trạng thái</th>
+              <td mat-cell *matCellDef="let element" class="text-center">
+                <div
+                  *ngIf="STATE_ORDER_DELIVERY[element?.state]"
+                  class="label-status"
+                  [style.background]="STATE_ORDER_DELIVERY[element?.state].background"
+                  [style.color]="STATE_ORDER_DELIVERY[element?.state].color">
+                  {{ STATE_ORDER_DELIVERY[element?.state].name }}
+                </div>
+              </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              (dblclick)="openDetail(row?.code)"
+              [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+          </table>
+          <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

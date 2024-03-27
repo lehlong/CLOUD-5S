@@ -1,0 +1,88 @@
+<div class="print-templates" id="stock-import-print">
+  <div class="header-print">
+    <div class="hearder-left">
+      <div class="title-left">{{ data?.company?.name }}</div>
+      <div class="text">{{ data?.company?.address }}</div>
+    </div>
+    <div class="hearder-right">
+      <div class="text">
+        <span>Số phiếu:{{ data?.code }}</span>
+        <br />
+        <span>Lần in</span>
+      </div>
+    </div>
+  </div>
+  <div class="title-main">PHIẾU CÂN HÀNG</div>
+  <div class="date text-center">Ngày 14 Tháng 07 năm 2023</div>
+
+  <div class="row-separate" style="margin-top: 20px">
+    <div class="row-separate-left">
+      <div class="label">- Khách hàng: {{ data?.customer?.customerName }}</div>
+      <!-- <div class="dot-line"></div> -->
+    </div>
+    <div class="row-separate-right">
+      <div class="label">-Biển số xe: {{ data?.vehicleCode }}</div>
+      <!-- <div class="dot-line"></div> -->
+    </div>
+  </div>
+
+  <div class="row-content">
+    <div class="label">-Địa chỉ: {{ data?.customer?.customerAddress }}</div>
+    <!-- <div class="dot-line"></div> -->
+  </div>
+  <div class="row-content">
+    <div class="label">-Tên sản phẩm: {{ data?.itemName }}</div>
+    <!-- <div class="dot-line"></div> -->
+  </div>
+
+  <table class="table-print">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Lần cân</th>
+        <th>Thời gian</th>
+        <th>Trọng lượng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center">1</td>
+        <td style="text-align: center">Lần cân 1</td>
+        <td style="text-align: center">{{ data?.weight1.timeWeight | date : 'dd/MM/yyyy - HH:mm' }}</td>
+        <td style="text-align: center">{{ data?.weight1.weight }}</td>
+      </tr>
+      <tr>
+        <td style="text-align: center">2</td>
+        <td style="text-align: center">Lần cân 2</td>
+        <td style="text-align: center">{{ data?.weight2.timeWeight | date : 'dd/MM/yyyy - HH:mm' }}</td>
+        <td style="text-align: center">{{ data?.weight2.weight }}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="fw-600" style="text-align: center">Trọng lượng hàng</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer-print">
+    <div class="signature-container">
+      <div class="title-signature">Khách hàng</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Kiểm soát viên</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Thủ kho</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="date-signature">Ngày Tháng Năm 2023</div>
+      <div class="title-signature">Người cân</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+  </div>
+</div>

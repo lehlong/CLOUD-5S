@@ -1,0 +1,289 @@
+<div class="card order-edit-container" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Thông tin đơn hàng ({{ dataDetail?.code }})
+      </div>
+      <div *ngIf="dataDetail" class="d-flex-wrap d-gap">
+        <div *ngIf="isConfirmOrder()" [appPermission]="ORDER_RELEASE_RIGHTS.THEM_MOI">
+          <button type="button" class="btn btn-success" (click)="onCreateOrderRelease()">
+            <i class="bi bi-plus-lg"></i>Tạo phiếu trộn
+          </button>
+        </div>
+        <ng-container *ngIf="isExportOrder()" [appPermission]="ORDER_RELEASE_RIGHTS.HOAN_THANH_TRON">
+          <div>
+            <button type="button" class="btn btn-primary mr-3" (click)="onConfirmMix()">
+              <i class="bi bi-check-lg"></i>Xác nhận hoàn thành trộn
+            </button>
+          </div>
+          <div>
+            <button type="button" class="btn btn-success" (click)="onCreateOrderRelease()">
+              <i class="bi bi-plus-lg"></i>Tạo phiếu trộn
+            </button>
+          </div>
+        </ng-container>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3">
+      <form *ngIf="orderForm" [formGroup]="orderForm">
+        <div class="row g-3 detail-container">
+          <div class="main-content col-md-8 pr-2">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-box"></i>
+                  Danh sách sản phẩm
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="wraper-table no-scroll-y mb-3">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Đá</th>
+                        <th>Cát</th>
+                        <th>Độ sụt</th>
+                        <th class="text-right">SL đặt</th>
+                        <th>ĐVT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let od of ordersDetail">
+                        <td>{{ od?.item?.name }}</td>
+                        <td>
+                          <span *ngIf="od?.stone?.name">{{ od?.stone?.name }}</span>
+                          <span *ngIf="!od?.stone?.name">-/-</span>
+                        </td>
+                        <td>
+                          <span *ngIf="od?.sand?.name">{{ od?.sand?.name }}</span>
+                          <span *ngIf="!od?.sand?.name">-/-</span>
+                        </td>
+                        <td>
+                          <span *ngIf="od?.slump">{{ od?.slump }}</span>
+                          <span *ngIf="!od?.slump">-/-</span>
+                        </td>
+                        <td class="text-right">{{ od?.orderNumber | number }}</td>
+                        <td>{{ od?.item?.unit?.name }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-journal-text"></i>
+                  Danh sách phiếu trộn
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div>
+                  <table class="table" style="width: 100%">
+                    <tbody>
+                      <tr class="fw-medium">
+                        <td scope="col">Mã phiếu</td>
+                        <td scope="col">Ngày giờ xuất</td>
+                        <td scope="col">Xe bồn</td>
+                        <td scope="col">Xe bơm</td>
+                        <td scope="col">Máy trộn</td>
+                        <td scope="col" class="align-right">Số lượng</td>
+                        <!-- <td scope="col" class="align-right">KL. cân vào</td>
+                        <td scope="col" class="align-right">KL. cân ra</td> -->
+                        <td class="text-center" scope="col">Trạng thái</td>
+                      </tr>
+                      <ng-container *ngIf="orderReleases?.length > 0, else orderReleaseEmpty">
+                        <tr *ngFor="let os of orderReleases">
+                          <td class="cursor-pointer text-primary" (click)="openEdit(os)">
+                            {{ os.code }}
+                          </td>
+                          <td>{{ os.mixDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                          <td>{{ os.mixVehicleCode }}</td>
+                          <td>{{ os.pumpVehicleCode }}</td>
+                          <td>{{ os.mixerCode }}</td>
+                          <td class="align-right">{{ os.mixNumber | number }}</td>
+                          <!-- <td class="align-right">{{ os.weightIn | number }}</td>
+                          <td class="align-right">{{ os.weightOut | number }}</td> -->
+                          <td>
+                            <div class="label-status text-center" *ngIf="state_orderRelease[os?.state]"
+                              [style.color]="state_orderRelease[os?.state].color"
+                              [style.background]="state_orderRelease[os?.state].background">
+                              {{ state_orderRelease[os?.state].name }}
+                            </div>
+                          </td>
+                          <td *ngIf="!state_orderRelease[os?.state]" class="text-primary"></td>
+                        </tr>
+                      </ng-container>
+                      <ng-template #orderReleaseEmpty>
+                        <tr>
+                          <td colspan="8">Chưa có phiếu trộn nào</td>
+                        </tr>
+                      </ng-template>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-clock-history"></i>
+                  Lịch sử đơn hàng
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="wraper-table">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Người thực hiện</th>
+                        <th>Hành động</th>
+                        <th>Thời gian thực hiện</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of dataDetail?.orderProcesses">
+                        <td>{{ item?.account?.fullName || item?.createBy }}</td>
+                        <td>
+                          {{
+                            item.actionCode && item.actionCode != '' && ACTION_ORDER[item.actionCode]
+                              ? ACTION_ORDER[item.actionCode].name
+                              : ''
+                          }}
+                        </td>
+                        <td>{{ item?.createDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-content col-md-4">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-info-circle"></i>
+                  Máy trộn
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Tên máy trộn</div>
+                  <div class="value">{{ dataDetail?.mixer?.name }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-info-circle"></i>
+                  Thông tin đơn hàng
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="list-info d-space-bw">
+                  <div class="label">Mã đơn hàng</div>
+                  <div class="value">{{ code || '' }}</div>
+                </div>
+                <div class="list-info d-space-bw">
+                  <div class="label">Người tạo</div>
+                  <div class="value">{{ dataDetail?.createBy || '' }}</div>
+                </div>
+                <div class="list-info d-space-bw">
+                  <div class="label">Ngày tạo</div>
+                  <div class="value">{{ dataDetail?.createDate | date: 'dd/MM/yyyy HH:mm' }}</div>
+                </div>
+                <div class="list-info d-space-bw">
+                  <div class="label">Trạng thái</div>
+                  <div *ngIf="dataDetail?.state && STATE_ORDER[dataDetail?.state]" class="value label-status status"
+                    [style.background]="STATE_ORDER[dataDetail?.state].background"
+                    [style.color]="STATE_ORDER[dataDetail?.state].color">
+                    {{ STATE_ORDER[dataDetail?.state].name }}
+                  </div>
+                  <div *ngIf="!dataDetail?.state || !STATE_ORDER[dataDetail?.state]">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-info-circle"></i>
+                  Thông tin khách hàng
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Tên Khách hàng</div>
+                  <div class="value">{{ dataDetail?.partner?.name }}</div>
+                </div>
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Số điện thoại</div>
+                  <div class="value">{{ dataDetail?.partner?.phoneNumber || '' }}</div>
+                </div>
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Địa chỉ</div>
+                  <div [matTooltip]="dataDetail?.partner?.address || ''" matTooltipPosition="above" class="value">
+                    {{ dataDetail?.partner?.address || '' }}
+                  </div>
+                </div>
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Ghi chú</div>
+                  <div class="value">
+                    {{ dataDetail?.partnerNote || '' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-info-circle"></i>
+                  Thông tin công trình
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Thời gian đổ</div>
+                  <div class="value">{{ dataDetail?.pourDate | date : 'dd/MM/yyyy hh:mm' }}</div>
+                </div>
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Khu vực</div>
+                  <div class="value">{{ dataDetail?.area?.name }}</div>
+                </div>
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Loại đơn hàng</div>
+                  <div class="value">{{ dataDetail?.orderType?.name }}</div>
+                </div>
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Hình thức đổ</div>
+                  <div class="value">{{ dataDetail?.pourType?.name }}</div>
+                </div>
+                <div class="list-info d-space-bw gap-50">
+                  <div class="label">Hạng mục công trình</div>
+                  <div class="value">{{ dataDetail?.pourCategory }}</div>
+                </div>
+                <div class="list-info d-space-bw">
+                  <div class="label">Địa điểm đổ</div>
+                  <div class="value">
+                    {{ orderForm.value.pourLocation }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

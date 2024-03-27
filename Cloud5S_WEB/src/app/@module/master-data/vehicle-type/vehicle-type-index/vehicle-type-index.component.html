@@ -1,0 +1,105 @@
+<div class="card" [appPermission]="VEHICLETYPE_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title"><i class="bi bi-journal-text"></i>Danh sách loại phương tiện</div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="filter">
+          <div class="input-group search-box">
+            <div class="wrapper-input">
+              <app-input-clear
+                placeholder="content.common.placeholder_search"
+                (searchEvent)="search()"
+                [(value)]="filter.keyWord"></app-input-clear>
+            </div>
+            <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+            <span (click)="search(1, filter.pageSize, true)" class="input-group-text"
+              ><i class="bi bi-arrow-clockwise"></i
+            ></span>
+            &nbsp;
+          </div>
+        </div>
+        <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="openCreate()"
+            [appPermission]="VEHICLETYPE_RIGHTS.THEM_MOI">
+            <i class="bi bi-plus-lg"></i>Thêm mới
+          </button>
+
+          <button
+            type="button"
+            class="btn export-excel-btn"
+            (click)="exportExcel()"
+            [appPermission]="VEHICLETYPE_RIGHTS.DANH_SACH">
+            <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1">
+      <table
+        mat-table
+        [dataSource]="paginationResult.data"
+        *ngIf="paginationResult"
+        class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef width="60px" class="align-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="align-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef width="150px">Mã loại phương tiện</th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" (click)="openEdit(element)" class="cursor-pointer text-primary" style="text-align: left">{{
+              element.code
+            }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Tên loại phương tiện</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef width="90px" class="text-center">Trạng thái</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i *ngIf="element.isActive" class="bi bi-check-circle-fill text-success"></i>
+            <i *ngIf="!element.isActive" class="bi bi-x-circle-fill"></i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef width="90px">Hành động</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i
+              class="bi bi-trash3 text-danger cursor-pointer"
+              (click)="deleteVehicleType(element)"
+              [appPermission]="VEHICLETYPE_RIGHTS.XOA"></i>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (dblclick)="openEdit(row)"
+          [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

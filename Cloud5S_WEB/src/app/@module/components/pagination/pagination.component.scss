@@ -1,0 +1,52 @@
+.pagination-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  .total-record {
+    line-height: 33.5px;
+    font-size: 14px;
+  }
+  .page-link {
+    cursor: pointer;
+  }
+  .page-size {
+    select {
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      height: 33.5px;
+      padding: 0px 0px 0px 8px;
+      color: #0d6efd;
+      outline: none;
+      &:hover {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+      }
+    }
+  }
+  .go-to-page {
+    display: flex;
+    gap: 5px;
+    line-height: 33.5px;
+    input {
+      width: 50px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      height: 33.5px;
+      padding: 0px 8px;
+      outline: none;
+      &:hover {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+      }
+    }
+  }
+  .three-dots {
+    color: rgba(0, 0, 0, 0.25);
+    width: 36px;
+    font-size: 25px;
+    text-align: center;
+    line-height: 20.5px;
+  }
+}

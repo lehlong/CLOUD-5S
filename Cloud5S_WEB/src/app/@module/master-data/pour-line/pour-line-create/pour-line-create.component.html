@@ -1,0 +1,77 @@
+<div class="card" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title"><i class="bi bi-plus-lg"></i>Tạo mới dãy đổ hàng</div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onCreate()" type="button" class="btn btn-primary" [appPermission]="POURLINE_RIGHTS.THEM_MOI">
+            <i class="bi bi-check-circle"></i>{{ 'content.common.btn_create' | translate }}
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning">
+            <i class="bi bi-x-circle"></i>{{ 'content.common.btn_close' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form [formGroup]="pourlineForm" (ngSubmit)="onCreate()">
+        <div class="mt-3">
+          <app-input-clear
+            [initFocus]="true"
+            label="Mã dãy đổ hàng"
+            [required]="true"
+            [errorsRequired]="f['code'].errors?.['required']"
+            [errorsWrongFormat]="f['code'].errors?.['pattern']"
+            [showErrors]="submitted && f['code'].errors"
+            [status]="submitted && f['code'].errors ? 'error' : ''"
+            [control]="$any(pourlineForm).controls['code']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <app-input-clear
+            label="Tên dãy đổ hàng"
+            [required]="true"
+            [errorsRequired]="f['name'].errors?.['required']"
+            [showErrors]="submitted && f['name'].errors"
+            [status]="submitted && f['name'].errors ? 'error' : ''"
+            [control]="$any(pourlineForm).controls['name']"></app-input-clear>
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Khu vực đổ hàng<span class="text-danger ms-1">*</span></label>
+          <nz-select
+            nzShowSearch
+            nzAllowClear
+            [nzStatus]="submitted && f['sectionCode'].errors ? 'error' : ''"
+            nzAllowClear
+            nzPlaceHolder="Chọn khu vực đổ hàng"
+            formControlName="sectionCode">
+            <nz-option *ngFor="let item of pourSections" [nzLabel]="item.name" [nzValue]="item.code"></nz-option>
+          </nz-select>
+          <div *ngIf="submitted && f['sectionCode'].errors" class="text-validate">
+            <div *ngIf="f['sectionCode']['errors']['required']">Không được để trống</div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <label for="inputText" class="form-label">{{ 'content.masterdata.partner.create.state' | translate }}</label>
+          <div class="d-flex d-gap-20 w-100 mt-0">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="true" />
+              <label class="form-check-label" for="isActive">
+                {{ 'content.masterdata.area.create.statevalue.Activated' | translate }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="false" />
+              <label class="form-check-label" for="isActive">
+                {{ 'content.masterdata.area.create.statevalue.Locked' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

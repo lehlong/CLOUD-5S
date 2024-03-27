@@ -1,0 +1,431 @@
+<div class="card stock-edit-container">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title mb-2 p-0">
+        <i class="bi bi-plus-lg"></i>{{'content.business.order_import.create.title' | translate}}
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div class="">
+          <button (click)="onCreate()" type="button" class="btn btn-primary" submitForm>
+            <i class="bi bi-check-circle"></i>{{'content.common.btn_save' | translate}}
+          </button>
+        </div>
+        <div class="">
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>{{'content.common.btn_close' | translate}}</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3">
+      <form [formGroup]="orderImpForm" (ngSubmit)="onCreate()">
+        <div class="row detail-container">   
+          <div class="main-content col-sm-12 col-md-8 pr-2">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-box"></i>
+                    <span>{{'content.business.order_import.create.product_infor.title' | translate}}</span>
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row g-3">
+                   <div class="col-md-12">
+                    <!-- newcode -->
+                  <div (click)="openChooseItem()" class="product-wraper-btn mt-2">
+                    <i class="bi bi-plus-lg me-1"></i> {{'content.common.btn_choose' | translate}}
+                  </div>
+                  <div class="wraper-table mt-3">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th class="fw-normal">{{'content.business.order_import.create.product_infor.product_code' | translate}}</th>
+                          <th>{{'content.business.order_import.create.product_infor.product_name' | translate}}</th>
+                          <th class="text-right">{{'content.business.order_import.create.product_infor.number' | translate}}</th>
+                          <th>{{'content.business.order_import.create.product_infor.unit' | translate}}</th>
+                          <th>{{'content.business.order_import.create.product_infor.price' | translate}}</th>
+                          <th>{{'content.business.order_import.create.product_infor.total_money' | translate}}</th>
+                          <!-- <th>Ghi chú</th> -->
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container
+                          *ngIf="listItemDetails.length > 0; else importEmpty"
+                          formArrayName="importDetails">
+                          <ng-container
+                            *ngFor="let dateTimeGroup of importDetails.controls; let i = index"
+                            [formGroupName]="i">
+                            <tr>
+                              <td>{{ listItemDetails[i].code || '' }}</td>
+                              <td>{{ listItemDetails[i].name || '' }}</td>
+                              <td>
+                                <input
+                                  [ngClass]="{
+                                    'is-invalid': submitted && dateTimeGroup?.get('amount')?.hasError('required') || 
+                                    dateTimeGroup?.get('amount')?.hasError('min')
+                                  }"
+                                  (input)="textQuantity($event, i)"
+                                  type="text"
+                                  class="form-control text-right border-table-input"
+                                  formControlName="amount"
+                                  appCommaSeparated />
+                                  <div *ngIf="submitted && dateTimeGroup?.get('amount')?.hasError('required') || 
+                                    dateTimeGroup?.get('amount')?.hasError('min')" class="invalid-feedback">
+                                    <div *ngIf="dateTimeGroup?.get('amount')?.hasError('required') || 
+                                    dateTimeGroup?.get('amount')?.hasError('min')
+                                    ">
+                                    {{'content.business.order_import.great_than_zero' | translate}}
+                                    </div>
+                                  </div>
+                              </td>
+                              <td>{{ listItemDetails[i].unit.name || '' }}</td>
+                              <td>
+                                <input
+                                  [ngClass]="{
+                                    'is-invalid': submitted && dateTimeGroup?.get('price')?.hasError('required')
+                                  }"
+                                  type="text"
+                                  (input)="textPrice($event, i)"
+                                  class="form-control text-right border-table-input"
+                                  formControlName="price"
+                                  appCommaSeparated
+                                  [(ngModel)]="listItemDetails[i].costPrice" />
+                              </td>
+                              <td>{{ utils.formatNumber(moneyTotal[i]?.totalMoney) }}</td>
+                              <!-- <td>
+                                <input type="text" class="form-control border-table-input" formControlName="note" />
+                              </td> -->
+                              <td><i (click)="removeImportDetails(i)" class="bi bi-dash-circle minus-field"></i></td>
+                            </tr>
+                          </ng-container>
+                          <tr [hidden]="!importDetails.controls.length">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-left money" [hidden]="!importDetails.controls.length">Tổng tiền</td>
+                            <td class="text-left" [hidden]="!importDetails.controls.length">
+                              {{ utils.formatNumber(totalMoneyResult) || 0 }}
+                            </td>
+                          </tr>
+                        </ng-container>
+                        <ng-template #importEmpty>
+                          <tr>
+                            <td colspan="7">{{'content.business.order_import.create.product_infor.empty_product' | translate}}</td>
+                          </tr>
+                        </ng-template>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- newcode -->
+                   </div>
+                </div>
+              </div>
+            </div>
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-currency-dollar"></i>
+                    <span>{{'content.business.order_import.create.bill_infor.title' | translate}}</span>
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row g-3">
+                  <!-- money -->
+                  <div class="d-flex" style="gap: 0px">
+                    <div class="col-lg-3 import-input">
+                      <label class="label">{{'content.business.order_import.create.bill_infor.discount' | translate}} (%)</label>
+                      <input
+                        (input)="enterDisCount($event)"
+                        type="text"
+                        class="form-control"
+                        formControlName="disCount"
+                        appCommaSeparated />
+                    </div>
+                    <div class="col-lg-3 import-input">
+                      <label class="label">{{'content.business.order_import.create.bill_infor.vat_tax' | translate}} (%)</label>
+                      <input
+                        (input)="enterTaxVAT($event)"
+                        type="text"
+                        class="form-control"
+                        formControlName="taxVAT"
+                        appCommaSeparated />
+                    </div>
+                    <div class="col-lg-3 import-input">
+                      <label for="">{{'content.business.order_import.create.bill_infor.total_money_pay' | translate}}</label>
+                      <input
+                        type="text"
+                        class="form-control text-right table--input"
+                        formControlName="totalMoney"
+                        readonly />
+                    </div>
+                    <div class="col-lg-3 import-input">
+                      <label for="">{{'content.business.order_import.create.bill_infor.debt' | translate}}</label>
+                      <input
+                        type="text"
+                        class="form-control text-right table--input"
+                        formControlName="debt"
+                        readonly />
+                    </div>
+                  </div>
+                  <!-- money -->
+                </div>
+              </div>
+            </div>    
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-credit-card"></i>
+                    <span>{{'content.business.order_import.create.payment_infor.title' | translate}}</span>
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row g-3">
+                  <div class="col-12">
+                    <nz-radio-group formControlName="isPaymentNow" class="d-flex">
+                      <label nz-radio [nzValue]="false">{{'content.business.order_import.create.payment_infor.unpaid' | translate}}</label>
+                      <label nz-radio [nzValue]="true">{{'content.business.order_import.create.payment_infor.pay_now' | translate}}</label>
+                    </nz-radio-group>
+                  </div>
+                  <div class="col-12 pay-info-right mt-3" *ngIf="orderImpForm.value.isPaymentNow">
+                    <div class="mb-3">
+                      <label class="fw-medium form-label" for="">
+                        {{'content.business.order_import.create.payment_infor.money_pay_now' | translate}}
+                      </label>
+                      <!-- <input
+                        (input)="enterPayMoney($event)"
+                        type="text"
+                        class="form-control"
+                        formControlName="payMoney"
+                        appCommaSeparated /> -->
+                      <app-input-number [required]="true" 
+                      (input)="enterPayMoney($event)"                   
+                      [errorsRequired]="f['payMoney'].errors?.['min'] || f['payMoney'].errors?.['required']"
+                      [showErrors]="submitted && f['payMoney'].errors"
+                      [class]="submitted && f['payMoney'].errors ? 'is-invalid' : ''"
+                      [control]="$any(orderImpForm).controls['payMoney']"></app-input-number>
+                    <div *ngIf="submitted && f['payMoney'].errors" class="invalid-feedback">
+                      <div *ngIf="f['payMoney'].errors?.['min'] || f['payMoney'].errors?.['required']">
+                        {{'content.business.order_import.great_than_zero' | translate}}
+                      </div>
+                    </div>
+                    </div>
+                    <div class="d-flex row">
+                      <div class="mb-3 col-md-6 pr-4">
+                        <label class="fw-medium form-label" for=""
+                          >{{'content.business.order_import.create.payment_infor.pay_method' | translate}}<span class="text-danger ms-1">*</span></label
+                        >
+                        <!--  -->
+                        <div class="import-date-wraper col-12 mt-2">
+                          <!-- update-new -->
+                          <nz-select
+                            [nzStatus]="submitted && f['payMethodCode'].errors ? 'error' : ''"
+                            nzShowSearch
+                            nzAllowClear
+                            [nzPlaceHolder]="'content.business.order_import.create.payment_infor.pay_method'| translate"
+                            formControlName="payMethodCode"
+                            [ngClass]="{'is-invalid': submitted && f['payMethodCode'].errors}"
+                            (ngModelChange)="selectPayMethod($event)">
+                            <nz-option
+                              *ngFor="let payMethod of listPayMethodAll"
+                              [nzLabel]="payMethod.name"
+                              [nzValue]="payMethod.code">
+                            </nz-option>
+                          </nz-select>
+                          <div *ngIf="submitted && f['payMethodCode'].errors" class="invalid-feedback">
+                            <div *ngIf="f['payMethodCode']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                          </div>
+                          <!-- update-new -->
+                        </div>
+                        <!--  -->
+                      </div>
+                      <div class="mb-3 col-md-6 pl-4">
+                        <label class="fw-medium form-label" for="">{{'content.business.order_import.create.payment_infor.bank' | translate}}</label>
+                        <!--  -->
+                        <div class="import-date-wraper col-12 mt-2">
+                          <nz-select
+                            [nzStatus]="submitted && f['bankId'].errors ? 'error' : ''"
+                            nzShowSearch
+                            nzAllowClear
+                            [nzPlaceHolder]="'content.business.order_import.create.payment_infor.bank'| translate"
+                            formControlName="bankId"
+                            [ngClass]="{'is-invalid': submitted && f['bankId'].errors}">
+                            <nz-option *ngFor="let bank of listBankAll" [nzLabel]="bank.name" [nzValue]="bank.id">
+                            </nz-option>
+                          </nz-select>
+                          <div *ngIf="submitted && f['bankId'].errors" class="invalid-feedback">
+                            <div *ngIf="f['bankId']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                          </div>
+                        </div>
+                        <!--  -->
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label class="fw-medium form-label" for="">{{'content.business.order_import.create.payment_infor.content' | translate}}</label>
+                      <!--  -->
+                      <div class="import-date-wraper col-12 mt-2">
+                        <nz-select
+                          [nzStatus]="submitted && f['contentPay'].errors ? 'error' : ''"
+                          nzShowSearch
+                          nzAllowClear
+                          [nzPlaceHolder]="'content.business.order_import.create.payment_infor.content'| translate"
+                          formControlName="contentPay"
+                          [ngClass]="{'is-invalid': submitted && f['contentPay'].errors}">
+                          <nz-option
+                            *ngFor="let contentPay of listContentPayAll"
+                            [nzLabel]="contentPay.name"
+                            [nzValue]="contentPay.id">
+                          </nz-option>
+                        </nz-select>
+                      </div>
+                      <!--  -->
+                    </div>
+                    <div class="d-flex row mb-3">
+                      <div class="col-md-6 pr-4">
+                        <label class="fw-medium form-label" for="">{{'content.business.order_import.create.payment_infor.receiver' | translate}}</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="receiverName"
+                          [ngClass]="{'is-invalid': submitted && f['receiverName'].errors}" />
+                        <div *ngIf="submitted && f['receiverName'].errors" class="invalid-feedback">
+                          <div *ngIf="f['receiverName']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 pl-4">
+                        <label class="fw-medium form-label" for="">{{'content.business.order_import.create.payment_infor.phone_number' | translate}}</label>
+                        <input type="text" class="form-control" formControlName="receiverPhoneNumber" />
+                      </div>
+                    </div>
+                    <div class="mb-0">
+                      <label class="fw-medium form-label" for=""
+                        >{{'content.business.order_import.create.payment_infor.address' | translate}}
+                        <span class="text-danger ms-1">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="receiverAddress"
+                        [ngClass]="{'is-invalid': submitted && f['receiverAddress'].errors}" />
+                      <div *ngIf="submitted && f['receiverAddress'].errors" class="invalid-feedback">
+                        <div *ngIf="f['receiverAddress']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-content col-sm-12 col-md-4">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                    <i class="bi bi-receipt"></i>
+                    <span>{{'content.business.order_import.create.order_import_infor.title' | translate}}</span>
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row g-3">
+                  <div class="import-date-wraper mt-3">
+                    <label class=" form-label">{{'content.business.order_import.create.order_import_infor.import_date' | translate}}</label>
+                    <nz-date-picker
+                      nzFormat="dd/MM/yyyy"
+                      class="d-block"
+                      [nzStatus]="submitted && f['importDate'].errors ? 'error' : ''"
+                      formControlName="importDate"></nz-date-picker>
+                    <div *ngIf="submitted && f['importDate'].errors" class="text-validate">
+                      <div *ngIf="f['importDate']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                    </div>
+                  </div>
+                  
+                  <div class="import-date-wraper col-12 mt-3">
+                    <label class=" form-label">{{'content.business.order_import.create.order_import_infor.stock' | translate}}<span class="text-danger ms-1">*</span></label>
+                    <!-- update-new -->
+                    <nz-select
+                      [nzStatus]="submitted && f['stockCode'].errors ? 'error' : ''"
+                      nzShowSearch
+                      nzAllowClear
+                      [nzPlaceHolder]="'content.business.order_import.create.order_import_infor.stock'| translate"
+                      formControlName="stockCode"
+                      [ngClass]="{'is-invalid': submitted && f['stockCode'].errors}">
+                      <nz-option *ngFor="let stock of listStockAll" [nzLabel]="stock.name" [nzValue]="stock.code">
+                      </nz-option>
+                    </nz-select>
+                    <div *ngIf="submitted && f['stockCode'].errors" class="invalid-feedback">
+                      <div *ngIf="f['stockCode']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                    </div>
+                    <!-- update-new -->
+                  </div>
+                  
+                  <div class="import-date-wraper col-12 mt-3">
+                    <label class=" form-label">{{'content.business.order_import.create.order_import_infor.attach' | translate}}</label>
+                    <input type="text" class="form-control" />
+                  </div>
+                  
+                  <div class="import-date-wraper col-12 mt-3">
+                    <label class=" form-label">{{'content.business.order_import.create.order_import_infor.partner' | translate}}<span class="text-danger ms-1">*</span></label>
+                    <!-- update-new -->
+                    <nz-select
+                      [nzStatus]="submitted && f['partnerCode'].errors ? 'error' : ''"
+                      (ngModelChange)="selectPartner($event)"
+                      nzShowSearch
+                      nzAllowClear
+                      [nzPlaceHolder]="'content.business.order_import.create.order_import_infor.partner'| translate"
+                      formControlName="partnerCode"
+                      [ngClass]="{'is-invalid': submitted && f['partnerCode'].errors}">
+                      <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name" [nzValue]="partner.code">
+                      </nz-option>
+                    </nz-select>
+                    <div *ngIf="submitted && f['partnerCode'].errors" class="invalid-feedback">
+                      <div *ngIf="f['partnerCode']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                    </div>
+                    <!-- update-new -->
+                  </div>
+                  
+                  <div class="import-date-wraper col-12 mt-3">
+                    <label class=" form-label">{{'content.business.order_import.create.order_import_infor.address' | translate}}</label>
+                    <input type="text" class="form-control" formControlName="address" />
+                  </div>
+                  <div class="import-date-wraper col-12 mt-3 ml-2">
+                    <label class=" form-label">{{'content.business.order_import.create.order_import_infor.phone_number' | translate}}</label>
+                    <input type="text" class="form-control" formControlName="phoneNumber" />
+                  </div>
+                  
+                  <div class="import-date-wraper col-12 mt-3">
+                    <label class=" form-label">{{'content.business.order_import.create.order_import_infor.vehicle' | translate}} <span class="text-danger ms-1">*</span></label>
+                    <!-- update-new -->
+                    <nz-select
+                      [nzStatus]="submitted && f['vehicleCode'].errors ? 'error' : ''"
+                      nzShowSearch
+                      nzAllowClear
+                      [nzPlaceHolder]="'content.business.order_import.create.order_import_infor.vehicle'| translate"
+                      formControlName="vehicleCode"
+                      [ngClass]="{'is-invalid': submitted && f['vehicleCode'].errors}">
+                      <nz-option *ngFor="let vehicle of listVehicleAll" [nzLabel]="vehicle.code" [nzValue]="vehicle.code">
+                      </nz-option>
+                    </nz-select>
+                    <div *ngIf="submitted && f['vehicleCode'].errors" class="invalid-feedback">
+                      <div *ngIf="f['vehicleCode']['errors']['required']">{{'content.business.order_import.message_empty' | translate}}</div>
+                    </div>
+                    <!-- update-new -->
+                  </div>
+                 
+                  <div class="import-date-wraper col-12 mt-3">
+                    <label class="form-label">{{'content.business.order_import.create.order_import_infor.driver' | translate}}</label>
+                    <input type="text" class="form-control" formControlName="driverName" />
+                  </div>
+                  <div class="note-wraper mt-3">
+                    <label class="form-label">{{'content.business.order_import.create.order_import_infor.note' | translate}}</label>
+                    <!-- <textarea type="text" class="form-control" placeholder="Ghi chú" formControlName="note"> </textarea> -->
+                    <app-input-clear
+                      [textArea]="true"
+                      [control]="$any(orderImpForm).controls['note']"></app-input-clear>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

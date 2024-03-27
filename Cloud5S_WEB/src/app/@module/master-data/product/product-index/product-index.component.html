@@ -1,0 +1,144 @@
+<div class="card" [appPermission]="PRODUCT_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>Danh sách sản phẩm
+      </div>
+      <div class="d-flex d-gap-2 flex-wrap">
+        <div class="d-flex-wrap d-gap">
+          <div *ngIf="filter">
+            <div class="input-group search-box">
+              <div class="d-flex flex-row flex-grow-1" style="padding-right: 3px">
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Nhóm sản phẩm" [(ngModel)]="filter.typeCode">
+                  <nz-option
+                    *ngFor="let itemtype of listItemTypeAll"
+                    [nzLabel]="itemtype.name"
+                    [nzValue]="itemtype.code"></nz-option>
+                </nz-select>
+              </div>
+              <app-input-clear
+                placeholder="Nhập từ khóa tìm kiếm"
+                (searchEvent)="search()"
+                [(value)]="filter.keyWord"></app-input-clear>
+              <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+              <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+
+              &nbsp;
+            </div>
+          </div>
+          <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+            <button
+              type="button"
+              class="btn btn-success"
+              (click)="openDrawer()"
+              [appPermission]="PRODUCT_RIGHTS.THEM_MOI">
+              <i class="bi bi-plus-lg"></i>Thêm mới
+            </button>
+            <button
+              type="button"
+              class="btn export-excel-btn"
+              (click)="exportExcel()"
+              [appPermission]="PRODUCT_RIGHTS.DANH_SACH">
+              <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1">
+      <table
+        mat-table
+        [dataSource]="paginationResult.data"
+        *ngIf="paginationResult"
+        class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef width="60px" class="align-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="align-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef width="150px">Mã</th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" (click)="openDrawer(element)" class="cursor-pointer text-primary" style="text-align: left">{{
+              element.code
+            }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef width="350px">Tên sản phẩm</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="typeCode">
+          <th mat-header-cell *matHeaderCellDef>Nhóm sản phẩm</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.itemType?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isManufacture">
+          <th mat-header-cell *matHeaderCellDef width="145px" class="text-center">Tình trạng sản xuất</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i *ngIf="element.isManufacture" class="bi bi-check-circle-fill text-success"></i>
+            <i *ngIf="!element.isManufacture" class="bi bi-x-circle-fill"></i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef width="90px" class="text-center">Trạng thái</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i *ngIf="element.isActive" class="bi bi-check-circle-fill text-success"></i>
+            <i *ngIf="!element.isActive" class="bi bi-x-circle-fill"></i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef width="90px">Hành động</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i
+              class="bi bi-trash3 text-danger cursor-pointer"
+              (click)="deleteProduct(element)"
+              [appPermission]="PRODUCT_RIGHTS.XOA"></i>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (dblclick)="openDrawer(row)"
+          [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+    <!-- <table class="table table-hover table-click-row border-top" id="table-user">
+          <thead>
+              <tr>
+                  <th scope="col" class="align-center" width=100px>STT</th>
+                  <th scope="col" class="" width=150px>Mã đơn vị tính</th>
+                  <th scope="col" class="">Tên đơn vị tính</th>
+              </tr>
+          </thead>
+          <tbody *ngIf="paginationResult">
+              <tr *ngFor="let item of paginationResult.data, index as i">
+                  <td class="align-center">{{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1}}</td>
+                  <td class="">
+                      <span href="#" (click)="openEdit(item)" class="cursor-pointer text-primary">{{item.code}}</span>
+                  </td>
+                  <td class="">{{item.name}}</td>
+              </tr>
+          </tbody>
+      </table> -->
+  </div>
+</div>

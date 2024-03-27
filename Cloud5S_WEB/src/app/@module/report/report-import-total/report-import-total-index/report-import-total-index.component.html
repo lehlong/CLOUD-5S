@@ -1,0 +1,108 @@
+<div class="card midnight-report-container">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Báo cáo 0h
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-wrap d-gap-2">
+        <nz-range-picker
+          nzFormat="dd/MM/yyyy"
+          [nzRanges]="rangePresets"
+          [(ngModel)]="filter.selectedRange"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khu vực" [(ngModel)]="filter">
+          <nz-option *ngFor="let type of listArea" [nzLabel]="type.name" [nzValue]="type.code"> </nz-option>
+        </nz-select>
+      </div>
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <div class="wrapper-input">
+            <app-input-clear
+              placeholder="Nhập từ khóa tìm kiếm"
+              (searchEvent)="search()"
+              [(value)]="filter.keyWord"></app-input-clear>
+          </div>
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-bottom mb-1 mt-1">
+      <div>
+        <table class="table table-bordered">
+          <thead>
+            <tr style="text-align: center">
+              <th>STT</th>
+              <th>Ngày</th>
+              <th colspan="2">Đà Nẵng</th>
+              <th colspan="2">Keo QSơn-NS-DX</th>
+              <th colspan="2">Hà Nha - Nam Giang</th>
+              <th colspan="2">Đại Lộc</th>
+              <th colspan="2">Keo TC Đại Đồng</th>
+              <th colspan="2">Keo Q.Trị</th>
+              <th colspan="2">Keo QNF-FM</th>
+              <th colspan="2">Keo HN-PS</th>
+              <th colspan="1">Tổng cộng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of data">
+              <td>{{ row.stt }}</td>
+              <td>{{ row.date | date }}</td>
+              <td>{{ row.rate1 }}</td>
+              <td>{{ row.rate2 }}</td>
+              <td>{{ row.data1 }}</td>
+              <td>{{ row.data2 }}</td>
+              <td>{{ row.data3 }}</td>
+              <td>{{ row.data4 }}</td>
+              <td>{{ row.rate3 }}</td>
+              <td>{{ row.rate4 }}</td>
+              <td>{{ row.rate5 }}</td>
+              <td>{{ row.rate6 }}</td>
+              <td>{{ row.rate7 }}</td>
+              <td>{{ row.rate8 }}</td>
+              <td>{{ row.rate9 }}</td>
+              <td>{{ row.rate10 }}</td>
+              <td>{{ row.rate11 }}</td>
+              <td>{{ row.rate12 }}</td>
+              <td>{{ row.rate13 }}</td>
+            </tr>
+            <tr>
+              <td>{{ calculateColumnTotal('rate1') }}</td>
+              <td>{{ calculateColumnTotal('rate2') }}</td>
+              <td>{{ calculateColumnTotal('data1') }}</td>
+              <td>{{ calculateColumnTotal('data2') }}</td>
+              <td>{{ calculateColumnTotal('data3') }}</td>
+              <td>{{ calculateColumnTotal('data4') }}</td>
+              <td>{{ calculateColumnTotal('rate3') }}</td>
+              <td>{{ calculateColumnTotal('rate4') }}</td>
+              <td>{{ calculateColumnTotal('rate5') }}</td>
+              <td>{{ calculateColumnTotal('rate6') }}</td>
+              <td>{{ calculateColumnTotal('rate7') }}</td>
+              <td>{{ calculateColumnTotal('rate8') }}</td>
+              <td>{{ calculateColumnTotal('rate9') }}</td>
+              <td>{{ calculateColumnTotal('rate10') }}</td>
+              <td>{{ calculateColumnTotal('rate11') }}</td>
+              <td>{{ calculateColumnTotal('rate12') }}</td>
+              <td>{{ calculateColumnTotal('rate13') }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

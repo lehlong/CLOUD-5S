@@ -1,0 +1,100 @@
+<div class="card stock-edit-container" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Chỉnh sửa chăm sóc khách hàng
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button
+            (click)="onEdit()"
+            type="button"
+            class="btn btn-primary"
+            [appPermission]="CUSTOMER_SUPPORT_RIGHTS.CHINH_SUA">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <div class="row g-3 detail-container">
+        <div class="main-content col-md-8 pr-2">
+          <div class="mbf-box__header">
+            <div class="mbf-box__title">
+              <span>Nội dung chăm sóc: </span>
+            </div>
+          </div>
+          <div>
+            <!--  -->
+            <form *ngIf="ctcForm" [formGroup]="ctcForm" (ngSubmit)="onEdit()">
+              <div>
+                <div class="tab-content pt-2">
+                  <div class="fade show active" role="tabpanel" aria-labelledby="info-tab">
+                    <div class="row g-3">
+                      <div class="col-md-12">
+                        <!-- <textarea type="text" class="form-control" formControlName="careContent"
+                          [ngClass]="{'is-invalid': submitted && f['careContent'].errors}">
+                      </textarea>
+                        <div *ngIf="submitted && f['careContent'].errors" class="invalid-feedback">
+                          <div *ngIf="f['careContent']['errors']['required']">Không được để trống</div>
+                        </div> -->
+                        <app-input-clear
+                          label="Nội dung chăm sóc"
+                          placeholder="Nội dung chăm sóc"
+                          [textArea]="true"
+                          [control]="$any(ctcForm).controls['careContent']"></app-input-clear>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <!--  -->
+          </div>
+        </div>
+        <div class="info-content col-md-4">
+          <!--  -->
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-person"></i>
+                <span>Thông tin CSKH</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="list-info d-space-bw">
+                <div class="form-label">Mã đơn hàng</div>
+                <div class="value">{{ this.orderCode }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Tên khách hàng</div>
+                <div class="value">{{ this.partnerName }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Địa chỉ</div>
+                <div class="value">{{ this.address }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Số điện thoại</div>
+                <div class="value">{{ phoneNumber }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Ngày chăm sóc</div>
+                <div class="value">{{ this.careDate | date : 'dd/MM/yyyy' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Giờ chăm sóc</div>
+                <div class="value">{{ this.careDate | date : 'HH:mm' }}</div>
+              </div>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

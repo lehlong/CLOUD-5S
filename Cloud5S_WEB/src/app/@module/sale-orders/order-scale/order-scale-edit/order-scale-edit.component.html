@@ -1,0 +1,168 @@
+<div class="card order-edit-container" [style.width]="widthDeault" [appPermission]="ORDERSCALE_RIGHTS.CHI_TIET">
+  <div class="card-body pb-0">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Thông tin phiếu cân
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div> -->
+    <div class="row g-3 detail-container" style="height: 100%">
+      <div class="main-content col-md-8 pr-2">
+        <div class="mbf-box">
+          <div class="mbf-box__header">
+            <div class="mbf-box__title">
+              <i class="bi bi-box"></i>
+              Thông tin cân hàng
+            </div>
+          </div>
+          <div class="list-img" style="overflow-x: auto">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="col-1" style="width: 16px">STT</th>
+                  <th class="col-9" style="text-align: left">Lần cân</th>
+                  <th>Thời gian cân</th>
+                  <th class="text-right">Trọng lượng</th>
+                  <th>Đơn vị tính</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td style="text-align: left">Cân lần 1</td>
+                  <td>{{ detailData?.timeWeight1 | date : 'dd/MM/yyyy HH:mm' }}</td>
+                  <td class="text-right">{{ detailData?.weight1 | number }}</td>
+                  <td>{{ detailData?.order?.scale?.unit?.name }}</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td style="text-align: left">Cân lần 2</td>
+                  <td>{{ detailData?.timeWeight2 | date : 'dd/MM/yyyy HH:mm' }}</td>
+                  <td class="text-right">{{ detailData?.weight2 | number }}</td>
+                  <td>{{ detailData?.order?.scale?.unit?.name }}</td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-right weight">Trọng lượng hàng</td>
+                  <td class="text-right">{{ detailData?.weight | number }}</td>
+                  <td>{{ detailData?.order?.scale?.unit?.name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="mbf-box">
+          <div class="mbf-box__header">
+            <div class="mbf-box__title">
+              <i class="bi bi-box"></i>
+              Hình ảnh cân lần 1
+            </div>
+          </div>
+          <div class="list-img">
+            <div class="mbf-box__body box-image">
+              <ng-container *ngIf="imagesScaleIn.length > 0; else imgCheckInEmpty">
+                <nz-image-group class="group-img">
+                  <div *ngFor="let image of imagesScaleIn" class="inOut-img">
+                    <img nz-image [nzSrc]="imageUrl + image.attachmentId" alt="Hình ảnh" />
+                  </div>
+                </nz-image-group>
+              </ng-container>
+
+              <ng-template #imgCheckInEmpty>
+                <app-empty></app-empty>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="mbf-box">
+          <div class="mbf-box__header">
+            <div class="mbf-box__title">
+              <i class="bi bi-box"></i>
+              Hình ảnh cân lần 2
+            </div>
+          </div>
+
+          <div class="list-img">
+            <div class="mbf-box__body box-image">
+              <ng-container *ngIf="imagesScaleOut.length > 0; else imgCheckInEmpty">
+                <nz-image-group class="group-img">
+                  <div *ngFor="let image of imagesScaleOut" class="inOut-img">
+                    <img nz-image [nzSrc]="imageUrl + image.attachmentId" alt="Hình ảnh" />
+                  </div>
+                </nz-image-group>
+              </ng-container>
+              <ng-template #imgCheckInEmpty>
+                <app-empty></app-empty>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="info-content col-md-4">
+        <div class="mbf-box">
+          <div class="mbf-box__header">
+            <div class="mbf-box__title">
+              <i class="bi bi-info-circle"></i>
+              Thông tin phiếu cân hàng
+            </div>
+          </div>
+          <div class="mbf-box__body">
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Số phiếu</div>
+              <div class="value">{{ detailData?.billNumber }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Mã phiếu cân</div>
+              <div class="value">{{ detailData?.code }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Ngày cân hàng</div>
+              <div class="value">{{ scale?.timeWeight1 | date : 'dd/MM/yyyy HH:mm' }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Khách hàng</div>
+              <div class="value">{{ detailData?.partner?.name }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Hàng hóa</div>
+              <div class="value">{{ detailData?.item?.name }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Khu vực trồng</div>
+              <div class="value">{{ detailData?.area?.name }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Phương tiện</div>
+              <div class="value">{{ detailData?.vehicleCode }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Loại phiếu</div>
+              <div class="value">
+                {{ SCALE_TYPES[detailData.scaleTypeCode] && SCALE_TYPES[detailData.scaleTypeCode].name }}
+              </div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Số HĐ</div>
+              <div class="value">{{ detailData?.invoiceNumber }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Mẫu HĐ</div>
+              <div class="value">{{ detailData?.invoiceTemplate }}</div>
+            </div>
+            <div class="export-line pt-10 pb-10 d-flex align-item-center justify-content-between border-bottom">
+              <div class="label">Ký hiệu HĐ</div>
+              <div class="value">{{ detailData?.invoiceSymbol }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

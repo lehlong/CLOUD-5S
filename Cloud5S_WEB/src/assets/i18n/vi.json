@@ -1,0 +1,705 @@
+{
+  "navbar": {},
+  "sidebar": {},
+  "content": {
+    "common": {
+      "btn_print": "In phiếu",
+      "btn_choose": "Chọn sản phẩm",
+      "btn_save": "Lưu thông tin",
+      "btn_create": "Thêm mới",
+      "btn_edit": "Chỉnh sửa",
+      "btn_confirm": "Xác nhận",
+      "btn_refuse": "Từ chối",
+      "btn_cancel": "Huỷ",
+      "btn_close": "Đóng",
+      "btn_detail": "Chi tiết",
+      "download_excel": "Tải Excel",
+      "from_date": "Từ ngày",
+      "to_date": "Đến ngày",
+      "placeholder_search": "Nhập từ khoá tìm kiếm",
+      "total_recorl": "Tổng {{total}} bản ghi",
+      "page": "Trang",
+      "go_to": "Đi đến",
+      "empty_notify": "Không được để trống",
+      "number_notify": "Nhập số khác 0",
+      "wrong_format": "Sai định dạng",
+      "comment": {
+        "title": "Bình luận",
+        "placeholder": "Viết bình luận ...",
+        "reply_to": "Phản hồi",
+        "delete_confirmation": {
+          "title": "Xoá bình luận này ?",
+          "text": "Hành động này sẽ không thể hoàn tác!",
+          "confirmButtonText": "Xoá",
+          "cancelButtonText": "Huỷ"
+        }
+      }
+    },
+    "business": {
+      "order": {
+        "list": {
+          "breadcrumb": "Quản lý đơn hàng",
+          "title": "Danh sách đơn hàng",
+          "status": "Trạng thái",
+          "client": "Khách hàng",
+          "product": "Sản phẩm",
+          "order_code": "Mã đơn hàng",
+          "order_date": "Ngày đặt hàng",
+          "delivery_date": "Ngày đổ",
+          "delivery_location": "Địa điểm đổ",
+          "quantity_ordered": "SL đặt",
+          "phone_number": "Số điện thoại",
+          "state": {
+            "initialization": "Khởi tạo",
+            "confirmed": "Đã xác nhận",
+            "in_progress": "Đang xuất hàng",
+            "mixing_completed": "Đã trộn xong",
+            "cancelled": "Đã bị huỷ",
+            "rejected": "Đã từ chối",
+            "completed": "Đã hoàn thành"
+          },
+          "action": {
+            "create_new": "Tạo mới",
+            "confirm": "Xác nhận",
+            "create_mixing_order": "Tạo phiếu trộn",
+            "weighing": "Cân hàng",
+            "cancel": "Huỷ",
+            "reject": "Từ chối",
+            "edit": "Chỉnh sửa",
+            "close_accounts": "Chốt công nợ",
+            "mixing_completed": "Hoàn thành trộn",
+            "completion": "Hoàn thành"
+          }
+        },
+        "create": {
+          "title": "Thêm mới đơn hàng",
+          "client": "Khách hàng",
+          "note": "Ghi chú",
+          "address": "Địa chỉ",
+          "phone_number": "Số điện thoại",
+          "project_information": "Thông tin công trình",
+          "pouring_date": "Ngày đổ",
+          "pouring_time": "Giờ đổ",
+          "area": "Khu vực",
+          "type_of_construction": "Loại công trình",
+          "pouring_method": "Hình thức đổ",
+          "construction_item": "Hạng mục công trình",
+          "pouring_location": "Địa điểm đổ",
+          "add_field": "Thêm trường",
+          "main_product": "Sản phẩm chính",
+          "product": "Sản phẩm",
+          "unit_of_measurement": "Đơn vị tính",
+          "main_sand_component": "Thành phần cát chính",
+          "main_stone_component": "Thành phần đá chính",
+          "placed_volume": "Khối lượng đặt",
+          "slump": "Độ sụt",
+          "additional_services": "Dịch vụ kèm theo",
+          "quantity": "Số lượng"
+        },
+        "detail": {
+          "title": "Thông tin đơn hàng",
+          "product_list": "Danh sách sản phẩm",
+          "product_name": "Tên sản phẩm",
+          "sand": "Cát",
+          "stone": "Đá",
+          "slump": "Độ sụt",
+          "quantity_ordered": "Số lượng đặt",
+          "order_history": "Lịch sử đơn hàng",
+          "executor": "Người thực hiện",
+          "action": "Hành động",
+          "execution_time": "Thời gian thực hiện",
+          "list_documents": "Danh sách chứng từ",
+          "mixer": "Máy trộn",
+          "mixer_name": "Tên máy trộn",
+          "select_mixer": "Chọn máy trộn",
+          "order_information": "Thông tin đơn hàng",
+          "order_code": "Mã đơn hàng",
+          "creator": "Người tạo",
+          "creation_date": "Ngày tạo",
+          "status": "Trạng thái",
+          "customer_information": "Thông tin khách hàng",
+          "customer_name": "Tên khách hàng",
+          "phone_number": "Số điện thoại",
+          "address": "Địa chỉ",
+          "note": "Ghi chú",
+          "project_information": "Thông tin công trình",
+          "pouring_time": "Thời gian đổ",
+          "area": "Khu vực",
+          "project_type": "Loại công trình",
+          "pouring_method": "Hình thức đổ",
+          "project_category": "Hạng mục công trình",
+          "pouring_location": "Địa điểm đổ",
+          "modal": {
+            "title_confirm": "Xác nhận đơn hàng ?",
+            "title_reject": "Từ chối đơn hàng ?",
+            "title_cancel": "Huỷ đơn hàng ?",
+            "text": "Hành động này sẽ không thể hoàn tác!",
+            "confirmButtonText": "Xoá",
+            "cancelButtonText": "Huỷ"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa đơn hàng",
+          "mixing_machine": "Máy trộn",
+          "select_mixing_machine": "Chọn máy trộn",
+          "client": "Khách hàng",
+          "note": "Ghi chú",
+          "address": "Địa chỉ",
+          "phone_number": "Số điện thoại",
+          "project_information": "Thông tin công trình",
+          "pouring_date": "Ngày đổ",
+          "pouring_time": "Giờ đổ",
+          "area": "Khu vực",
+          "type_of_construction": "Loại công trình",
+          "pouring_method": "Hình thức đổ",
+          "construction_item": "Hạng mục công trình",
+          "pouring_location": "Địa điểm đổ",
+          "main_product": "Sản phẩm chính",
+          "product": "Sản phẩm",
+          "unit_of_measurement": "Đơn vị tính",
+          "main_sand_component": "Thành phần cát chính",
+          "main_stone_component": "Thành phần đá chính",
+          "placed_volume": "Khối lượng đặt",
+          "slump": "Độ sụt",
+          "additional_services": "Dịch vụ kèm theo",
+          "quantity": "Số lượng"
+        }
+      },
+      "order_release": {
+        "list": {
+          "breadcrumb": "Mix ticket management",
+          "title": "Batching - Order management",
+          "status": "Status",
+          "client": "Customer",
+          "product": "Product",
+          "order_code": "Order Code",
+          "order_date": "Order Date",
+          "delivery_date": "Delivery Date",
+          "delivery_location": "Delivery Location",
+          "quantity_ordered": "Ordered Quantity",
+          "phone_number": "Phone Number",
+          "save": "Save",
+          "download_excel": "Download excel",
+          "mixer": "Mixer"
+        },
+        "create": {},
+        "detail": {},
+        "edit": {}
+      },
+      "plan_management": {
+        "list": {
+          "breadcrumb": "Quản lý kế hoạch",
+          "title": "Danh sách kế hoạch",
+          "status": "Trạng thái",
+          "client": "Khách hàng",
+          "product": "Sản phẩm",
+          "order_code": "Mã đơn hàng",
+          "order_date": "Ngày đặt hàng",
+          "delivery_date": "Ngày đổ",
+          "delivery_location": "Địa điểm đổ",
+          "pour_date": "Ngày đổ",
+          "pour_location": "Địa điểm đổ",
+          "quantity_ordered": "SL đặt",
+          "phone_number": "Số điện thoại",
+          "save": "Lưu thông tin",
+          "download_excel": "Tải excel",
+          "mixer": "Máy trộn"
+        },
+        "detail": {},
+        "edit": {}
+      },
+      "in_out": {
+        "list": {
+          "breadcrumb": "Quản lý vào ra",
+          "title": "Danh sách vào ra",
+          "status": "Trạng thái",
+          "client": "Khách hàng",
+          "product": "Sản phẩm",
+          "order_code": "Mã đơn hàng",
+          "order_date": "Ngày đặt hàng",
+          "delivery_date": "Ngày đổ",
+          "delivery_location": "Địa điểm đổ",
+          "pour_date": "Ngày đổ",
+          "pour_location": "Địa điểm đổ",
+          "quantity_ordered": "SL đặt",
+          "phone_number": "Số điện thoại",
+          "save": "Lưu thông tin",
+          "download_excel": "Tải excel",
+          "mixer": "Máy trộn",
+          "see_detail": "Xem chi tiết",
+          "album": "Xem album ảnh",
+          "camera": "Xem camera",
+          "vehicle": "Biển số xe",
+          "check_in": "Thời gian vào",
+          "check_out": "Thời gian ra"
+        },
+        "detail": {},
+        "edit": {}
+      },
+      "order_import": {
+        "message_empty": "Không được để trống",
+        "not_zero": "Nhập số khác 0",
+        "great_than_zero": "Nhập số lớn hơn 0",
+        "list": {
+          "breadcrumb": "Quản lý nhập hàng",
+          "title": "DANH SÁCH PHIẾU NHẬP HÀNG",
+          "number": "STT",
+          "code": "Mã phiếu",
+          "order_import_date": "Ngày nhập hàng",
+          "partner": "Đối tác",
+          "stock": "Kho nhập",
+          "total_money": "Tổng tiền",
+          "creator": "Người tạo phiếu",
+          "create_date": "Ngày tạo phiếu",
+          "status": "Trạng thái"
+        },
+        "detail": {
+          "title": "CHI TIẾT PHIẾU NHẬP HÀNG",
+          "product_infor": {
+            "title": "THÔNG TIN HÀNG HOÁ",
+            "product_code": "Mã sản phẩm",
+            "product_name": "Tên sản phẩm",
+            "number": "Số lượng",
+            "unit": "ĐVT",
+            "price": "Đơn giá",
+            "total_money": "Thành tiền"
+          },
+          "bill_infor": {
+            "title": "THÔNG TIN HÓA ĐƠN",
+            "discount": "Chiết khấu",
+            "vat_tax": "Thuế VAT",
+            "total_money_item": "Tổng tiền hàng",
+            "total_money_pay": "Tổng tiền thanh toán",
+            "pay_now": "Thanh toán ngay",
+            "debt": "Tiền nợ"
+          },
+          "payment_infor": {
+            "title": "THÔNG TIN THANH TOÁN",
+            "unpaid": "Chưa thanh toán",
+            "pay_now": "Thanh toán ngay",
+            "receiver": "Người nhận",
+            "address": "Địa chỉ",
+            "pay_method": "Hình thức chi",
+            "content": "Nội dung chi",
+            "phone_number": "Số điện thoại",
+            "bank": "Ngân hàng"
+          },
+          "order_import_infor": {
+            "title": "THÔNG TIN PHIẾU NHẬP HÀNG",
+            "code": "Mã phiếu",
+            "import_date": "Ngày nhập",
+            "stock": "Kho nhập",
+            "partner": "Đối tác",
+            "driver": "Lái xe",
+            "vehicle": "Phương tiện"
+          },
+          "state": {
+            "initialization": "Khởi tạo",
+            "confirmed": "Đã xác nhận",
+            "in_progress": "Đang xuất hàng",
+            "mixing_completed": "Đã trộn xong",
+            "cancelled": "Đã bị huỷ",
+            "rejected": "Đã từ chối",
+            "completed": "Đã hoàn thành"
+          }
+        },
+        "create": {
+          "title": "TẠO MỚI PHIẾU NHẬP HÀNG",
+          "product_infor": {
+            "title": "THÔNG TIN SẢN PHẨM",
+            "product_code": "Mã sản phẩm",
+            "product_name": "Tên sản phẩm",
+            "number": "Số lượng",
+            "unit": "ĐVT",
+            "price": "Đơn giá",
+            "total_money": "Thành tiền",
+            "empty_product": "Chưa có sản phẩm nào được chọn"
+          },
+          "bill_infor": {
+            "title": "THÔNG TIN HÓA ĐƠN",
+            "discount": "Chiết khấu",
+            "vat_tax": "Thuế VAT",
+            "total_money_pay": "Tổng tiền thanh toán",
+            "debt": "Tiền nợ"
+          },
+          "payment_infor": {
+            "title": "THÔNG TIN THANH TOÁN",
+            "unpaid": "Chưa thanh toán",
+            "pay_now": "Thanh toán ngay",
+            "receiver": "Người nhận tiền",
+            "address": "Địa chỉ",
+            "pay_method": "Hình thức chi",
+            "content": "Nội dung chi",
+            "phone_number": "Số điện thoại",
+            "bank": "Ngân hàng",
+            "money_pay_now": "Số tiền trả ngay"
+          },
+          "order_import_infor": {
+            "title": "THÔNG TIN PHIẾU NHẬP HÀNG",
+            "import_date": "Ngày nhập",
+            "stock": "Kho nhập",
+            "partner": "Đối tác",
+            "address": "Địa chỉ",
+            "phone_number": "Số điện thoại",
+            "vehicle": "Phương tiện",
+            "note": "Ghi chú",
+            "driver": "Lái xe",
+            "attach": "Chứng từ kèm theo"
+          }
+        },
+        "edit": {}
+      }
+    },
+    "masterdata": {
+      "unit": {
+        "list": {
+          "breadcrumb": "Danh sách đơn vị tính",
+          "title": "Danh sách đơn vị tính",
+          "status": "Trạng thái",
+          "code": "Mã đơn vị tính",
+          "name": " Tên đơn vị tính",
+          "action": "Hành động"
+        },
+        "create": {
+          "title": "Tạo mới đơn vị tính",
+          "code": "Mã đơn vị tính",
+          "name": " Tên đơn vị tính",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa đơn vị tính",
+          "code": "Mã đơn vị tính",
+          "name": " Tên đơn vị tính",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "partner": {
+        "list": {
+          "breadcrumb": "Danh sách đối tác",
+          "title": "Danh sách đối tác",
+          "status": "Trạng thái",
+          "code": "Mã đối tác",
+          "name": "Họ tên",
+          "action": "Hành động",
+          "taxcode": "Mã số thuế",
+          "address": "Địa chỉ",
+          "phone_number": "Số điện thoại",
+          "email": "Email",
+          "KH": "KH",
+          "NCC": "NCC",
+          "client": "Nhóm đối tác"
+        },
+        "create": {
+          "title": "Tạo mới đối tác",
+          "code": "Mã đối tác",
+          "name": "Tên đối tác",
+          "taxcode": "Mã số thuế",
+          "address": "Địa chỉ",
+          "phone_number": "Số điện thoại",
+          "state": "Trạng thái",
+          "email": "Email",
+          "isCustomer": "Là khách hàng?",
+          "isProvider": "Là nhà cung cấp?",
+
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa đối tác",
+          "code": "Mã đối tác",
+          "name": "Tên đối tác",
+          "taxcode": "Mã số thuế",
+          "address": "Địa chỉ",
+          "phone_number": "Số điện thoại",
+          "state": "Trạng thái",
+          "email": "Email",
+          "isCustomer": "Là khách hàng?",
+          "isProvider": "Là nhà cung cấp?",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "stock": {
+        "list": {
+          "breadcrumb": "Danh sách kho hàng",
+          "title": "Danh sách kho hàng",
+          "status": "Trạng thái",
+          "code": "Mã kho",
+          "name": " Tên kho",
+          "action": "Hành động"
+        },
+        "create": {
+          "title": "Tạo mới kho",
+          "code": "Mã kho",
+          "name": " Tên kho",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa kho",
+          "code": "Mã kho",
+          "name": " Tên kho",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "itemtype": {
+        "list": {
+          "breadcrumb": "Danh sách loại sản phẩm",
+          "title": "Danh sách loại sản phẩm",
+          "status": "Trạng thái",
+          "code": "Mã loại sản phẩm",
+          "name": " Tên loại sản phẩm",
+          "action": "Hành động"
+        },
+        "create": {
+          "title": "Tạo mới loại sản phẩm",
+          "code": "Mã loại sản phẩm",
+          "name": " Tên loại sản phẩm",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa loại sản phẩm",
+          "code": "Mã loại sản phẩm",
+          "name": " Tên loại sản phẩm",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "area": {
+        "list": {
+          "breadcrumb": "Danh sách khu vực",
+          "title": "Danh sách khu vực",
+          "status": "Trạng thái",
+          "code": "Mã khu vực",
+          "name": " Tên khu vực",
+          "action": "Hành động"
+        },
+        "create": {
+          "title": "Tạo mới khu vực",
+          "code": "Mã khu vực",
+          "name": " Tên khu vực",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa khu vực",
+          "code": "Mã khu vực",
+          "name": " Tên khu vực",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "mixer": {
+        "list": {
+          "breadcrumb": "Danh sách máy trộn",
+          "title": "Danh sách máy trộn",
+          "status": "Trạng thái",
+          "code": "Mã máy trộn",
+          "name": "Tên máy trộn",
+          "action": "Hành động"
+        },
+        "create": {
+          "title": "Tạo mới máy trộn",
+          "code": "Mã máy trộn",
+          "name": "Tên máy trộn",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa máy trộn",
+          "code": "Mã máy trộn",
+          "name": "Tên máy trộn",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "pourtype": {
+        "list": {
+          "breadcrumb": "Danh sách hình thức đổ",
+          "title": "Danh sách hình thức đổ",
+          "status": "Trạng thái",
+          "code": "Mã hình thức đổ",
+          "name": "Tên hình thức đổ",
+          "action": "Hành động"
+        },
+        "create": {
+          "title": "Tạo mới hình thức đổ",
+          "code": "Mã hình thức đổ",
+          "name": "Tên hình thức đổ",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa hình thức đổ",
+          "code": "Mã hình thức đổ",
+          "name": "Tên hình thức đổ",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "ordertype": {
+        "list": {
+          "breadcrumb": "Danh sách loại đơn hàng",
+          "title": "Danh sách loại đơn hàng",
+          "status": "Trạng thái",
+          "code": "Mã ",
+          "name": "Đơn hàng",
+          "action": "Hành động"
+        },
+        "create": {
+          "title": "Tạo mới loại đơn hàng",
+          "code": "Mã ",
+          "name": "Đơn hàng",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit": {
+          "title": "Chỉnh sửa loại đơn hàng",
+          "code": "Mã ",
+          "name": "Đơn hàng",
+          "state": "Trạng thái",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      },
+      "chipper":{
+         "list":{
+           "breadcrumb": "Máy băm",
+           "tt":"Danh sách máy băm",
+           "stt":"STT",
+           "tmb":"Tên máy băm",
+           "trt":"Trạng thái",
+           "hd":"Hành động"
+         },
+         "edit":{
+            "tt":"Chỉnh sửa máy băm",
+            "tmb":"Tên máy băm",
+            "trt":"Trạng thái"
+         },
+         "create":{
+          "tt":"Tạo mới máy băm",
+          "tmb":"Tên máy băm",
+          "trt":"Trạng thái"
+         }
+      },
+      "ship":{
+        "list":{
+          "breadcrumb": "Tàu hàng",
+          "tt":"Danh sách tàu hàng",
+          "stt":"STT",
+          "mt":"Mã tàu",
+          "trt":"Trọng tải",
+          "trgth":"Trạng thái",
+          "hd":"Hành động"
+        },
+        "create":{
+           "tt":"Tạo mới tàu",
+           "mt":"Mã tàu",
+           "trt":"Trọng tải",
+           "trgth":"Trạng thái"
+        },
+        "edit":{
+           "tt":"Chỉnh sửa tàu", 
+           "mt":"Mã tàu",
+           "trt":"Trọng tải",
+           "trgth":"Trạng thái"
+        }
+      },
+      "shift":{
+        "list":{
+           "tt":"Danh sách ca làm việc",
+           "stt":"STT",
+           "mc":"Mã ca",
+           "tc":"Tên ca",
+           "gbd":"Giờ bắt đầu",
+           "gkt":"Giờ kết thúc",
+           "trt":"Trạng thái",
+           "hd":"Hành động"
+        },
+        "create":{
+          "tt":"Tạo mới ca làm việc",
+          "mc":"Mã ca",
+          "tc":"Tên ca",
+          "clv":"Ca làm việc",
+          "gbd":"Giờ bắt đầu ca",
+          "gkt":"Giờ kết thúc ca",
+          "gc":"Ghi chú",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        },
+        "edit":{
+          "tt":"Chỉnh sửa ca làm việc",
+          "mc":"Mã ca",
+          "tc":"Tên ca",
+          "clv":"Ca làm việc",
+          "gbd":"Giờ bắt đầu ca",
+          "gkt":"Giờ kết thúc ca",
+          "gc":"Ghi chú",
+          "statevalue": {
+            "Activated": "Kích hoạt",
+            "Locked": "Khóa"
+          }
+        }
+      }
+    },
+    "report": {
+      "dashboard": {
+        "breadcrumb": "Trang chủ"
+      }
+    },
+    "device_configuration": {},
+    "system_administration": {}
+  },
+  "footer": {}
+}

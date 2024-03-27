@@ -1,0 +1,23 @@
+
+<!-- Loading Screen -->
+<div id="overlay" class="div-loading">
+    <div class="indeterminate-progress-bar">
+        <div class="indeterminate-progress-bar__progress"></div>
+    </div>
+</div>
+<div class="wrapper">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <sidebar-cmp></sidebar-cmp>
+    </div>
+    <div class="main-panel">
+        <navbar-cmp></navbar-cmp>
+        <div class="content container-fluid" [ngClass]="openSidebar ? '' : 'large-width'">
+            <app-drawer></app-drawer>
+            <router-outlet></router-outlet>
+        </div>
+        <footer-cmp></footer-cmp>
+    </div>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+    </div>
+</div>

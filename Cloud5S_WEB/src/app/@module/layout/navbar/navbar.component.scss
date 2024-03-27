@@ -1,0 +1,47 @@
+.account-name {
+  font-size: 14px;
+  font-style: normal;
+  margin-right: 10px;
+  text-transform: none;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.account-name:hover {
+  color: #4880ff;
+}
+
+#navbarDropdownMenuLink {
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #4880ff;
+}
+
+img {
+  max-width: none !important;
+}
+
+.navbar-toggler-xl {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: "991px") {
+  .navbar-toggler-xl {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: "570px") {
+  .breadcrumb-text, .breadcrumb-icon {
+    display: none;
+  }
+}
+
+.fixed-top-right {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+}

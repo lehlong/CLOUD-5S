@@ -1,0 +1,35 @@
+<nav *ngIf="totalRecord > 0" class="pagination-container">
+    <div class="total-record">{{ 'content.common.total_recorl' | translate:{total: totalRecord} }}</div>
+    <ul *ngIf="totalPage > 1" class="pagination">
+        <li (click)="decreasePage()" class="page-item" [ngClass]="page === 1 ? 'disabled' : ''">
+            <a class="page-link" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+            </a>
+        </li>
+        <li (click)="goToPage(pageNumber)" *ngFor="let pageNumber of visiblePages, index as i" class="page-item"
+            [class.active]="pageNumber === page">
+            <ng-container *ngIf="pageNumber === -1">
+                <div class="three-dots">...</div>
+            </ng-container>
+            <ng-container *ngIf="pageNumber !== -1">
+                <div class="page-link">{{pageNumber}}</div>
+            </ng-container>
+        </li>
+        <li (click)="increasePage()" class="page-item" [ngClass]="page === totalPage ? 'disabled' : ''">
+            <a class="page-link" aria-label="Next">
+                <span aria-hidden="true">»</span>
+            </a>
+        </li>
+    </ul>
+    <div class="page-size">
+        <select [(ngModel)]="pageSize" (change)="pageSizeChanged()">
+            <option *ngFor="let size of pageSizes" [value]="size">{{ size }} / {{ 'content.common.page' | translate }}</option>
+        </select>
+    </div>
+    <div *ngIf="totalPage > 1 && totalPage > pagesToShow" class="go-to-page">
+        {{ 'content.common.go_to' | translate }}
+        <span *ngIf="!translate.store.currentLang || translate.store.currentLang == 'vi'">trang</span>
+        <input type="number" (blur)="onInputBlur($event)" />
+        <span *ngIf="translate.store.currentLang == 'en'">Page</span>
+    </div>
+</nav>

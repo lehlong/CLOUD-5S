@@ -1,0 +1,15 @@
+<div class="otp-container">
+  <input
+    type="text"
+    placeholder="Nhập mã OTP"
+    (input)="onInputChange($event)"
+    class="otp-input"
+    maxlength="6"
+    id="otp-input"
+    [(ngModel)]="otpValue"
+    autofocus />
+</div>
+
+<div class="countdown">
+  <div class="countdown-display">{{ minutes | number : '2.0-0' }}:{{ seconds | number : '2.0-0' }}</div>
+</div>

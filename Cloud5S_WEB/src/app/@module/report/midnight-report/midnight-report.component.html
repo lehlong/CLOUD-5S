@@ -1,0 +1,198 @@
+<div class="card midnight-report-container">
+    <div class="card-body container-page">
+        <div class="d-flex flex-wrap d-gap d-space-bw">
+            <div class="card-title">
+                <i class="bi bi-journal-text"></i>
+                Báo cáo 0h
+            </div>
+
+        </div>
+        <div class="d-flex flex-wrap d-gap d-space-bw">
+            <div class="d-flex flex-wrap d-gap">
+                <div style="max-width: 250px;">
+                    <nz-range-picker (nzOnCalendarChange)="search()" nzFormat="dd/MM/yyyy" [nzRanges]="rangePresets"
+                        [(ngModel)]="filter.selectedRange" [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+                </div>
+                <div>
+                    <span (click)="search()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap d-gap">
+                <div [appPermission]="REPORT_0H.EXCEL">
+                    <button (click)="exportExcel()" type="button" class="btn export-excel-btn">
+                        <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+                        Tải excel
+                    </button>
+                </div>
+                <div>
+                    <button (click)="makeNewStockItemDetail()" type="button" class="btn btn-primary">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        Làm mới dữ liệu tồn kho
+                    </button>
+                </div>
+            </div>         
+        </div>
+        <div class="list-container border-bottom mb-1 mt-1" [appPermission]="REPORT_0H.DANH_SACH">
+            <table mat-table [dataSource]="dataTable" *ngIf="dataTable?.length > 0"
+                class="table table-hover table-click-row">
+
+                <!-- HEADER 1 -->
+
+                <ng-container matColumnDef="header-row-date">
+                    <th class="align-y-center text-center" mat-header-cell *matHeaderCellDef rowSpan="2">
+                        Ngày
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="header-row-import-goods">
+                    <th class="text-center" style="background: #00ccff;" mat-header-cell *matHeaderCellDef
+                        [colSpan]="dynamicColums?.length + 1">
+                        Nhập hàng
+                    </th>
+
+                </ng-container>
+
+                <ng-container matColumnDef="header-row-production(gmt)">
+                    <th class="text-center" style="background: #ffff00;" mat-header-cell *matHeaderCellDef colSpan="5">
+                        Sản xuất (GMT)
+                    </th>
+
+                </ng-container>
+
+                <ng-container matColumnDef="header-row-inventory">
+                    <th class="text-center" style="background: #99cc01;" mat-header-cell *matHeaderCellDef colSpan="4">
+                        Tồn kho
+                    </th>
+                </ng-container>
+
+                <!-- HEADER 2 -->
+
+                <ng-container matColumnDef="header-row-hn-1">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef [colSpan]="dynamicColums?.length">
+                        HOÀ NHƠN
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="header-row-total-1">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>
+                        Tổng cộng
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="header-row-hn-2">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef colSpan="3">
+                        HOÀ NHƠN
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="header-row-total-2">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef colSpan="2">
+                        Total
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="header-row-hn-3">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef colSpan="2">
+                        HOÀ NHƠN
+                    </th>
+                </ng-container>
+
+                <!-- HEADER 3 -->
+
+                <ng-container matColumnDef="orderDate">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element;" class="text-center">
+                        <span *ngIf="element.title" class="fw-600">{{ element.title }}</span>
+                        <span *ngIf="!element.title">{{ element?.orderDate | date: 'dd/MM/yyyy' }}</span>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">Total</td>
+                </ng-container>
+
+                <ng-container *ngFor="let item of dynamicColums; let i = index" [matColumnDef]="item.partnerCode">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">{{item?.partnerName}}</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element?.partnerReceipts?.[i]?.partnerNumber)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">{{getTotal('partnerReceipts', i)}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalPartnerNumber">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.totalPartnerNumber)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">{{getTotal('totalPartnerNumber')}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="shift1Value">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Ca 1</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.shift1Value)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">{{getTotal('shift1Value')}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="shift2Value">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Ca 2</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.shift2Value)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">{{getTotal('shift2Value')}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="shift3Value">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Ca 3</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.shift3Value)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">{{getTotal('shift3Value')}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalShiftGMT">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">GMT</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.totalShiftGMT)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">{{getTotal('totalShiftGMT')}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalShiftBDT">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">BDT</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.totalShiftBDT)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">{{getTotal('totalShiftBDT')}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="stockGMT">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">GMT</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.stockGMT)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">-</td>
+                </ng-container>
+
+                <ng-container matColumnDef="stockBDT">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">BDT</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        {{utils.formatNumber(element.stockBDT)}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="fw-600 text-right">-</td>
+                </ng-container>
+
+                <tr mat-header-row
+                    *matHeaderRowDef="['header-row-date', 'header-row-import-goods', 'header-row-production(gmt)', 'header-row-inventory']; sticky: true">
+                </tr>
+                <tr mat-header-row
+                    *matHeaderRowDef="['header-row-hn-1', 'header-row-total-1', 'header-row-hn-2', 'header-row-total-2', 'header-row-hn-3']; sticky: true">
+                </tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                <tr mat-footer-row class="total" *matFooterRowDef="displayedColumns; sticky: true"></tr>
+            </table>
+            <app-empty *ngIf="!dataTable || dataTable?.length == 0"></app-empty>
+        </div>
+    </div>
+</div>

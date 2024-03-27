@@ -1,0 +1,21 @@
+<div class="mt-2">
+  <div class="row g-3 detail-container">
+    <div class="d-flex flex-wrap" style="gap: 15px">
+      <div class="d-flex" style="gap: 15px; justify-content: center">
+        <label class="mt-1">Ngày thực hiện</label>
+        <div>
+          <nz-date-picker
+            nzFormat="dd/MM/yyyy"
+            nzPlaceHolder="Ngày sản xuất"
+            [(ngModel)]="filter.date"></nz-date-picker>
+        </div>
+      </div>
+      <div style="width: 165px">
+        <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+          <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+          Tải excel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

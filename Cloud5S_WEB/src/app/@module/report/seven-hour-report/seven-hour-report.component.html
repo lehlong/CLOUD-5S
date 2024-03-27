@@ -1,0 +1,277 @@
+<div class="card midnight-report-container">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Báo cáo 7h
+      </div>
+
+    </div>
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="d-flex flex-wrap d-gap">
+        <div style="max-width: 250px;">
+          <nz-range-picker (nzOnCalendarChange)="search()" nzFormat="dd/MM/yyyy" [nzRanges]="rangePresets"
+            [(ngModel)]="filter.selectedRange" [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+        </div>
+        <div>
+          <span (click)="search()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap d-gap">
+        <div [appPermission]="REPORT_7H.EXCEL">
+          <button (click)="exportExcel()" type="button" class="btn export-excel-btn">
+            <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+            Tải excel
+          </button>
+        </div>
+        <div>
+          <button (click)="makeNewStockItemDetail()" type="button" class="btn btn-primary">
+              <i class="bi bi-arrow-clockwise"></i>
+              Làm mới dữ liệu tồn kho
+          </button>
+        </div>
+      </div>    
+    </div>
+    <div class="list-container border-bottom mb-1 mt-1" [appPermission]="REPORT_7H.DANH_SACH">
+      <table mat-table [dataSource]="dataTable" *ngIf="dataTable?.length > 0" class="table table-click-row">
+        <ng-container matColumnDef="header-row-date">
+          <th class="align-y-center text-center" mat-header-cell *matHeaderCellDef rowSpan="3">
+            Ngày
+          </th>
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-receipt">
+          <th class="text-center align-y-center" mat-header-cell *matHeaderCellDef
+            [colSpan]="(dynamicColums?.length * 4) + 1">
+            Receipt
+          </th>
+
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-consumption">
+          <th class="text-center align-y-center" mat-header-cell *matHeaderCellDef colSpan="4" rowSpan="2">
+            Consumption
+          </th>
+
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-discharge">
+          <th class="text-center align-y-center" mat-header-cell *matHeaderCellDef colSpan="4" rowSpan="2">
+            Discharge
+          </th>
+
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-inventory">
+          <th class="text-center align-y-center" mat-header-cell *matHeaderCellDef colSpan="2" rowSpan="2">
+            Inventory
+          </th>
+        </ng-container>
+
+        <!-- HEADER 2 -->
+
+        <ng-container matColumnDef="header-row-shift-1">
+          <th style="background: #ffff04;" class="text-center align-y-center" mat-header-cell *matHeaderCellDef
+            [colSpan]="dynamicColums?.length">
+            Shift 1
+          </th>
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-shift-2">
+          <th style="background: #92d050;" class="text-center align-y-center" mat-header-cell *matHeaderCellDef
+            [colSpan]="dynamicColums?.length">
+            Shift 2
+          </th>
+
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-shift-3">
+          <th style="background: #f79647;" class="text-center align-y-center" mat-header-cell *matHeaderCellDef
+            [colSpan]="dynamicColums?.length">
+            Shift 3
+          </th>
+
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-total-123">
+          <th style="background: #0070c0;" class="text-center align-y-center" mat-header-cell *matHeaderCellDef
+            [colSpan]="dynamicColums?.length">
+            Total 1, 2, 3
+          </th>
+
+        </ng-container>
+
+        <ng-container matColumnDef="header-row-total">
+          <th class="text-center align-y-center" mat-header-cell *matHeaderCellDef rowSpan="2">
+            Total
+          </th>
+        </ng-container>
+
+        <!-- HEADER 3 -->
+
+        <ng-container matColumnDef="orderDate">
+          <td mat-cell *matCellDef="let element;" class="text-center">
+            <span *ngIf="element.title">{{ element.title }}</span>
+            <span *ngIf="!element.title">{{ element?.orderDate | date: 'dd/MM/yyyy' }}</span>
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">Total</td>
+        </ng-container>
+
+        <ng-container *ngFor="let item of dynamicColums; let i = index" [matColumnDef]="item.partnerCode + '_1'">
+          <td mat-header-cell *matHeaderCellDef class="text-center">{{item?.partnerName}}</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element?.partnerNumber?.[i]?.shift1Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('shift1Number', i)}}
+          </td>
+        </ng-container>
+
+        <ng-container *ngFor="let item of dynamicColums; let i = index" [matColumnDef]="item.partnerCode + '_2'">
+          <td mat-header-cell *matHeaderCellDef class="text-center">{{item?.partnerName}}</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element?.partnerNumber?.[i]?.shift2Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('shift2Number', i)}}
+          </td>
+        </ng-container>
+
+        <ng-container *ngFor="let item of dynamicColums; let i = index" [matColumnDef]="item.partnerCode + '_3'">
+          <td mat-header-cell *matHeaderCellDef class="text-center">{{item?.partnerName}}</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element?.partnerNumber?.[i]?.shift3Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('shift3Number', i)}}
+          </td>
+        </ng-container>
+
+        <ng-container *ngFor="let item of dynamicColums; let i = index" [matColumnDef]="item.partnerCode + '_4'">
+          <td mat-header-cell *matHeaderCellDef class="text-center">{{item?.partnerName}}</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element?.partnerNumber?.[i]?.totalNumber)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('totalNumber', i)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalPartnerNumber">
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.totalPartnerNumber)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('totalPartnerNumber')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="consumptionShift1Number">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Shift 1</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.consumptionShift1Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('totalPartnerNumber')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="consumptionShift2Number">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Shift 2</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.consumptionShift2Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('consumptionShift2Number')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="consumptionShift3Number">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Shift 3</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.consumptionShift3Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('consumptionShift3Number')}}
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="consumptionTotalShiftNumber">
+          <td mat-header-cell *matHeaderCellDef class="text-center fw-600 fs-14px">Total</td>
+          <td mat-cell *matCellDef="let element" class="text-center fw-600">
+            {{utils.formatNumber(element.consumptionTotalShiftNumber)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('consumptionTotalShiftNumber')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dischargeShift1Number">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Shift 1</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.dischargeShift1Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('dischargeShift1Number')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dischargeShift2Number">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Shift 2</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.dischargeShift2Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('dischargeShift2Number')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dischargeShift3Number">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Shift 3</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.dischargeShift3Number)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('dischargeShift3Number')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dischargeTotalNumber">
+          <td mat-header-cell *matHeaderCellDef class="text-center fw-600 fs-14px">Total</td>
+          <td mat-cell *matCellDef="let element" class="text-center fw-600">
+            {{utils.formatNumber(element.dischargeTotalNumber)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('dischargeTotalNumber')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inventoryLog">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Log</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.inventoryLog)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('inventoryLog')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inventoryBDT">
+          <td mat-header-cell *matHeaderCellDef class="text-center">Wood Chip (BDT)</td>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{utils.formatNumber(element.inventoryBDT)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{getTotal('inventoryBDT')}}
+          </td>
+        </ng-container>
+
+        <!-- END -->
+
+        <tr mat-header-row
+          *matHeaderRowDef="['header-row-date','header-row-receipt',  'header-row-consumption','header-row-discharge','header-row-inventory']; sticky: true">
+        </tr>
+        <tr mat-header-row *matHeaderRowDef="
+            [
+              'header-row-shift-1',
+              'header-row-shift-2',
+              'header-row-shift-3',
+              'header-row-total-123',
+              'header-row-total',   
+            ];
+            sticky: true
+          "></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsHeader; sticky: true" class="border-bottom"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-footer-row class="total" *matFooterRowDef="displayedColumns; sticky: true"></tr>
+      </table>
+      <app-empty *ngIf="dataTable?.length == 0"></app-empty>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="card care-create-container" [ngClass]="{'container-change': !!partnerCode}">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title"><i class="bi bi-plus-lg"></i>Tạo mới CSKH</div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button
+            (click)="onCreate()"
+            type="button"
+            class="btn btn-primary"
+            *ngIf="!!partnerCode"
+            [appPermission]="CUSTOMER_SUPPORT_RIGHTS.THEM_MOI">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3 detail-container">
+      <div class="main-content pr-2" [ngClass]="{'col-md-8': !!partnerCode}">
+        <div>
+          <form *ngIf="ctcForm" [formGroup]="ctcForm">
+            <div class="tab-content pt-2">
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label class="form-label">Chọn khách hàng<span class="text-danger ms-1">*</span></label>
+                  <nz-select
+                    [nzStatus]="submitted && f['partnerName'].errors ? 'error' : ''"
+                    (ngModelChange)="onChangePartner($event)"
+                    nzShowSearch
+                    nzAllowClear
+                    nzPlaceHolder="Khách hàng"
+                    formControlName="partnerName">
+                    <nz-option
+                      *ngFor="let partner of listPartnerAll"
+                      [nzLabel]="partner.name"
+                      [nzValue]="partner"></nz-option>
+                  </nz-select>
+                  <div *ngIf="submitted && f['partnerName'].errors" class="invalid-feedback">
+                    <div *ngIf="f['partnerName']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <button (click)="viewListOrder()" class="btn btn-primary" [disabled]="partnerCode == ''">
+                    Chọn đơn hàng
+                  </button>
+                </div>
+                <div class="col-md-12">
+                  <app-input-clear
+                    label="Nội dung chăm sóc"
+                    placeholder="Nội dung chăm sóc"
+                    [textArea]="true"
+                    [control]="$any(ctcForm).controls['careContent']"
+                    [ngClass]="{'is-invalid': submitted && f['careContent'].errors}"></app-input-clear>
+                  <div *ngIf="submitted && f['careContent'].errors" class="invalid-feedback">
+                    <div *ngIf="f['careContent']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="info-content" [ngClass]="{'col-md-4': !!partnerCode}" *ngIf="!!partnerCode">
+        <!--  -->
+        <div class="mbf-box">
+          <div class="mbf-box__header" *ngIf="!!partnerCode">
+            <div class="mbf-box__title">
+              <i class="bi bi-person"></i>
+              <span>Thông tin khách hàng</span>
+            </div>
+          </div>
+          <div class="mbf-box__body" *ngIf="!!partnerCode">
+            <ng-container>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Khách Hàng:</div>
+                <div class="value">{{ partnerName }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Số điện thoại:</div>
+                <div class="value">{{ phoneOrder }}</div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <!--  -->
+        <div class="mbf-box">
+          <div class="mbf-box__header" *ngIf="!!codeOrder">
+            <div class="mbf-box__title">
+              <i class="bi bi-receipt"></i>
+              <span>Thông tin đơn hàng</span>
+            </div>
+          </div>
+          <div class="mbf-box__body">
+            <ng-container *ngIf="!!codeOrder">
+              <div class="list-info d-space-bw">
+                <div class="form-label">Mã đơn hàng:</div>
+                <div class="value">{{ codeOrder }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Ngày đặt hàng:</div>
+                <div class="value">{{ dateOrder | date : 'dd/MM/yyyy' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Sản phẩm:</div>
+                <div class="value">{{ itemOrder }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="form-label">Trạng thái:</div>
+                <div class="value">{{ statusOrder }}</div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <!--  -->
+      </div>
+    </div>
+  </div>
+</div>

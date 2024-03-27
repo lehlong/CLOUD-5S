@@ -1,0 +1,153 @@
+<div class="card" [appPermission]="REPORTIMPORT_RIGHTS.CHI_TIET">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Báo cáo chi tiết nhập kho
+      </div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button
+          type="button"
+          class="btn export-excel-btn"
+          (click)="exportExcel()"
+          [appPermission]="REPORTIMPORT_RIGHTS.CHI_TIET">
+          <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-wrap d-gap-2">
+        <nz-range-picker
+          nzFormat="dd/MM/yyyy"
+          [nzRanges]="rangePresets"
+          [(ngModel)]="filter.selectedRange"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+
+      <!-- <div class="d-flex flex-row flex-grow-1">
+        <input
+          type="text"
+          placeholder="Người nhập"
+          aria-label="Người nhập"
+          class="form-control"
+          (input)="onChangeCreateby($event)"
+          [matAutocomplete]="auto2"
+          [(ngModel)]="CreatebySelected.userName" />
+        <mat-autocomplete #auto2="matAutocomplete">
+          <mat-option
+            *ngFor="let Createby of listCreatebyFilter"
+            [value]="Createby.userName"
+            (onSelectionChange)="selectCreateby(Createby, $event)"
+            [class.selected]="Createby.selected">
+            <span>
+              {{ Createby.userName }}
+            </span>
+          </mat-option>
+        </mat-autocomplete>
+      </div> -->
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Người nhập" [(ngModel)]="filter.Createby">
+          <nz-option
+            *ngFor="let Createby of listCreatebyAll"
+            [nzLabel]="Createby.userName"
+            [nzValue]="Createby.userName"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Kho hàng" [(ngModel)]="filter.StockCode">
+          <nz-option *ngFor="let stock of listStockAll" [nzLabel]="stock.name" [nzValue]="stock.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Nhóm sản phẩm" [(ngModel)]="filter.itemType">
+          <nz-option
+            *ngFor="let itemtype of listItemTypeAll"
+            [nzLabel]="itemtype.name"
+            [nzValue]="itemtype.code"></nz-option>
+        </nz-select>
+      </div>
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <div class="wrapper-input">
+            <app-input-clear
+              placeholder="Nhập từ khóa tìm kiếm"
+              (searchEvent)="search()"
+              [(value)]="filter.keyWord"></app-input-clear>
+          </div>
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+      <table
+        mat-table
+        [dataSource]="paginationResult.data"
+        *ngIf="paginationResult && paginationResult.data?.length > 0"
+        class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell *matHeaderCellDef>Kho Hàng</th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" class="cursor-pointer text-primary">{{ element.stock?.name }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="itemCode">
+          <th mat-header-cell *matHeaderCellDef>Mã sản phẩm</th>
+          <td mat-cell *matCellDef="let element">{{ element.item?.code }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="itemName">
+          <th mat-header-cell *matHeaderCellDef>Tên sản phẩm</th>
+          <td mat-cell *matCellDef="let element">{{ element.item?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Số lượng</th>
+          <td mat-cell *matCellDef="let element" class="text-danger text-right">{{ element.amount | number }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="unitCode">
+          <th mat-header-cell *matHeaderCellDef>Đơn vị tính</th>
+          <td mat-cell *matCellDef="let element">{{ element.item?.unit?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createDate">
+          <th mat-header-cell *matHeaderCellDef>Ngày nhập</th>
+          <td mat-cell *matCellDef="let element">{{ element.importDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef>Người nhập</th>
+          <td mat-cell *matCellDef="let element">{{ element.account?.fullName }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [ngClass]="{'selected-row': row?.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

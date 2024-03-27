@@ -1,0 +1,181 @@
+<!-- div2 -->
+<div class="card stock-edit-container" [style.width]="widthDeault">
+  <div class="card-body" [appPermission]="CONTRACT_RIGHTS.CHI_TIET">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-pencil-square"></i>
+        Chỉnh sửa hợp đồng
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="showDetail()" type="button" class="btn btn-show-detail"
+            [appPermission]="CONTRACT_RIGHTS.CHI_TIET">
+            <i class="bi bi-eye"></i>Chi tiết
+          </button>
+        </div>
+        <div>
+          <button (click)="onEdit()" type="button" class="btn btn-primary" submitForm
+            [appPermission]="CONTRACT_RIGHTS.CHINH_SUA">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3">
+      <form [formGroup]="contractForm" (ngSubmit)="onEdit()">
+        <div class="row g-3 detail-container">
+          <div class="main-content col-md-8 pr-2">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-box"></i>
+                  Thông tin sản phẩm
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div (click)="openChooseItem()" class="product-wraper-btn mt-2">
+                  <i class="bi bi-plus-lg me-1"></i> Chọn sản phẩm
+                </div>
+                <div class="wraper-table mt-3">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th class="fw-normal">Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th class="text-right">Số lượng</th>
+                        <th>ĐVT</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                        <td></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container formArrayName="details">
+                        <ng-container *ngFor="let dateTimeGroup of importDetails.controls; let i = index"
+                          [formGroupName]="i">
+                          <tr>
+                            <td>{{ listItemDetails[i].code || '' }}</td>
+                            <td>{{ listItemDetails[i].name || '' }}</td>
+                            <td>
+                              <app-input-number [requiredNotlabel]="true" (input)="textQuantity($event, i)"
+                                [required]="true"
+                                [showErrors]="submitted && dateTimeGroup?.get('orderNumber')?.hasError('required')"
+                                [control]="$any(dateTimeGroup).controls['orderNumber']"></app-input-number>
+                            </td>
+                            <td>{{ listItemDetails[i].unit.name || '' }}</td>
+                            <td>
+                              <app-input-number [requiredNotlabel]="true" (input)="textPrice($event, i)"
+                                [required]="true"
+                                [showErrors]="submitted && dateTimeGroup?.get('price')?.hasError('required')"
+                                [control]="$any(dateTimeGroup).controls['price']"></app-input-number>
+                            </td>
+                            <td>{{ utils.formatNumber(moneyTotal[i]?.totalMoney) }}</td>
+                            <td><i (click)="removeDetails(i)" class="bi bi-dash-circle minus-field"></i></td>
+                          </tr>
+                        </ng-container>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-3">
+                  <app-input-clear label="Nội dung hợp đồng" [textArea]="true" placeholder="Nội dung hợp đồng" 
+                    [control]="$any(contractForm).controls['content']"></app-input-clear>
+                </div>
+                <div class="mt-5">
+                  <app-input-clear label="Ghi chú" [textArea]="true" placeholder="Ghi chú"
+                    [control]="$any(contractForm).controls['note']"></app-input-clear>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-content col-md-4">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-person-circle"></i>
+                  Thông tin đối tác
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="import-date-wraper col-12">
+                  <label class="form-label">Đối tác<span class="text-danger ms-1">*</span></label>
+                  <nz-select (ngModelChange)="selectPartner($event)" [nzStatus]="submitted && f['partnerCode'].errors ? 'error' : ''" nzAllowClear nzShowSearch
+                    nzPlaceHolder="Đối tác" formControlName="partnerCode">
+                    <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name"
+                      [nzValue]="partner.code"></nz-option>
+                  </nz-select>
+                  <div *ngIf="submitted && f['partnerCode'].errors" class="text-validate">
+                    <div *ngIf="f['partnerCode']['errors']['required']">Không được để trống</div>
+                  </div>
+                </div>
+                <div class="import-date-wraper col-12 mt-3">
+                    <app-input-clear label="Địa chỉ" placeholder="Địa chỉ" [control]="$any(contractForm).controls['address']"></app-input-clear>
+                </div>
+                <div class="note-wraper mt-3">
+                  <app-input-clear placeholder="Số điện thoại" label="Số điện thoại"
+                    [control]="$any(contractForm).controls['phoneNumber']"></app-input-clear>
+                </div>
+              </div>
+            </div>
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-boxes"></i>
+                  Thông tin hợp đồng
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row g-3">
+                  <div class="col-sm-12">
+                      <label class="form-label">Ngày ký<span class="text-danger ms-1">*</span></label>
+                      <nz-date-picker nzFormat="dd/MM/yyyy" class="d-block"
+                          [nzStatus]="submitted && f['releaseDate'].errors ? 'error' : ''"
+                          formControlName="releaseDate"></nz-date-picker>
+                      <div *ngIf="submitted && f['releaseDate'].errors" class="text-validate">
+                          <div *ngIf="f['releaseDate']['errors']['required']">Không được để trống
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-12">
+                      <label class="form-label">Loại hợp đồng<span class="text-danger ms-1">*</span></label>
+                      <nz-select [nzStatus]="submitted && f['type'].errors ? 'error' : ''" nzAllowClear nzShowSearch
+                        nzPlaceHolder="Loại hợp đồng" formControlName="type">
+                        <nz-option *ngFor="let partner of listContractAll" [nzLabel]="partner.name"
+                          [nzValue]="partner.value"></nz-option>
+                      </nz-select>
+                      <div *ngIf="submitted && f['type'].errors" class="text-validate">
+                        <div *ngIf="f['type']['errors']['required']">Không được để trống</div>
+                      </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <label class="form-label">Ngày bắt đầu<span class="text-danger ms-1">*</span></label>
+                    <nz-date-picker nzFormat="dd/MM/yyyy" class="d-block"
+                        [nzStatus]="submitted && f['startDate'].errors ? 'error' : ''"
+                        formControlName="startDate"></nz-date-picker>
+                    <div *ngIf="submitted && f['startDate'].errors" class="text-validate">
+                        <div *ngIf="f['startDate']['errors']['required']">Không được để trống
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <label class="form-label">Ngày kết thúc<span class="text-danger ms-1">*</span></label>
+                    <nz-date-picker nzFormat="dd/MM/yyyy" class="d-block"
+                        [nzStatus]="submitted && f['endDate'].errors ? 'error' : ''"
+                        formControlName="endDate"></nz-date-picker>
+                    <div *ngIf="submitted && f['endDate'].errors" class="text-validate">
+                        <div *ngIf="f['endDate']['errors']['required']">Không được để trống
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

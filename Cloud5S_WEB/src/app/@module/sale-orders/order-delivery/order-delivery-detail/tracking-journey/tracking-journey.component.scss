@@ -1,0 +1,128 @@
+.tracking-journey-container {
+  ::ng-deep.ant-table {
+    border-collapse: collapse !important;
+  }
+  ::ng-deep.ant-table-thead {
+    tr {
+      th {
+        border: 1px solid #f1f0f0;
+        padding: 10px !important;
+      }
+    }
+  }
+  ::ng-deep.ant-table-tbody {
+    tr {
+      cursor: pointer !important;
+      td {
+        border: 1px solid #f1f0f0;
+        padding: 10px !important;
+      }
+      &.selected-bill {
+        td {
+          color: #02b774 !important;
+        }
+      }
+    }
+  }
+  .title-vehicle {
+    margin: 10px 0px;
+  }
+  .wrapper-btn-locations {
+    position: absolute;
+    top: 10px;
+    left: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    z-index: 2;
+    .btn-show-locations {
+      display: flex;
+      gap: 7px;
+      width: fit-content;
+      padding: 7px 15px;
+      border-radius: 30px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 5px;
+      &.selected-mixer {
+        color: #f5565a !important;
+      }
+      &.selected-poured {
+        color: #02b774 !important;
+      }
+      &.selected-pouring {
+        color: #fcc419 !important;
+      }
+      &.selected-not-poured {
+        color: #cecece !important;
+      }
+    }
+  }
+
+  .menu-icon {
+    position: fixed;
+    right: 20px;
+    top: 131px;
+    z-index: 2;
+    background: #ffffff;
+    border-radius: 5px;
+    padding: 0px 5px;
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  .right-panel {
+    padding: 0 10px;
+    position: fixed;
+    right: 0px;
+    top: 110px;
+    width: 370px;
+    background: #ffffff;
+    opacity: 0.95;
+    height: calc(100vh - 110px);
+    z-index: 3;
+    transition: all 0.5s;
+    overflow: hidden;
+    transform: translateX(100%);
+    &.open-menu {
+      transform: translateX(0);
+    }
+
+    &.close-menu {
+      transform: translateX(100%);
+    }
+    .hearder-map-menu {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 8px 8px 8px;
+      border-bottom: 1px solid #dee2e6;
+      i {
+        cursor: pointer;
+        margin: 3px 0px 0px 5px;
+      }
+      img {
+        width: 100px;
+        height: 29.3px;
+      }
+    }
+
+    .content-menu {
+      .element-content {
+        .wrapper-table {
+          overflow: auto;
+          max-height: calc((100vh - 290px) / 2);
+        }
+      }
+    }
+  }
+}
+
+::ng-deep .mat-mdc-select-value {
+  display: none;
+}
+
+::ng-deep .mat-mdc-select-trigger {
+  justify-content: flex-end;
+}

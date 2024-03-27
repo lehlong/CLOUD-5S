@@ -1,0 +1,43 @@
+<div class="card" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title"><i class="bi bi-plus-lg"></i>Tạo mới thông báo</div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onCreate()" type="button" class="btn btn-primary" [appPermission]="MESSAGE_RIGHTS.THEM_MOI">
+            <i class="bi bi-check-circle"></i>{{ 'content.common.btn_create' | translate }}
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning">
+            <i class="bi bi-x-circle"></i>{{ 'content.common.btn_close' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form [formGroup]="messageForm" (ngSubmit)="onCreate()">
+        <div class="mt-3">
+          <app-input-clear
+            [initFocus]="true"
+            label="Mã"
+            [required]="true"
+            [errorsRequired]="f['code'].errors?.['required']"
+            [showErrors]="submitted && f['code'].errors"
+            [errorsWrongFormat]="f['code'].errors?.['pattern']"
+            [status]="submitted && f['code'].errors ? 'error' : ''"
+            [control]="$any(messageForm).controls['code']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <app-input-clear
+            label="Nội dung"
+            [required]="true"
+            [errorsRequired]="f['value'].errors?.['required']"
+            [showErrors]="submitted && f['value'].errors"
+            [status]="submitted && f['value'].errors ? 'error' : ''"
+            [control]="$any(messageForm).controls['value']"></app-input-clear>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

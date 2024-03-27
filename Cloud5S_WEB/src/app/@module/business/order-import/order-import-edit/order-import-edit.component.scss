@@ -1,0 +1,92 @@
+.stock-edit-container {
+  padding-bottom: 20px;
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    .product-wraper-btn {
+      border: 1px solid transparent;
+      box-shadow: 0 2px rgba(0, 0, 0, 0.0156862745);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      height: 32px;
+      font-size: 13px;
+      border-radius: 2px;
+      color: rgba(0, 0, 0, 0.8509803922);
+      border-color: #d9d9d9;
+      background: #fff;
+      border-style: dashed;
+      width: 35%;
+      text-align: center;
+      line-height: 31px;
+      &:hover {
+        color: #1890ff;
+        border-color: #1890ff;
+      }
+    }
+    .wraper-table {
+      overflow: auto;
+      border-bottom: 1px solid #dee2e6;
+      border-radius: 3px;
+      table {
+        margin: 0px !important;
+        min-width: unset !important;
+        border-collapse: collapse !important;
+        border-style: hidden;
+        th {
+          font-weight: 500 !important;
+        }
+      }
+    }
+  }
+  .detail-container {
+    .info-content {
+      border-left: 1px solid #dee2e6;
+    }
+    .debt-calculation-wraper {
+      display: flex;
+      flex-wrap: nowrap;
+      margin-top: 18px;
+      .import-input {
+        text-align: right;
+        padding: 5px;
+        label {
+          font-weight: 600;
+        }
+        input {
+          margin-top: 5px;
+          text-align: right;
+          padding-right: 8px;
+        }
+      }
+    }
+    // @media (max-width: 1145px) {
+    //   .debt-calculation-wraper {
+    //     flex-wrap: wrap;
+    //   }
+    // }
+    // @media (max-width: 768px) {
+    //   .debt-calculation-wraper {
+    //     .wraper-detail {
+    //       width: calc(100% - 10px);
+    //     }
+    //   }
+    // }
+    // @media (max-width: 1110px) {
+    //   .info-content {
+    //     height: calc(100vh - 200px);
+    //   }
+    // }
+  }
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+.pr-4 {
+  padding-right: 4px;
+}
+.pl-4 {
+  padding-left: 4px;
+}

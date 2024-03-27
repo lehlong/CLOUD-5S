@@ -1,0 +1,105 @@
+<div class="print-templates" id="stock-import-print">
+  <div class="header-print">
+    <div class="hearder-left">
+      <div class="title-left">{{ data?.company?.name }}</div>
+      <div class="text">{{ data?.company?.address }}</div>
+    </div>
+    <div class="hearder-right">
+      <div class="title-right">Mẫu số 1 - VT</div>
+      <div class="text">
+        <span>Ban hành theo Thông tư số 113/2016/TT-BTC</span>
+        <br />
+        <span>Ngày 26/08/2016 của Bộ Tài Chính</span>
+      </div>
+    </div>
+  </div>
+  <div class="title-main">PHIẾU NHẬP KHO</div>
+  <div class="date text-center">
+    <!-- Ngày 14 Tháng 07 năm 2023 
+        {{data?.detail?.importDate}} -->
+    Ngày {{ data?.detail?.importDate | date : 'dd' }} Tháng {{ data?.detail?.importDate | date : 'MM' }} năm
+    {{ data?.detail?.importDate | date : 'yyyy' }}
+  </div>
+  <div class="code text-center">Số: NK140723-010</div>
+  <div class="row-content">
+    <div class="label">- Họ và tên người giao:</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Theo hoá đơn:</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-separate">
+    <div class="row-separate-left">
+      <div class="label">- Nhập tại kho:</div>
+      <div class="dot-line"></div>
+    </div>
+    <div class="row-separate-right">
+      <div class="label">- Địa điểm:</div>
+      <div class="dot-line"></div>
+    </div>
+  </div>
+  <table class="table-print">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên sản phẩm</th>
+        <th>Mã số</th>
+        <th>Đơn vị tính</th>
+        <th class="text-right">Số lượng theo CT</th>
+        <th class="text-right">Số lượng thực nhập</th>
+        <th class="text-right">Đơn giá</th>
+        <th class="text-right">Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of data?.detail?.importDetails; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ element?.item?.name }}</td>
+        <td>{{ element?.item?.code }}</td>
+        <td>{{ element?.item?.unit?.name }}</td>
+        <td class="text-right">{{ formatNumber(element?.amount) }}</td>
+        <td class="text-right">{{ formatNumber(element?.amount) }}</td>
+        <td class="text-right">{{ formatNumber(element?.price) }}</td>
+        <td class="text-right">{{ formatNumber(element.sumMoney) }}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="fw-600">Cộng:</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{ getTotalMoney(data.detail) }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row-content">
+    <div class="label">- Tổng số tiền (viết bằng chữ):</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="row-content">
+    <div class="label">- Số chứng từ gốc kèm theo:</div>
+    <div class="dot-line"></div>
+  </div>
+  <div class="footer-print">
+    <div class="signature-container">
+      <div class="title-signature">Người lập phiếu</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Người giao hàng</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="title-signature">Thủ kho</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+    <div class="signature-container">
+      <div class="date-signature">Ngày Tháng Năm 2023</div>
+      <div class="title-signature">Kế toán trưởng</div>
+      <div class="signature">(Ký, họ tên)</div>
+    </div>
+  </div>
+</div>

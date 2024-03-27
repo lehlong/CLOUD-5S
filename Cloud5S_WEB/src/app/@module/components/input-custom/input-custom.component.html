@@ -1,0 +1,15 @@
+<div class="input-custom">
+  <label *ngIf="title" for="">{{title}}</label>
+  <input class="form-control ng-pristine ng-invalid ng-touched" [ngClass]="className" type="text" [placeholder]="place"
+    [(ngModel)]="inputValue" (ngModelChange)="onChange($event)" (focus)="onFocus()" (blur)="onBlur()">
+  <div class="btn-down" (click)="onFocusDown()">
+    <i class='bx bx-chevron-down'></i>
+  </div>
+  <div class="dropdown" *ngIf="showOptions && options.length > 0" (scroll)="onScroll($event)">
+    <ng-container *ngFor="let item of options">
+      <p (click)="handleClick(item)">
+        {{item[prop]}}
+      </p>
+    </ng-container>
+  </div>
+</div>

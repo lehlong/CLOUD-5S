@@ -1,0 +1,162 @@
+<div class="card" [appPermission]="PARTNER_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>{{ 'content.masterdata.partner.list.title' | translate }}
+      </div>
+
+      <div class="d-flex d-gap-2 flex-wrap">
+        <div class="d-flex-wrap d-gap">
+          <div *ngIf="filter">
+            <div class="input-group search-box">
+              <div class="d-flex flex-row flex-grow-1" style="padding-right: 3px">
+                <nz-select
+                  nzShowSearch
+                  nzAllowClear
+                  [nzPlaceHolder]="'content.masterdata.partner.list.client' | translate"
+                  [(ngModel)]="userTypeFilter">
+                  <nz-option
+                    [nzLabel]="'content.masterdata.partner.list.KH' | translate"
+                    nzValue="customer"></nz-option>
+                  <nz-option
+                    [nzLabel]="'content.masterdata.partner.list.NCC' | translate"
+                    nzValue="provider"></nz-option>
+                </nz-select>
+              </div>
+              <app-input-clear
+                placeholder="content.common.placeholder_search"
+                (searchEvent)="search()"
+                [(value)]="filter.keyWord"></app-input-clear>
+              <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+              <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+
+              &nbsp;
+            </div>
+          </div>
+          <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+            <button
+              type="button"
+              class="btn btn-success"
+              (click)="openCreate()"
+              [appPermission]="PARTNER_RIGHTS.THEM_MOI">
+              <i class="bi bi-plus-lg"></i>{{ 'content.common.btn_create' | translate }}
+            </button>
+            <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+              <fa-icon [icon]="faFileExcel"></fa-icon> {{ 'content.common.download_excel' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom">
+      <table
+        mat-table
+        [dataSource]="paginationResult.data"
+        *ngIf="paginationResult"
+        class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef width="60px" class="align-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="align-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef width="150px">
+            {{ 'content.masterdata.partner.list.code' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" (click)="openEdit(element)" class="cursor-pointer text-primary" style="text-align: left">{{
+              element.code
+            }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Tên đối tác</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="taxCode">
+          <th mat-header-cell *matHeaderCellDef>{{ 'content.masterdata.partner.list.taxcode' | translate }}</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.taxCode }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isCustomer">
+          <th mat-header-cell *matHeaderCellDef width="90px" class="text-center">
+            {{ 'content.masterdata.partner.list.KH' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i *ngIf="element.isCustomer" class="bi bi-check-circle-fill text-success"></i>
+            <i *ngIf="!element.isCustomer" class="bi bi-x-circle-fill"></i>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="isProvider">
+          <th mat-header-cell *matHeaderCellDef width="90px" class="text-center">
+            {{ 'content.masterdata.partner.list.NCC' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i *ngIf="element.isProvider" class="bi bi-check-circle-fill text-success"></i>
+            <i *ngIf="!element.isProvider" class="bi bi-x-circle-fill"></i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef width="90px" class="text-center">
+            {{ 'content.masterdata.partner.list.status' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i *ngIf="element.isActive" class="bi bi-check-circle-fill text-success"></i>
+            <i *ngIf="!element.isActive" class="bi bi-x-circle-fill"></i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef>{{ 'content.masterdata.partner.list.address' | translate }}</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.address }}</td>
+        </ng-container>
+        <ng-container matColumnDef="phoneNumber">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">
+            {{ 'content.masterdata.partner.list.phone_number' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.phoneNumber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>{{ 'content.masterdata.partner.list.email' | translate }}</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.email }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef width="90px">
+            {{ 'content.masterdata.partner.list.action' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i
+              class="bi bi-trash3 text-danger cursor-pointer"
+              (click)="deleteCustomer(element)"
+              [appPermission]="PARTNER_RIGHTS.XOA"></i>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (dblclick)="openEdit(row)"
+          [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="w-100">
+      <div class="float-end" *ngIf="paginationResult">
+        <app-pagination
+          [pageSize]="paginationResult.pageSize"
+          [totalRecord]="paginationResult.totalRecord"
+          [totalPage]="paginationResult.totalPage"
+          [(page)]="paginationResult.currentPage"
+          (pageChange)="onChangePage($event)"
+          (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+      </div>
+    </div>
+  </div>
+</div>

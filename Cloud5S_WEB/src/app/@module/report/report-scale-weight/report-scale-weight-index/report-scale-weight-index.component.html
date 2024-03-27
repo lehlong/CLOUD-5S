@@ -1,0 +1,125 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title"><i class="bi bi-journal-text"></i>Danh sách thống kê trọng lượng cân</div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+          <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-wrap d-gap-2">
+        <nz-range-picker
+          nzFormat="dd/MM/yyyy"
+          [nzRanges]="rangePresets"
+          [(ngModel)]="filter.selectedRange"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Biển số xe" [(ngModel)]="filter.VehicleCode">
+          <nz-option *ngFor="let vehicle of vehicleAll" [nzLabel]="vehicle.code" s [nzValue]="vehicle.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khách hàng" [(ngModel)]="filter.PartnerCode">
+          <nz-option
+            *ngFor="let partner of listPartnerAll"
+            [nzLabel]="partner.name"
+            [nzValue]="partner.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Khu vực" [(ngModel)]="filter.areaCode">
+          <nz-option *ngFor="let area of listAreaAll" [nzLabel]="area.name" s [nzValue]="area.code"></nz-option>
+        </nz-select>
+      </div>
+      <div class="d-flex flex-row flex-grow-1">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Sản phẩm" [(ngModel)]="filter.ItemCode">
+          <nz-option *ngFor="let item of listItemAll" [nzLabel]="item.name" [nzValue]="item.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <div class="wrapper-input">
+            <app-input-clear placeholder="Nhập từ khóa tìm kiếm" (searchEvent)="search()" [(value)]="filter.keyWord">
+            </app-input-clear>
+          </div>
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+      <table mat-table [dataSource]="listData" *ngIf="listData?.length > 0" class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="time">
+          <th mat-header-cell *matHeaderCellDef>Ngày cân vào</th>
+          <td mat-cell *matCellDef="let element">{{ element.timeWeight1 | date : 'dd/MM/yyyy' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="vehicleCode">
+          <th mat-header-cell *matHeaderCellDef>Biển số xe</th>
+          <td mat-cell *matCellDef="let element">{{ element.vehicleCode }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="customerName">
+          <th mat-header-cell *matHeaderCellDef>Tên Khách hàng</th>
+          <td mat-cell *matCellDef="let element">{{ element?.partner?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="itemName">
+          <th mat-header-cell *matHeaderCellDef>Sản phẩm</th>
+          <td mat-cell *matCellDef="let element">{{ element.item?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="timeWeight1">
+          <th mat-header-cell *matHeaderCellDef>Giờ cân</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.timeWeight1 | date : 'HH:mm:ss' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="weight1">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Trọng lượng cân lần 1</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.weight1 | number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="timeWeight2">
+          <th mat-header-cell *matHeaderCellDef>Giờ cân</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.timeWeight2 | date : 'HH:mm:ss' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="time2">
+          <th mat-header-cell *matHeaderCellDef>Ngày cân ra</th>
+          <td mat-cell *matCellDef="let element">{{ element.timeWeight2 | date : 'dd/MM/yyyy' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="weight2">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Trọng lượng cân lần 2</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.weight2 | number }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Trọng lượng hàng</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.weight | number }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [ngClass]="{'selected-row': row?.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="listData?.length == 0"></app-empty>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+.vertical-cell{
+  transform: rotate(-90deg);display: inline-block;
+  text-align: center;
+  transform-origin: center;
+  width: 100%;
+  margin: auto;
+}
+
+
+.wraper-table{overflow: auto;
+height: 350px;
+  border-radius: 3px;}
+.export-modal-container{
+  overflow: hidden;
+}
+.total-row td{
+  font-weight: 500;
+}

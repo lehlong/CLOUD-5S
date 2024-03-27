@@ -1,0 +1,22 @@
+::ng-deep .mat-mdc-tab-body-content {
+  overflow: hidden !important;
+}
+::ng-deep .mat-mdc-tab-labels {
+  justify-content: space-between;
+}
+::ng-deep .mdc-tab {
+  flex: 1 !important;
+  letter-spacing: normal;
+}
+::ng-deep .mdc-tab__text-label {
+  font-family: var(--bs-font-sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+}
+::ng-deep .mat-mdc-tab.mdc-tab {
+  height: 35px !important;
+}
+.icon-tree {
+  margin-right: 20px;
+  cursor: pointer;
+}

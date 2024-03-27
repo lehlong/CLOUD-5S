@@ -1,0 +1,153 @@
+.print-templates {
+    padding-bottom: 50px;
+}
+.print-templates .header-print {
+    display: flex;
+    justify-content: space-between;
+}
+.print-templates .header-print .hearder-left .title-left {
+    font-weight: 600;
+    font-size: 15px;
+}
+.print-templates .header-print .hearder-left .text {
+    font-weight: 400;
+    font-size: 14px;
+}
+.print-templates .header-print .hearder-right {
+    text-align: center;
+}
+.print-templates .header-print .hearder-right .title-right {
+    font-weight: 600;
+    font-size: 15px;
+}
+.print-templates .header-print .hearder-right .text {
+    font-weight: 400;
+    font-size: 14px;
+    font-style: italic;
+}
+.print-templates .title-main {
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    margin-top: 20px;
+}
+.print-templates .date {
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 18px;
+}
+.print-templates .code {
+    text-align: center;
+    font-weight: 400;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+.print-templates .row-content {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+.print-templates .row-content .label {
+    flex: 0 0 auto;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.print-templates .row-content .dot-line-start {
+    border-bottom: 1px dotted black;
+    height: 1px;
+    margin-top: 5px;
+    width: 25px;
+    height: 7px;
+}
+
+.print-templates .row-content .dot-line {
+    border-bottom: 1px dotted black;
+    height: 1px;
+    margin-top: 5px;
+    flex: 1;
+    height: 7px;
+}
+.print-templates .row-separate {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.print-templates .row-separate .row-separate-left, .print-templates .row-separate .row-separate-right {
+    display: flex;
+    gap: 5px;
+}
+.print-templates .row-separate .row-separate-left .label, .print-templates .row-separate .row-separate-right .label {
+    flex: 0 0 auto;
+    font-weight: 400;
+    font-size: 15px;
+}
+.print-templates .row-separate .row-separate-left .dot-line, .print-templates .row-separate .row-separate-right .dot-line {
+    border-bottom: 1px dotted black;
+    height: 1px;
+    margin-top: 5px;
+    flex: 1;
+    height: 8px;
+}
+.print-templates .row-separate .row-separate-left .dot-line-start, .print-templates .row-separate .row-separate-right .dot-line-start {
+    border-bottom: 1px dotted black;
+    height: 1px;
+    margin-top: 5px;
+    width: 25px;
+    height: 8px;
+}
+.print-templates .row-separate .row-separate-left {
+    flex: 2 1 auto;
+}
+.print-templates .row-separate .row-separate-right {
+    flex: 3 1 auto;
+}
+.print-templates .table-print {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 30px !important;
+    margin-bottom: 25px;
+}
+.print-templates .table-print .text-right {
+    text-align: right !important;
+}
+.print-templates .table-print th, .print-templates .table-print td {
+    border: 1px solid #dee2e6;
+    white-space: normal !important;
+    line-height: 19px !important;
+    padding: 10px !important;
+}
+.print-templates .table-print th {
+    font-weight: 600 !important;
+}
+.print-templates .table-print .fw-600 {
+    font-weight: 600;
+}
+.print-templates .footer-print {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+}
+.print-templates .footer-print .signature-container {
+    flex: 1 0 auto;
+}
+.print-templates .footer-print .signature-container .title-signature {
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+.print-templates .footer-print .signature-container .signature, .print-templates .footer-print .signature-container .date-signature {
+    text-align: center;
+    font-weight: 300;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.print-templates .footer-print .signature-container .name {
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 40px;
+}

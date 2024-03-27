@@ -1,0 +1,80 @@
+<div class="card box-list-order" *ngIf="paginationResult">
+   <!-- <h6 class="cart-title mt-3" *ngIf="paginationResult">
+      Danh sách đơn hàng của khách hàng : {{partnerName}}
+   </h6> -->
+  <div class="container-page-order">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title" *ngIf="paginationResult">
+        <i class="bi bi-journal-text"></i>Danh sách đơn hàng của khách hàng : {{partnerName}}
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="filter">
+          <div class="input-group search-box">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="filter.keyWord"
+              (keyup.enter)="search()"
+              placeholder="Nhập từ khóa tìm kiếm" />
+            <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+            <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+      <table mat-table [dataSource]="paginationResult.data"
+        *ngIf="paginationResult && paginationResult.data?.length > 0" class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="text-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>Mã đơn hàng</th>
+          <td mat-cell *matCellDef="let element" (click)="chooseOrder(element)">
+            <span href="#" class="cursor-pointer text-primary">{{ element.code }}</span>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="createDate">
+          <th mat-header-cell *matHeaderCellDef>Ngày đặt hàng</th>
+          <td mat-cell *matCellDef="let element">{{ element.createDate | date : 'dd/MM/yyyy' }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="itemName">
+          <th mat-header-cell *matHeaderCellDef>Sản phẩm</th>
+          <td mat-cell *matCellDef="let element">{{ element.itemName }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="phoneNumber">
+          <th mat-header-cell *matHeaderCellDef>Số điện thoại</th>
+          <td mat-cell *matCellDef="let element">{{ element.phoneNumber }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Trạng thái</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <div *ngIf="state_order[element?.state]" class="label-status"
+              [style.background]="state_order[element?.state].background"
+              [style.color]="state_order[element?.state].color">
+              {{ state_order[element?.state].name }}
+            </div>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

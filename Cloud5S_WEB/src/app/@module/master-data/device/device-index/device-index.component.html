@@ -1,0 +1,142 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title"><i class="bi bi-journal-text"></i>Danh sách thiết bị</div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="filter">
+          <div class="input-group search-box">
+            <div class="d-flex flex-row flex-grow-1" style="padding-right: 3px">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Loại thiết bị" [(ngModel)]="filter.typeCode">
+                <nz-option
+                  *ngFor="let devicetype of listdevicetypeAll"
+                  [nzLabel]="devicetype.name"
+                  [nzValue]="devicetype.code"></nz-option>
+              </nz-select>
+            </div>
+            <div class="d-flex flex-row flex-grow-1" style="padding-right: 3px">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Nhóm thiết bị" [(ngModel)]="filter.groupCode">
+                <nz-option
+                  *ngFor="let devicegroup of listdevicegroupAll"
+                  [nzLabel]="devicegroup.name"
+                  [nzValue]="devicegroup.code"></nz-option>
+              </nz-select>
+            </div>
+
+            <app-input-clear
+              placeholder="Nhập từ khóa tìm kiếm"
+              (searchEvent)="search()"
+              [(value)]="filter.keyWord"></app-input-clear>
+            <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+            <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+            &nbsp;
+          </div>
+        </div>
+        <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+          <button type="button" class="btn btn-success" (click)="openCreate()">
+            <i class="bi bi-plus-lg"></i>Thêm mới
+          </button>
+
+          <button type="button" class="btn export-excel-btn" (click)="exportExcel()">
+            <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1">
+      <table
+        mat-table
+        [dataSource]="paginationResult.data"
+        *ngIf="paginationResult"
+        class="table table-hover table-click-row">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef width="60px" class="align-center">STT</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="align-center">
+            {{ (paginationResult.currentPage - 1) * paginationResult.pageSize + i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef width="150px">Mã thiết bị</th>
+          <td mat-cell *matCellDef="let element">
+            <span href="#" (click)="openEdit(element)" class="cursor-pointer text-primary" style="text-align: left">{{
+              element.code
+            }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Tên thiết bị</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="typeCode">
+          <th mat-header-cell *matHeaderCellDef>Loại thiết bị</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element?.type?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="groupCode">
+          <th mat-header-cell *matHeaderCellDef>Nhóm thiết bị</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element?.group?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ipAddress">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Địa chỉ IP</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.ipAddress }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ipPort">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">IP Port</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.ipPort }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="devicePort">
+          <th mat-header-cell *matHeaderCellDef style="text-align: right">Port thiết bị</th>
+          <td mat-cell *matCellDef="let element" style="text-align: right">{{ element.devicePort }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>Tài khoản</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.username }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="password">
+          <th mat-header-cell *matHeaderCellDef>Mật khẩu</th>
+          <td mat-cell *matCellDef="let element" style="text-align: left">{{ element.password }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef width="90px" class="text-center">Trạng thái</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i *ngIf="element.isActive" class="bi bi-check-circle-fill text-success"></i>
+            <i *ngIf="!element.isActive" class="bi bi-x-circle-fill"></i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef width="90px">Hành động</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            <i class="bi bi-trash3 text-danger cursor-pointer" (click)="deleteDevice(element)"></i>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="border-bottom"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (dblclick)="openEdit(row)"
+          [ngClass]="{'selected-row': row.code === filter.code}"></tr>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

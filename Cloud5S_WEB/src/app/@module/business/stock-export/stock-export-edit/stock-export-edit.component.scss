@@ -1,0 +1,131 @@
+.stock-edit-container {
+  padding-bottom: 10px;
+  height: 100vh;
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 100px);
+    .title {
+      margin-bottom: 20px !important;
+    }
+    height: calc(100vh - 100px);
+    overflow: auto;
+    .wraper-table {
+      overflow: auto;
+      border-bottom: 1px solid #dee2e6;
+      border-radius: 3px;
+      table {
+        margin: 0px !important;
+        min-width: unset !important;
+        border-collapse: collapse !important;
+        border-style: hidden;
+        overflow: auto;
+        th {
+          font-weight: 500 !important;
+        }
+      }
+    }
+  }
+  .detail-container {
+    .info-content {
+      border-left: 1px solid #dee2e6;
+      height: calc(100vh - 100px);
+      .list-info {
+        display: flex;
+        border-bottom: 1px solid #dee2e6;
+        gap: 5px;
+        padding: 15.5px 10px;
+        align-items: baseline;
+        .label {
+          font-weight: 500;
+          white-space: nowrap;
+          align-self: baseline;
+        }
+        .value {
+          font-weight: 400;
+        }
+        &.title {
+          border: none !important;
+          //padding-bottom: 12px !important;
+        }
+      }
+      .gap-50 {
+        gap: 50px !important;
+      }
+      
+    }
+  }
+  .container-edit {
+    .wraper-input {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      .import-date-wraper {
+        width: 35%;
+      }
+      .note-wraper {
+        width: calc(65% - 16px);
+      }
+    }
+    .product-wraper-btn {
+      border: 1px solid transparent;
+      box-shadow: 0 2px rgba(0, 0, 0, 0.0156862745);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      height: 32px;
+      font-size: 13px;
+      border-radius: 2px;
+      color: rgba(0, 0, 0, 0.8509803922);
+      border-color: #d9d9d9;
+      background: #fff;
+      border-style: dashed;
+      width: 35%;
+      text-align: center;
+      line-height: 31px;
+      &:hover {
+        color: #1890ff;
+        border-color: #1890ff;
+      }
+    }
+
+    .wraper-table {
+      overflow: auto;
+      border-bottom: 1px solid #dee2e6;
+      border-radius: 3px;
+      table {
+        margin: 0px !important;
+        min-width: unset !important;
+        border-collapse: collapse !important;
+        border-style: hidden;
+        overflow: auto;
+        th {
+          font-weight: 500 !important;
+        }
+        .minus-field {
+          cursor: pointer;
+          color: #999;
+          font-size: 16px;
+          &:hover {
+            color: #1890ff;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 570px) {
+      .wraper-input {
+        gap: 10px;
+        .import-date-wraper,
+        .note-wraper {
+          width: 100%;
+        }
+      }
+      .product-wraper-btn {
+        width: 100%;
+      }
+    }
+  }
+}

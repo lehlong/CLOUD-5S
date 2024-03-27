@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Dtos\SO\OrderExport\**" />
+    <Compile Remove="Dtos\SO\OrderImport\**" />
+    <Compile Remove="Services\BU\CustomerCare\**" />
+    <Compile Remove="Services\BU\Payment\**" />
+    <EmbeddedResource Remove="Dtos\SO\OrderExport\**" />
+    <EmbeddedResource Remove="Dtos\SO\OrderImport\**" />
+    <EmbeddedResource Remove="Services\BU\CustomerCare\**" />
+    <EmbeddedResource Remove="Services\BU\Payment\**" />
+    <None Remove="Dtos\SO\OrderExport\**" />
+    <None Remove="Dtos\SO\OrderImport\**" />
+    <None Remove="Services\BU\CustomerCare\**" />
+    <None Remove="Services\BU\Payment\**" />
+  </ItemGroup>
+	
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="6.0.4" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
+    <PackageReference Include="EPPlus" Version="6.2.6" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.50" />
+    <PackageReference Include="MailKit" Version="4.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="MimeKit" Version="4.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.2.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
+  </ItemGroup>
+
+
+	
+  <ItemGroup>
+    <ProjectReference Include="..\DMS.Core\DMS.CORE.csproj" />
+  </ItemGroup>
+
+</Project>

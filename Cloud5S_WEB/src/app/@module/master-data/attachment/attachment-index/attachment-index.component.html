@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class=" d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>Danh sách file
+      </div>
+    </div>
+    <div class="d-flex d-gap flex-wrap card-function">
+      <div class="input-group search-box">
+        <div class="wrapper-input">
+          <app-input-clear placeholder="content.common.placeholder_search" (searchEvent)="search()"
+            [(value)]="filter.keyWord"></app-input-clear>
+        </div>
+        <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+        <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+      </div>
+    </div>
+    <div class="border-top border-bottom mb-1 mt-1">
+      <ng-container mat-table *ngIf="paginationResult?.data && paginationResult?.data?.length > 0, else dataEmpty">
+        <table class="table table-hover table-click-row">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Tên</th>
+              <th class="text-right">Kích thước</th>
+              <th>Người tạo</th>
+              <th>Ngày tạo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of paginationResult.data, index as i">
+              <td>{{i + 1}}</td>
+              <td><span [outerHTML]="showTypeFile(item.attachment.extension)"></span> {{item.attachment.title}}</td>
+              <td class="text-right">{{item.attachment.size | number: '1.0-0'}}</td>
+              <td>{{item.attachment.createBy}}</td>
+              <td>{{item.attachment.createDate | date: 'dd/MM/yyyy'}}</td>
+              <td><i class="bi bi-eye" (click)="viewFile(item.id)"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      <ng-template #dataEmpty>
+        <app-empty></app-empty>
+      </ng-template>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

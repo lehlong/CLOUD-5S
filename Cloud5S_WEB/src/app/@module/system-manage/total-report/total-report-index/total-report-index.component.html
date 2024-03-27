@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Tổng hợp xuất nhập tồn
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div style="margin-top: 6px">Từ ngày:</div>
+
+      <div class="d-flex flex-wrap d-gap-2">
+        <div>
+          <input [(ngModel)]="filter.FromDate" type="date" class="form-control" placeholder="Từ ngày" />
+        </div>
+      </div>
+
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <input
+          type="text"
+          placeholder="Kho"
+          aria-label="Kho"
+          class="form-control"
+          (input)="onChangeStock($event)"
+          [matAutocomplete]="auto1"
+          [(ngModel)]="StockSelected.name" />
+        <mat-autocomplete #auto1="matAutocomplete">
+          <mat-option
+            *ngFor="let stock of listStockFilter"
+            [value]="stock.name"
+            (onSelectionChange)="selectStock(stock, $event)"
+            [class.selected]="stock.name.selected">
+            <span>
+              {{ stock.name }}
+            </span>
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+
+      <button type="button" class="btn export-excel-btn"><fa-icon></fa-icon> Tổng hợp</button>
+    </div>
+  </div>
+</div>

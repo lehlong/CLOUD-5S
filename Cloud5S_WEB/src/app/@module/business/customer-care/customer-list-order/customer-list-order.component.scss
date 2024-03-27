@@ -1,0 +1,9 @@
+.box-list-order {
+  padding: 25px 30px;
+  min-width: 900px;
+  .container-page-order{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px);
+  }
+}

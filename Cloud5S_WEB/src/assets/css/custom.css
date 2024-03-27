@@ -1,0 +1,267 @@
+.select2-container--default .select2-selection--single {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  height: 37.6px !important;
+}
+
+.select2-container {
+  width: 100% !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+  padding: 3px 11px;
+}
+
+.accordion-item {
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+#alert-message {
+  position: fixed;
+  top: 10%;
+  z-index: 10;
+  right: 1%;
+  max-width: 36%;
+}
+
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  z-index: 1050;
+  /* cursor: pointer; */
+}
+
+.pre {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
+.highlight {
+  background: #f6f9ff;
+  color: #4154f1 !important;
+}
+
+.form-control {
+  border-radius: 2px !important;
+}
+
+.page-item {
+  border-radius: 2px !important;
+}
+
+.input-group-text {
+  border-radius: 2px 0px 0px 2px !important;
+  font-size: 13px !important;
+}
+
+.modal-content {
+  border-radius: 2px !important;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  border-radius: 2px !important;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nav-tabs .nav-item {
+  border-radius: 2px !important;
+  font-size: 14px;
+}
+
+.nav-tabs .nav-item :hover {
+  border-radius: 2px !important;
+}
+
+.page-item:last-child .page-link {
+  border-top-right-radius: 2px !important;
+  border-bottom-right-radius: 2px !important;
+}
+
+.page-item:first-child .page-link {
+  border-top-left-radius: 2px !important;
+  border-bottom-left-radius: 2px !important;
+}
+
+.badge {
+  border-radius: 2px !important;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+  height: 37.5px !important;
+}
+
+.ng-select .ng-select-container {
+  border-radius: 2px !important;
+}
+
+td > input {
+  outline: 0 !important;
+  width: 100%;
+  border: none !important;
+  padding: 0 !important;
+  background: rgba(0, 0, 0, 0.001) !important;
+}
+
+th i {
+  font-size: 14px !important;
+}
+
+/*--------------------------------------------------------------
+# Table
+--------------------------------------------------------------*/
+
+td {
+  font-size: 13px;
+  /* font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"; */
+  padding: 10px 10px !important;
+  vertical-align: middle !important;
+}
+
+.table {
+  font-size: 13px;
+}
+
+.form-control {
+  font-size: 13px !important;
+}
+
+.btn {
+  font-size: 13px !important;
+  border-radius: 2px !important;
+}
+
+.page-link {
+  font-size: 13px !important; 
+}
+
+.card {
+  border: none !important;
+  /* box-shadow: none !important; */
+}
+
+.card-header{
+  border: none !important;
+}
+
+.search-box {
+  min-width: 350px !important;
+}
+
+.form-select{
+  border-radius: 2px !important;
+  font-size: 13px !important;
+}
+/*--------------------------------------------------------------
+# Padding
+--------------------------------------------------------------*/
+.p-l-2{
+  padding-left: 2px;
+}
+
+.p-b-6{
+  padding-bottom: 6px !important;
+}
+
+
+
+.flex-grow-2{
+  flex-grow: 2!important;
+}
+
+.flex-grow-3{
+  flex-grow: 3!important;
+}
+
+.flex-grow-4{
+  flex-grow: 4!important;
+}
+
+.flex-grow-5{
+  flex-grow: 5!important;
+}
+
+.align-center{
+  text-align: center;
+}
+
+.align-left{
+  text-align: left;
+}
+
+.align-right{
+  text-align: right;
+}
+
+.font-12{
+  font-size: 12px !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.border-top{
+  border-top: 1px solid #D7D7D7 !important;
+}
+
+.border-bottom{
+  border-bottom: 1px solid #D7D7D7 !important;
+}
+
+.pagination {
+  margin-bottom: 0 !important;
+}
+
+.list-container{
+  height: calc(100vh - 165px);
+  max-width: 100%;
+  overflow: auto;
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #007bff #eee;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #eee;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #D7D7D7;
+  border-radius: 5px;
+  cursor: pointer;
+  /* border: 3px solid orange; */
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  height: 8px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #9b9999;
+  cursor: pointer;
+  /* border: 3px solid orange; */
+}
+
+.swal2-title {
+  font-size: 18px !important;
+}

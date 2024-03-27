@@ -1,0 +1,119 @@
+<div class="card" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-pencil-square"></i>
+        Chỉnh sửa phương tiện
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div>
+          <button (click)="onEdit()" type="button" class="btn btn-primary" [appPermission]="VEHICLE_RIGHTS.CHINH_SUA">
+            <i class="bi bi-check-circle"></i>Lưu thông tin
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form [formGroup]="vehicleForm" (ngSubmit)="onEdit()">
+        <div class="mt-3">
+          <label for="inputText" class="col-form-label">Biển số xe</label>
+          <div>
+            <input type="text" class="form-control" formControlName="code" />
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <app-input-clear
+            [initFocus]="true"
+            label="Trọng tải"
+            [required]="true"
+            [errorsRequired]="f['tonnage'].errors?.['required']"
+            [showErrors]="submitted && f['tonnage'].errors"
+            [status]="submitted && f['tonnage'].errors ? 'error' : ''"
+            [control]="$any(vehicleForm).controls['tonnage']"></app-input-clear>
+        </div>
+
+        <div class="mt-3">
+          <app-input-clear
+            label="Trọng lượng không tải"
+            [required]="true"
+            [errorsRequired]="f['unladenWeight'].errors?.['required']"
+            [showErrors]="submitted && f['unladenWeight'].errors"
+            [status]="submitted && f['unladenWeight'].errors ? 'error' : ''"
+            [control]="$any(vehicleForm).controls['unladenWeight']"></app-input-clear>
+        </div>
+        <div class="mt-3">
+          <label class="form-label">Đơn vị tính<span class="text-danger ms-1">*</span></label>
+          <nz-select
+            [nzStatus]="submitted && f['unitCode'].errors ? 'error' : ''"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Chọn đơn vị tính"
+            formControlName="unitCode">
+            <nz-option *ngFor="let unit of units" [nzLabel]="unit.name" [nzValue]="unit.code"></nz-option>
+          </nz-select>
+          <div *ngIf="submitted && f['unitCode'].errors" class="text-validate">
+            <div *ngIf="f['unitCode']['errors']['required']">Không được để trống</div>
+          </div>
+
+          <!--  -->
+        </div>
+
+        <div class="mt-3">
+          <!--  -->
+
+          <label class="form-label">Lái xe<span class="text-danger ms-1">*</span></label>
+          <nz-select
+            [nzStatus]="submitted && f['typeCode'].errors ? 'error' : ''"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Chọn tài xế"
+            formControlName="driverUserName">
+            <nz-option
+              *ngFor="let account of accounts"
+              [nzLabel]="account.fullName"
+              [nzValue]="account.userName"></nz-option>
+          </nz-select>
+          <div *ngIf="submitted && f['driverUserName'].errors" class="text-validate">
+            <div *ngIf="f['driverUserName']['errors']['required']">Không được để trống</div>
+          </div>
+          <!--  -->
+        </div>
+
+        <div class="mt-3">
+          <!--  -->
+          <label class="form-label">Loại phương tiện<span class="text-danger ms-1">*</span></label>
+          <nz-select
+            [nzStatus]="submitted && f['typeCode'].errors ? 'error' : ''"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Chọn loại phương tiện"
+            formControlName="typeCode">
+            <nz-option *ngFor="let item of vehicleTypes" [nzLabel]="item.name" [nzValue]="item.code"></nz-option>
+          </nz-select>
+          <div *ngIf="submitted && f['typeCode'].errors" class="text-validate">
+            <div *ngIf="f['typeCode']['errors']['required']">Không được để trống</div>
+          </div>
+          <!--  -->
+        </div>
+
+        <div class="mt-3">
+          <label for="inputText" class="form-label">Trạng thái</label>
+          <div class="d-flex d-gap-20 w-100 mt-0">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="true" />
+              <label class="form-check-label" for="isActive"> Kích hoạt </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="isActive" formControlName="isActive" [value]="false" />
+              <label class="form-check-label" for="isActive"> Khoá </label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

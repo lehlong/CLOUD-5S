@@ -1,0 +1,105 @@
+<div class="card midnight-report-container">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        Báo cáo tổng hợp trọng lượng cân
+      </div>
+      <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+        <button type="button" class="btn btn-primary mr-2" (click)="redirect()">
+          <i class="bi bi-list"></i> Xem dữ liệu chi tiết
+        </button>
+        <button
+          type="button"
+          class="btn export-excel-btn"
+          (click)="exportExcel()"
+          [appPermission]="ORDERSCALE_RIGHTS.EXCEL">
+          <fa-icon [icon]="faFileExcel"></fa-icon> Tải Excel
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-wrap d-gap">
+        <div style="max-width: 340px">
+          <nz-range-picker
+            (ngModelChange)="GeReport()"
+            [nzFormat]="'dd-MM-YYYY HH:mm'"
+            [nzShowTime]="{nzFormat: 'HH:mm'}"
+            (nzOnOk)="changeSelectedRange($event)"
+            [(ngModel)]="filter.selectedRange"
+            [nzRanges]="rangePresets"
+            [nzPlaceHolder]="['content.common.from_date' | translate, 'content.common.to_date' | translate]"
+            >></nz-range-picker
+          >
+        </div>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-bottom mb-1 mt-1">
+      <table
+        mat-table
+        [dataSource]="dataTable"
+        *ngIf="dataTable?.length > 0"
+        id="table-report"
+        class="table table-hover table-click-row">
+        <!-- HEADER 1 -->
+
+        <ng-container matColumnDef="date">
+          <th class="align-y-center text-center sticky-column ab" mat-header-cell *matHeaderCellDef rowSpan="3">
+            Ngày
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center sticky-column">
+            {{ element.date }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center sticky-column ab">Tổng cộng</td>
+        </ng-container>
+
+        <ng-container [matColumnDef]="item" *ngFor="let item of areaList">
+          <th
+            class="text-center"
+            mat-header-cell
+            *matHeaderCellDef
+            colSpan="{{ getListItemByAreaName(item).length * 2 }}">
+            {{ item }}
+          </th>
+        </ng-container>
+
+        <ng-container matColumnDef="totalWeight">
+          <th class="align-y-center text-center" mat-header-cell *matHeaderCellDef rowSpan="3">Tổng cộng</th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{ element.totalWeight }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{ getTotal('totalWeight') }}</td>
+        </ng-container>
+
+        <!-- HEADER 2 -->
+        <ng-container [matColumnDef]="item2" *ngFor="let item2 of renderHeader2">
+          <th class="text-center" mat-header-cell *matHeaderCellDef colSpan="2">
+            {{ checkHeader2(item2) }}
+          </th>
+        </ng-container>
+        <ng-container [matColumnDef]="item3" *ngFor="let item3 of displayedColumnsHeader">
+          <th class="text-center" mat-header-cell *matHeaderCellDef>
+            {{ checkDisplayedColumn(item3) }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{ returnValueByRow(element, item3) }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="fw-600 text-center">{{ getTotal(item3) }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="renderHeader1; sticky: true"></tr>
+        <tr mat-header-row *matHeaderRowDef="renderHeader2; sticky: true"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsHeader; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-footer-row class="total" *matFooterRowDef="displayedColumns; sticky: true"></tr>
+      </table>
+      <app-empty *ngIf="!dataTable || dataTable?.length == 0"></app-empty>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+.income-detail-container {
+  min-height: 100vh;
+  padding-bottom: 10px;
+  .main-content {
+    // display: flex;
+    // flex-direction: column;
+    // max-height: calc(100vh - 100px);
+    // overflow: auto;
+    .title {
+      margin-bottom: 15px !important;
+    }
+    .table {
+      th {
+        font-weight: 600 !important;
+      }
+    }
+    .wraper-table {
+      overflow: auto;
+      border-bottom: 1px solid #dee2e6;
+      border-radius: 3px;
+      table {
+        margin: 0px !important;
+        min-width: unset !important;
+        border-collapse: collapse !important;
+        border-style: hidden;
+        overflow: auto;
+        th {
+          font-weight: 700 !important;
+        }
+      }
+      &.no-scroll-y {
+        overflow-y: hidden;
+        flex: 0 0 auto;
+      }
+    }
+    .row-content {
+      display: flex;
+      border-bottom: 1px solid #dee2e6;
+      padding: 15.5px 0px;
+      .label {
+        font-weight: 600;
+        width: 130px;
+        white-space: nowrap;
+      }
+      .value {
+        font-weight: 400;
+        white-space: nowrap;
+      }
+      &.border-top {
+        border-top: 1px solid #dee2e6;
+      }
+    }
+    .row-wrapper {
+      display: flex;
+      gap: 4px;
+      overflow: auto;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #dee2e6;
+      .row-content {
+        width: calc(50% - 2px);
+        border-bottom: unset;
+      }
+    }
+  }
+  .detail-container {
+    .info-content {
+      border-left: 1px solid #dee2e6;
+      //height: calc(100vh - 100px);
+      overflow: auto;
+      i {
+        margin-right: 5px;
+      }
+      .list-info {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid #dee2e6;
+        gap: 5px;
+        padding: 15.5px 10px;
+        align-items: baseline;
+        .label {
+          font-weight: 500;
+          white-space: nowrap;
+          align-self: baseline;
+        }
+        .value {
+          font-weight: 400;
+          &.status {
+            padding: 3px 5px !important;
+          }
+        }
+        &.title {
+          border: none !important;
+          margin-bottom: 10px !important;
+        }
+      }
+      .gap-50 {
+        gap: 50px !important;
+      }
+      
+    }
+    @media (max-width: 1110px) {
+      .info-content {
+        border-left: 1px solid #dee2e6;
+        //height: calc(100vh - 200px);
+      }
+    }
+    @media (max-width: 768px) {
+      .info-content {
+        border: none;
+        height: auto;
+      }
+    }
+  }
+}

@@ -1,0 +1,171 @@
+<div class="card" [appPermission]="FILE_RIGHTS.DANH_SACH">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="d-flex d-space-bw align-items-center">
+        <div class="card-title">
+          <i class="bi bi-journal-text"></i>QUẢN LÝ FILE <span style="margin-left: 12px">{{ breadCrumb.path }}</span>
+        </div>
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="filter">
+          <div class="input-group search-box">
+            <div class="wrapper-input">
+              <app-input-clear
+                placeholder="Tìm kiếm theo tên file, folder"
+                (searchEvent)="search()"
+                [(value)]="filter.keyWord"></app-input-clear>
+            </div>
+            <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+            <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+            &nbsp;
+          </div>
+        </div>
+        <div class="d-flex d-gap flex-wrap card-function p-0" style="height: 33.5px">
+          <button type="button" class="btn btn-success" (click)="openCreate()" [appPermission]="FILE_RIGHTS.THEM_MOI">
+            <i class="bi bi-plus-lg"></i> Tạo thư mục mới
+          </button>
+          <input
+            id="filesUpload"
+            type="file"
+            style="display: none"
+            multiple
+            (change)="onFileSelected($event)"
+            [appPermission]="FILE_RIGHTS.UPLOAD" />
+          <button class="btn btn-primary">
+            <label class="custom-file-label" for="filesUpload">
+              <i class="bi bi-upload"></i>
+              Tải files lên</label
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1">
+      <table class="table table-hover table-responsive">
+        <thead>
+          <tr>
+            <th class="col-1" style="width: 16px">STT</th>
+            <th class="col-9">Tên</th>
+            <th>Kiểu</th>
+            <th>Kích thước</th>
+            <th>Ngày tạo</th>
+            <th>Người tạo</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="!loading">
+          <div *ngIf="currentDirectory.parentId != null">
+            <button (click)="goUp()" type="button" class="btn return-button">
+              <i class="bi bi-arrow-return-left"></i>
+              Trở lại
+            </button>
+          </div>
+          <tr (dblclick)="openFolder(folder)" *ngFor="let folder of currentDirectory.folders; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>
+              <div *ngIf="editingEvent.id !== folder.id || editingEvent.type !== 'folder'">
+                <i class="bi bi-folder-fill folder-icon"></i>
+                <a class="folder-name" (click)="openFolder(folder)">
+                  {{ folder.name }}
+                </a>
+              </div>
+              <div *ngIf="editingEvent.id === folder.id && editingEvent.type === 'folder'">
+                <form [formGroup]="editForm" (keydown.enter)="saveEdit()" [appPermission]="FILE_RIGHTS.CHINH_SUA">
+                  <div>
+                    <input
+                      #inputField
+                      appSelectOnFocus
+                      [ngClass]="{'is-invalid': editingEvent.submitted && editf['name'].errors}"
+                      type="text"
+                      class="form-control"
+                      formControlName="name" />
+                    <div *ngIf="editingEvent.submitted && editf['name'].errors" class="invalid-feedback">
+                      <div *ngIf="editf['name']['errors']['required']">Không được để trống</div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </td>
+            <td>Thư mục</td>
+            <td></td>
+            <td>{{ folder.createDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ folder.createBy }}</td>
+            <td>
+              <div *ngIf="editingEvent.id !== folder.id || editingEvent.type !== 'folder'">
+                <i
+                  class="action-icon bi bi-pencil-square text-primary cursor-pointer"
+                  (click)="openEdit(folder, 'folder')"
+                  [appPermission]="FILE_RIGHTS.CHINH_SUA"></i>
+                <i
+                  class="action-icon bi bi-trash3 text-danger cursor-pointer"
+                  (click)="confirmDelete(folder, 'folder')"></i>
+              </div>
+              <div *ngIf="editingEvent.id === folder.id && editingEvent.type === 'folder'">
+                <button class="btn btn-primary me-2" (click)="saveEdit()">Save</button>
+                <button class="btn btn-light" (click)="resetEdit()">Cancel</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let file of currentDirectory.files; index as i">
+            <td>{{ i + 1 + currentDirectory.folders.length }}</td>
+            <td>
+              <div *ngIf="editingEvent.id !== file.attachment.id || editingEvent.type !== 'file'">
+                <i class="bi bi-file-earmark"></i>
+                {{ file.attachment.name }}
+              </div>
+              <div *ngIf="editingEvent.id === file.attachment.id && editingEvent.type === 'file'">
+                <form [formGroup]="editForm" (keydown.enter)="saveEdit()" [appPermission]="FILE_RIGHTS.CHINH_SUA">
+                  <div>
+                    <input
+                      appSelectOnFocus
+                      #inputField
+                      [ngClass]="{'is-invalid': editingEvent.submitted && editf['name'].errors}"
+                      type="text"
+                      class="form-control"
+                      formControlName="name" />
+                    <div *ngIf="editingEvent.submitted && editf['name'].errors" class="invalid-feedback">
+                      <div *ngIf="editf['name']['errors']['required']">Không được để trống</div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </td>
+            <td>{{ checkFileType(file.attachment) }}</td>
+            <td>{{ formatFileSize(file.attachment.size) }}</td>
+            <td>{{ file.attachment.createDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ file.attachment.createBy }}</td>
+            <td>
+              <div *ngIf="editingEvent.id !== file.attachment.id || editingEvent.type !== 'file'">
+                <i
+                  class="action-icon bi bi-pencil-square text-primary cursor-pointer"
+                  (click)="openEdit(file.attachment, 'file')"></i>
+                <i
+                  class="action-icon bi bi-trash3 text-danger cursor-pointer"
+                  (click)="confirmDelete(file, 'file')"></i>
+                <i
+                  (click)="downloadFile(file.attachment)"
+                  class="action-icon bi bi-download cursor-pointer"
+                  [appPermission]="FILE_RIGHTS.TAI_FILE"></i>
+              </div>
+              <div *ngIf="editingEvent.id === file.attachment.id && editingEvent.type === 'file'">
+                <button class="btn btn-primary me-2" (click)="saveEdit()">Save</button>
+                <button class="btn btn-light" (click)="resetEdit()">Cancel</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <app-empty *ngIf="currentDirectory?.folders?.length == 0 && currentDirectory?.files?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination
+        [pageSize]="paginationResult.pageSize"
+        [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage"
+        [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)"
+        (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

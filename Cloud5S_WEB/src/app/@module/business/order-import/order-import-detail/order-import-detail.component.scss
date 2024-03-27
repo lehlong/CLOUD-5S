@@ -1,0 +1,169 @@
+.orderImp-edit-container {
+  padding-bottom: 10px;
+  height: calc(100vh - 10px);
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    .title {
+      margin-bottom: 20px !important;
+    }
+    .import-table{
+      th,
+      td {
+        &.money {
+          font-weight: 500 !important;
+        }
+      }
+    }
+  }
+  .detail-container {
+    .info-content {
+      border-left: 1px solid #dee2e6;
+      overflow: auto;
+      .list-info {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid #dee2e6;
+        gap: 5px;
+        padding: 12px 5px;
+        align-items: baseline;
+        .label {
+          font-weight: 500;
+          white-space: nowrap;
+          align-self: baseline;
+        }
+        .value {
+          font-weight: 400;
+        }
+        &.title {
+          border: none !important;
+        }
+      }
+      .gap-50 {
+        gap: 50px !important;
+      }
+      
+    }
+    @media (max-width: 1110px) {
+      .info-content {
+        height: calc(100vh - 200px);
+      }
+    }
+    .debt-calculation-wraper {
+      display: flex;
+      flex-wrap: nowrap;
+      margin-top: 18px;
+      gap: 10px;
+      .wraper-detail {
+        width: 100%;
+        .label {
+          font-weight: 500;
+          white-space: nowrap;
+          align-self: baseline;
+        }
+      }
+    }
+    @media (max-width: 1145px) {
+      .debt-calculation-wraper {
+        flex-wrap: wrap;
+      }
+    }
+    @media (max-width: 768px) {
+      .debt-calculation-wraper {
+        .wraper-detail {
+          width: calc(100% - 10px);
+        }
+      }
+    }
+  }
+  .container-edit {
+    .wraper-input {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      .import-date-wraper {
+        width: 35%;
+      }
+      .note-wraper {
+        width: calc(65% - 16px);
+      }
+    }
+    .product-wraper-btn {
+      border: 1px solid transparent;
+      box-shadow: 0 2px rgba(0, 0, 0, 0.0156862745);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      height: 32px;
+      font-size: 13px;
+      border-radius: 2px;
+      color: rgba(0, 0, 0, 0.8509803922);
+      border-color: #d9d9d9;
+      background: #fff;
+      border-style: dashed;
+      width: 35%;
+      text-align: center;
+      line-height: 31px;
+      &:hover {
+        color: #1890ff;
+        border-color: #1890ff;
+      }
+    }
+
+    @media (max-width: 570px) {
+      .wraper-input {
+        gap: 10px;
+        .import-date-wraper,
+        .note-wraper {
+          width: 100%;
+        }
+      }
+      .product-wraper-btn {
+        width: 100%;
+      }
+    }
+  }
+}
+.pay-info-bottom {
+  border-top: 1px solid #dee2e6;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.pay-info {
+  border-top: 1px solid #dee2e6;
+}
+.g-10 {
+  gap: 10px;
+}
+.line-input {
+  div:nth-child(1) {
+    width: 50%;
+  }
+}
+.line-info {
+  border-bottom: 1px solid #dee2e6;
+  padding: 10px 0;
+  align-items: center;
+}
+thead th {
+  white-space: nowrap;
+  font-weight: 600;
+  border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+tbody td {
+  border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}

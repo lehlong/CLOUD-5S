@@ -1,0 +1,182 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="d-flex flex-wrap d-gap d-space-bw">
+      <div class="card-title">
+        <i class="bi bi-journal-text"></i>
+        {{'content.business.order_release.list.title' | translate}}
+      </div>
+      <div>
+        <button type="button" class="btn export-excel-btn" (click)="exportExcel()"
+          [appPermission]="ORDER_RELEASE_RIGHTS.DANH_SACH">
+          <fa-icon [icon]="faFileExcel"></fa-icon> {{'content.common.download_excel'| translate}}
+        </button>
+      </div>
+    </div>
+    <div class="d-flex d-gap-2 flex-wrap">
+      <div class="d-flex flex-wrap d-gap-2">
+        <nz-range-picker nzFormat="dd/MM/yyyy" [nzRanges]="rangePresets" [(ngModel)]="filter.selectedRange"
+          [nzPlaceHolder]="['content.common.from_date'| translate, 'content.common.to_date'| translate]">
+        </nz-range-picker>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1 multi-dropdown">
+        <nz-select [nzMaxTagCount]="maxTagCount" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+          [nzPlaceHolder]="'content.business.order_release.list.status'| translate" [(ngModel)]="filter.States">
+          <nz-option *ngFor="let item of list_state_order" [nzLabel]="item.name" [nzValue]="item.value"></nz-option>
+        </nz-select>
+        <ng-template #tagPlaceHolder let-selectedList>+{{selectedList.length}}</ng-template>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1 input-dropdown">
+        <nz-select nzShowSearch nzAllowClear [nzPlaceHolder]="'content.business.order_release.list.client'| translate"
+          [(ngModel)]="filter.PartnerCode">
+          <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name" [nzValue]="partner.code">
+          </nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-1 input-dropdown">
+        <nz-select nzShowSearch nzAllowClear [nzPlaceHolder]="'content.business.order_release.list.product'| translate"
+          [(ngModel)]="filter.ItemCode">
+          <nz-option *ngFor="let item of listItemAll" [nzLabel]="item.name" [nzValue]="item.code"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="d-flex flex-row flex-grow-3">
+        <div class="input-group search-box">
+          <input (keyup.enter)="search()" type="text" class="form-control" [(ngModel)]="filter.keyWord"
+            [placeholder]="'content.common.placeholder_search' | translate" />
+          <span (click)="search()" class="input-group-text"><i class="bi bi-search"></i></span>
+          <span (click)="reload()" class="input-group-text"><i class="bi bi-arrow-clockwise"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1">
+      <!-- <app-list-file></app-list-file> -->
+      <table *ngIf="paginationResult && paginationResult.data?.length > 0"
+        class="table table-hover table-click-row table-custom mt-2">
+        <thead>
+          <tr>
+            <th class="text-center">#</th>
+            <!-- <th class="text-center"><input class="cursor-pointer" type="checkbox" (change)="selectAll($event)"></th> -->
+            <th class="text-center">STT</th>
+            <th>Mã đơn hàng</th>
+            <th>Ngày đặt hàng</th>
+            <th>Ngày đổ</th>
+            <th>Địa điểm đổ</th>
+            <th>Sản phẩm</th>
+            <th class="text-right">SL đặt</th>
+            <th class="text-right">SL lũy kế</th>
+            <th>Khách hàng</th>
+            <th class="text-center">Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody class="accordion" id="accordionExample">
+          <ng-container *ngFor="let item of paginationResult.data; index as i">
+            <tr>
+              <td>
+                <div *ngIf="item.orderReleases?.length > 0">
+                  <span class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#' + item.code" aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseTwo"></span>
+                </div>
+              </td>
+              <!-- <td class="text-nowrap text-center"><input class="cursor-pointer" type="checkbox"
+                  (change)="selectOrder(item)" [checked]="isChecked(item)"></td> -->
+              <td class="text-center">{{ i + 1 }}</td>
+              <td class="cursor-pointer text-primary">
+                <span (click)="openDetail(item.code)">
+                  {{ item.code }}
+                </span>
+              </td>
+              <td>{{ item.createDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ item.pourDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                {{ item.pourLocation?.length <= 30 ? item.pourLocation : (item.pourLocation | slice : 0 : 30) + '...' }}
+              </td>
+              <td>
+                <div *ngFor="let od of item?.orderDetails">
+                  <span>{{ od?.item?.name }}</span>
+                </div>
+              </td>
+              <td class="text-right text-danger">
+                <div>{{ totalExportNumberMain(item?.orderDetails) | number }}</div>
+                <div>
+                  {{ totalExportNumberSub(item?.orderDetails) == 0 ? '-' : (totalExportNumberSub(item?.orderDetails) | number) }}
+                </div>
+              </td>
+              <td class="text-right text-success">
+                <div>
+                  {{ getAccumulated(item) | number }}
+                </div>
+                <div>-</div>
+              </td>
+              <td>{{ item?.partner?.name }}</td>
+              <td>
+                <div *ngIf="state_order[item?.state]" class="label-status text-center"
+                  [style.background]="state_order[item?.state].background"
+                  [style.color]="state_order[item?.state].color">
+                  {{ state_order[item?.state].name }}
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="item.orderReleases?.length > 0">
+              <td colspan="14" style="padding: 0 !important; border: none">
+                <div [attr.id]="item.code" class="accordion-collapse collapse"
+                  aria-labelledby="panelsStayOpen-headingTwo">
+                  <div class="accordion-body">
+                    <table class="table table-hover table-click-row orderRelease-table">
+                      <thead>
+                        <tr>
+                          <td scope="col" width="120px">Mã phiếu</td>
+                          <td scope="col" width="130px">Ngày giờ xuất</td>
+                          <td scope="col" width="150px">Xe bồn</td>
+                          <td scope="col" width="150px">Xe bơm</td>
+                          <td scope="col" width="150px">Máy trộn</td>
+                          <td scope="col" class="align-right" width="150px">Số lượng</td>
+                          <td scope="col" class="align-right" width="150px">KL. cân vào</td>
+                          <td scope="col" class="align-right" width="150px">KL. cân ra</td>
+                          <td scope="col" width="150px">Trạng thái</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let os of item.orderReleases">
+                          <td class="cursor-pointer text-primary">
+                            <span (click)="openInforOR(os.code)">
+                              {{ os.code }}
+                            </span>
+                          </td>
+                          <td>{{ os.mixDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+                          <td>{{ os.mixVehicleCode }}</td>
+                          <td>{{ os.pumpVehicleCode }}</td>
+                          <td>{{ os?.mixer?.name }}</td>
+                          <td class="align-right">{{ os.mixNumber | number }}</td>
+                          <td class="align-right">{{ os.weightIn | number }}</td>
+                          <td class="align-right">{{ os.weightOut | number }}</td>
+                          <td>
+                            <div class="label-status text-center" *ngIf="state_orderRelease[os?.state]"
+                              [style.background]="state_orderRelease[os?.state].background"
+                              [style.color]="state_orderRelease[os?.state].color">
+                              {{ state_orderRelease[os?.state].name }}
+                            </div>
+                          </td>
+                          <td *ngIf="!state_orderRelease[os?.state]" class="text-primary"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <app-empty *ngIf="!paginationResult || paginationResult.data?.length == 0"></app-empty>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,270 @@
+<div class="orderImp-edit-container" [style.width]="widthDeault">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        {{'content.business.order_import.detail.title' | translate}}
+      </div>
+      <div class="d-flex-wrap d-gap">
+        <div *ngIf="showButton.confirm">
+          <button
+            (click)="ConfirmState()"
+            type="button"
+            [style.color]="STATE_STOCK['DA_XAC_NHAN'].color"
+            [style.background]="STATE_STOCK['DA_XAC_NHAN'].background"
+            class="btn"
+            submitForm>
+            <i class="bi bi-check-circle"></i>{{'content.common.btn_confirm'| translate}}
+          </button>
+        </div>
+        <div *ngIf="showButton.edit">
+          <button (click)="showEdit()" type="button" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i>{{'content.common.btn_edit'| translate}}
+          </button>
+        </div>
+        <div *ngIf="showButton.cancel">
+          <button
+            (click)="cancelStockImport()"
+            type="button"
+            [style.color]="STATE_STOCK['DA_BI_HUY'].color"
+            [style.background]="STATE_STOCK['DA_BI_HUY'].background"
+            class="btn">
+            <i class="bi bi-trash"></i>{{'content.common.btn_cancel'| translate}}
+          </button>
+        </div>
+        <div>
+          <button (click)="printWarehouseReceipt()" type="button" class="btn print-btn">
+            <i class="bi bi-printer"></i>{{'content.common.btn_print'| translate}}
+          </button>
+        </div>
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>{{'content.common.btn_close'| translate}}</button>
+        </div>
+      </div>
+    </div>
+    <div class="pb-3 mt-2">
+      <div class="row g-3 detail-container">
+        <div class="main-content col-md-8 pr-2">
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-box"></i>
+                <span>{{'content.business.order_import.detail.product_infor.title' | translate}}</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div style="overflow-x: auto;">
+                <table class="table table-hover" [cellPadding]="0">
+                  <thead>
+                    <tr>
+                      <th>{{'content.business.order_import.detail.product_infor.product_code' | translate}}</th>
+                      <th>{{'content.business.order_import.detail.product_infor.product_name' | translate}}</th>
+                      <th class="text-right">{{'content.business.order_import.detail.product_infor.number' | translate}}</th>
+                      <th class="text-center">{{'content.business.order_import.detail.product_infor.unit' | translate}}</th>
+                      <th class="text-right">{{'content.business.order_import.detail.product_infor.price' | translate}}</th>
+                      <th class="text-right">{{'content.business.order_import.detail.product_infor.total_money' | translate}}</th>
+                      <!-- <th>Ghi chú</th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of detailData?.importDetails">
+                      <td>{{ product?.item?.code || '' }}</td>
+                      <td>{{ product?.item?.name || '' }}</td>
+                      <td class="text-right">{{ utils.formatNumber(product?.number) || '' }}</td>
+                      <td class="text-center">{{ product?.item?.unit?.name || '' }}</td>
+                      <td class="text-right">{{ utils.formatNumber(product?.price) || '' }}</td>
+                      <td class="text-right">{{ utils.formatNumber(product?.number * product?.price) }}</td>
+                      <!-- <td>{{ product?.note || '' }}</td> -->
+                    </tr>
+                    <tr>
+                      <td colspan="4"></td>
+                      <td class="money text-right fw-medium">
+                        {{'content.business.order_import.detail.bill_infor.total_money_item' | translate}}
+                      </td>
+                      <td class="money text-right fw-medium">{{ totalMoney() | number }}</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- code new -->
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-currency-dollar"></i>
+                <span>{{'content.business.order_import.detail.bill_infor.title' | translate}}</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <!-- test *ngIf="!!detailData.isPaymentNow"-->
+              <div class="pay-info">
+                <div class="d-flex justify-content-between line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.bill_infor.discount' | translate}}</div>
+                      <div>{{ detailData.discount | number }}%</div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.bill_infor.total_money_item' | translate}}</div>
+                      <div>{{ totalMoney() | number }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.bill_infor.vat_tax' | translate}}</div>
+                      <div>{{ detailData.taxVat | number }}%</div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.bill_infor.total_money_pay' | translate}}</div>
+                      <div>{{ realPayMoney() | number }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.bill_infor.pay_now' | translate}}</div>
+                      <div>{{ detailData.payMoney | number }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.bill_infor.debt' | translate}}</div>
+                      <div>{{ detailData.debt | number }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- test -->
+            </div>
+          </div>    
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-credit-card"></i>
+                <span>{{'content.business.order_import.detail.payment_infor.title' | translate}}</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="col-lg-12 mt-10 mb-20">
+                <nz-radio-group class="d-flex" [(ngModel)]="!!detailData.isPaymentNow">
+                  <label style="pointer-events: none" nz-radio [nzValue]="false">{{'content.business.order_import.detail.payment_infor.unpaid' | translate}}</label>
+                  <label style="pointer-events: none" nz-radio [nzValue]="true">{{'content.business.order_import.detail.payment_infor.pay_now' | translate}}</label>
+                </nz-radio-group>
+              </div>
+              <!-- test -->
+              <div *ngIf="!!detailData.isPaymentNow" class="pay-info">
+                <div class="d-flex justify-content-between line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.payment_infor.receiver' | translate}}</div>
+                      <div>{{ detailData.receiverName }}</div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.payment_infor.phone_number' | translate}}</div>
+                      <div>{{ detailData.receiverPhoneNumber }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.payment_infor.address' | translate}}</div>
+                      <div>{{ detailData.receiverAddress }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.payment_infor.pay_method' | translate}}</div>
+                      <div>{{ detailData.paymentMethod === 'CHUYEN_KHOAN' ? 'Chuyển Khoản' : 'Tiền mặt' }}</div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.payment_infor.bank' | translate}}</div>
+                      <div>{{ detailData?.bankAccount?.bankName }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between line-info">
+                  <div class="col-lg-6">
+                    <div class="d-flex line-input">
+                      <div class="fw-medium">{{'content.business.order_import.detail.payment_infor.content' | translate}}</div>
+                      <div>{{ detailData?.payType?.name }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- test -->
+            </div>
+          </div>   
+        </div>
+        <div class="info-content col-md-4">
+          <div class="mbf-box">
+            <div class="mbf-box__header">
+              <div class="mbf-box__title">
+                <i class="bi bi-receipt"></i>
+                <span>{{'content.business.order_import.detail.order_import_infor.title' | translate}}</span>
+              </div>
+            </div>
+            <div class="mbf-box__body">
+              <div class="list-info d-space-bw">
+                <div class="label">{{'content.business.order_import.detail.order_import_infor.code' | translate}}</div>
+                <div class="value">{{ detailData.code }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">{{'content.business.order_import.detail.order_import_infor.import_date' | translate}}</div>
+                <div class="value">{{ detailData?.importDate | date : 'dd/MM/yyyy' }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">{{'content.business.order_import.detail.order_import_infor.stock' | translate}}</div>
+                <div class="value">{{ detailData?.stock?.name }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">{{'content.business.order_import.detail.order_import_infor.partner' | translate}}</div>
+                <div class="value">{{ detailData?.partner?.name }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">{{'content.business.order_import.detail.order_import_infor.driver' | translate}}</div>
+                <div class="value">{{ detailData?.driverName }}</div>
+              </div>
+              <div class="list-info d-space-bw">
+                <div class="label">{{'content.business.order_import.detail.order_import_infor.vehicle' | translate}}</div>
+                <div class="value">{{ detailData?.vehicle?.code }}</div>
+              </div>
+              <!-- <div class="list-info d-space-bw">
+                <div class="label">Ghi chú</div>
+                <div class="value">{{ detailData?.note || '' }}</div>
+              </div> -->
+              <div class="list-info d-space-bw">
+                <div class="label">{{'content.business.order_import.list.status' | translate}}</div>
+                <div
+                  *ngIf="detailData?.state && STATE_STOCK[detailData?.state]"
+                  class="value label-status status"
+                  [style.background]="STATE_STOCK[detailData?.state].background"
+                  [style.color]="STATE_STOCK[detailData?.state].color">
+                  {{ STATE_STOCK[detailData?.state].name }}
+                </div>
+                <div *ngIf="!detailData?.state || !STATE_STOCK[detailData?.state]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

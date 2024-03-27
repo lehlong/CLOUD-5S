@@ -1,0 +1,21 @@
+<div class="container-fluid modal-container">
+  <div class="row">
+    <h4>Thêm Thư Mục</h4>
+  </div>
+  <div class="row">
+    <form [formGroup]="form">
+      <div class="col-12">
+        <app-input-clear
+          label="Tên  thư mục"
+          [required]="true"
+          [errorsRequired]="f['name'].errors?.['required']"
+          [showErrors]="submitted && f['name'].errors"
+          [status]="submitted && f['name'].errors ? 'error' : ''"
+          [control]="$any(form).controls['name']"></app-input-clear>
+      </div>
+      <div class="col col-12 mt-3 d-flex justify-content-end">
+        <button (click)="submit()" class="btn btn-primary">Tạo</button>
+      </div>
+    </form>
+  </div>
+</div>

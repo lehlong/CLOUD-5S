@@ -1,0 +1,11 @@
+.stock-edit-container {
+    padding-bottom: 10px;
+    height: 100vh;
+    .detail-container {
+      .info-content {
+        border-left: 1px solid #dee2e6;
+        height: calc(100vh - 100px);
+      }
+    }
+  }
+  

@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-body container-page">
+    <div class="page-container">
+      <div class="d-flex flex-wrap d-gap d-space-bw">
+        <div class="card-title">
+          <i class="bi bi-journal-text"></i>
+          Danh sách ảnh vào ra
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary btn-camera" (click)="listInOut()">
+            <i class="bi bi-journal-text"></i> Lịch sử vào ra
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="list-container border-top border-bottom mb-1 mt-1 pr-15 pb-10">
+      <div class="row">
+        <ng-container *ngIf="paginationResult?.data?.length > 0, else dataEmpty">
+          <div *ngFor="let item of paginationResult.data" class="col-lg-3 mt-10">
+            <div class="inout-image" (click)="showImage(item.attachment?.url)">
+              <img [srcImg]="item.attachment?.url" alt="">
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #dataEmpty>
+          <app-empty></app-empty>
+        </ng-template>
+      </div>
+    </div>
+    <div class="float-end" *ngIf="paginationResult">
+      <app-pagination [pageSize]="paginationResult.pageSize" [totalRecord]="paginationResult.totalRecord"
+        [totalPage]="paginationResult.totalPage" [(page)]="paginationResult.currentPage"
+        (pageChange)="onChangePage($event)" (pageSizeChange)="pageSizeChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

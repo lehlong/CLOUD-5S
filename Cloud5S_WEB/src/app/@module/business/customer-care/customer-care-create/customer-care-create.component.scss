@@ -1,0 +1,17 @@
+.order-create-container {
+  max-width: 502px;
+}
+.container-change {
+  transition: 0.5s;
+}
+.care-create-container {
+  padding-bottom: 10px;
+  height: 100vh;
+  .detail-container {
+    height: 100%;
+    padding-bottom: 50px;
+    .info-content {
+      border-left: 1px solid #dee2e6;
+    }
+  }
+}

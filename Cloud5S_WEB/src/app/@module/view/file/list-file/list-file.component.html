@@ -1,0 +1,47 @@
+<div class="mb-1 mt-1">
+  <ng-container mat-table *ngIf="data && data?.length > 0, else dataEmpty">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th style="width: 80px;">STT</th>
+          <th>Tên</th>
+          <th class="text-right" style="width: 150px;">Kích thước(kB)</th>
+          <th style="width: 150px;">Người tạo</th>
+          <th style="width: 150px;">Ngày tạo</th>
+          <th style="width: 100px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data, index as i">
+          <td>{{i + 1}}</td>
+          <td class="icon-type">
+            <span [outerHTML]="showTypeFile(item.attachment.extension)"></span>
+            {{item.attachment.title?.length <= 20 ? item.attachment.title :(item.attachment.title | slice : 0 : 20) + '...' }}
+          </td>
+          <td class="text-right">{{item.attachment.size | number: '1.0-0' }}</td>
+          <td>{{item.attachment.createBy}}</td>
+          <td>{{item.attachment.createDate | date: 'dd/MM/yyyy'}}</td>
+          <td class="d-flex justify-content-between">
+            <i class="bi bi-download icon mr-8" (click)="downloadFile(item)" [appPermission]="rightEdit"></i>
+            <i class="bi bi-eye icon icon-view mr-8" (click)="viewFile(item.id)"></i>
+            <i class="bi bi-trash icon icon-delete" (click)="deleteFile(item.id)" [appPermission]="rightEdit"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #dataEmpty>
+    <app-empty></app-empty>
+  </ng-template>
+</div>
+<div *ngIf="isEdit" class="mb-10" [appPermission]="rightEdit">
+  <div class="clearfix">
+    <nz-upload [nzCustomRequest]="customUploadReq" [nzShowUploadList]="false" nzListType="picture"
+      (nzChange)="handleChange($event)">
+      <button nz-button>
+        <span nz-icon nzType="upload"></span>
+        Thêm file
+      </button>
+    </nz-upload>
+  </div>
+</div>

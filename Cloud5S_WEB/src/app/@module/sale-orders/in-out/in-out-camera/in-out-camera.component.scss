@@ -1,0 +1,18 @@
+.camera {
+  text-align: center;
+  padding: 20px;
+  video {
+    width: 100%;
+  }
+}
+.g-10 {
+  gap: 10px;
+}
+.dialog {
+  @media (min-width: 1920px) {
+    min-width: 1400px;
+  }
+  @media (min-width: 1366px) {
+    min-width: 1024px;
+  }
+}

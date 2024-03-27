@@ -1,0 +1,267 @@
+<div class="card order-edit-container" style="height: 100vh">
+  <div class="card-body">
+    <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+      <div class="card-title">
+        <i class="bi bi-info-circle"></i>
+        Chi tiết công nợ cần chi
+      </div>
+      <div class="d-flex-wrap d-gap group-btn">
+        <div>
+          <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pb-3 mt-2">
+      <div>
+        <div class="row g-3 detail-container">
+          <div class="main-content">
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-person"></i>
+                  Thông tin nhà cung cấp
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="row-wrapper">
+                  <div class="row-content">
+                    <div class="label">Mã nhà cung cấp</div>
+                    <div class="value">
+                      {{ data?.partnerCode }}
+                    </div>
+                  </div>
+                  <div class="row-content">
+                    <div class="label">Nợ đầu kỳ</div>
+                    <div class="value">
+                      {{ data.firstPeriod | number }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row-wrapper">
+                  <div class="row-content">
+                    <div class="label">Tên nhà cung cấp</div>
+                    <div class="value">
+                      {{ data?.partnerName }}
+                    </div>
+                  </div>
+                  <div class="row-content">
+                    <div class="label">Nợ trong kỳ</div>
+                    <div class="value">
+                      {{ data.inPeriod | number }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row-wrapper">
+                  <div class="row-content">
+                    <div class="label">Số điện thoại</div>
+                    <div class="value">
+                      {{ data?.phoneNumber }}
+                    </div>
+                  </div>
+                  <div class="row-content">
+                    <div class="label">Trả trong kỳ</div>
+                    <div class="value">
+                      {{ data.payInPeriod | number }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row-wrapper">
+                  <div class="row-content">
+                    <div class="label">Địa chỉ</div>
+                    <div class="value">
+                      {{ data?.addresss }}
+                    </div>
+                  </div>
+                  <div class="row-content">
+                    <div class="label">Nợ cuối kỳ</div>
+                    <div class="value">
+                      {{ data.lastPeriod | number }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row-wrapper">
+                  <div class="row-content">
+                    <div class="label">Chu kỳ</div>
+                    <div class="value">
+                      {{ data.FromDate | date : 'dd/MM/yyyy' }} - {{ data.ToDate | date : 'dd/MM/yyyy' }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wrapper-table">
+                  <!-- <table class="table table-hover">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span style="font-weight: 500; padding-right: 15px">Mã khách hàng</span>
+                        {{ detail.partnerCode }}
+                      </td>
+
+
+                      <td>
+                        <div>
+                          <span style="font-weight: 500; padding-right: 35px">Nợ đầu kỳ</span>
+                          {{ data.firstPeriod | number }}
+                        </div>
+                      </td>
+
+                      <td></td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <span style="font-weight: 500; padding-right: 15px">Tên khách hàng</span>
+                        {{ detail.partnerName }}
+                      </td>
+                      <td>
+                        <div>
+                          <span style="font-weight: 500; padding-right: 25px">Nợ trong kỳ</span>
+                          {{ data.inPeriod | number }}
+                        </div>
+                      </td>
+
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+
+                        <span style="font-weight: 500; padding-right: 28px">Số điện thoại</span>
+                        {{ detail.phoneNumber }}
+                      </td>
+
+                      <td>
+                        <div class="d-flex align-items-end">
+                          <span style="font-weight: 500; padding-right: 31px">Trả trong kỳ</span>
+                          {{ data.payInPeriod | number }}
+                        </div>
+                      </td>
+
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight: 500; padding-right: 65px">Địa chỉ</span> {{ detail.address }}</td>
+
+                      <td>
+                        <span style="font-weight: 500; padding-right: 34px">Nợ cuối kỳ </span
+                        >{{ data.lastPeriod | number }}
+                      </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span style="font-weight: 500; padding-right: 65px">Chu kỳ:</span>
+                        {{ data.FromDate | date : 'dd/MM/yyyy' }} - {{ data.ToDate | date : 'dd/MM/yyyy' }}
+                      </td>
+
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table> -->
+                </div>
+              </div>
+            </div>
+            <div class="mbf-box">
+              <div class="mbf-box__header">
+                <div class="mbf-box__title">
+                  <i class="bi bi-info-circle"></i>
+                  Thông tin chi tiết
+                </div>
+              </div>
+              <div class="mbf-box__body">
+                <div class="wraper-table detail-table">
+                  <!-- <table mat-table [dataSource]="data" class="table table-hover table-click-row mb-0">
+                  <ng-container matColumnDef="FromDate">
+                    <th mat-header-cell *matHeaderCellDef>Ngày chứng từ</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.FromDate }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                </table> -->
+                  <table class="table table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Ngày chứng từ</th>
+                        <th>Số chứng từ</th>
+                        <th>Nội dung, sản phẩm, quy cách</th>
+                        <th>ĐVT</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                        <th>Phát sinh nợ</th>
+                        <th>Phát sinh có</th>
+                        <th>Số dư nợ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{ data.FromDate | date : 'dd/MM/yyyy' }}</td>
+                        <td></td>
+                        <td style="font-weight: 500">Tồn đầu kỳ</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">{{ data.firstPeriod | number }}</td>
+                      </tr>
+                      <ng-container *ngFor="let row of detail.details">
+                        <tr>
+                          <td class="bold-cell">{{ row.date | date : 'dd/MM/yyyy' }}</td>
+                          <td class="bold-cell" style="font-weight: 500">{{ row.code }}</td>
+                          <td class="bold-cell" style="white-space: normal; font-weight: 500">
+                            {{ row.content || '' }}
+                          </td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td class="text-right">{{ row.debt | number }}</td>
+                          <td class="text-right">{{ row.paid | number }}</td>
+                          <td class="text-right">{{ row.lastDebt | number }}</td>
+                        </tr>
+                        <tr *ngFor="let item of row.items">
+                          <td></td>
+                          <td></td>
+                          <td>{{ item.itemName }}</td>
+                          <td>{{ item.itemUnit }}</td>
+                          <td class="text-right">{{ item.number | number }}</td>
+                          <td class="text-right">{{ item.price | number }}</td>
+                          <td class="text-right">{{ item.sumMoney | number }}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </ng-container>
+
+                      <tr>
+                        <td>{{ data.ToDate | date : 'dd/MM/yyyy' }}</td>
+                        <td></td>
+                        <td style="font-weight: 500">Tồn cuối kỳ</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">{{ data.lastPeriod | number }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

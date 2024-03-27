@@ -1,0 +1,151 @@
+<div class="leave-ship" style="overflow: auto;">
+  <div class="d-flex flex-wrap d-gap d-space-bw my-2">
+    <div class="d-flex flex-wrap d-gap">
+      <div style="max-width: 250px;">
+        <nz-range-picker nzFormat="dd/MM/yyyy" [(ngModel)]="selectedRange"
+          [nzDisabledDate]="disabledDate" [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"></nz-range-picker>
+      </div>
+      <div>
+        <span (click)="getDetailShip()" class="input-group-text"><i class="bi bi-search"></i></span>
+      </div>
+    </div>
+    <div>
+      <button (click)="exportExcel()" type="button" class="btn export-excel-btn">
+        <span nz-icon nzType="file-excel" nzTheme="outline"></span>
+        Tải excel
+      </button>
+    </div>
+  </div>
+  <div style="min-width: 100%;">
+    <table *ngIf="data" class="ls__table" [cellPadding]="0" [cellSpacing]="0">
+      <tr class="text-center custom-header">
+        <td class="border-right border-bottom" style="width: 100px;">Ngày</td>
+        <td class="border-right border-bottom" style="width: 80px;">Ca</td>
+        <ng-container *ngFor="let item of colData">
+          <td class="border-right" style="width: 130px;">
+            <table class="ls__table-child" [cellPadding]="0" [cellSpacing]="0">
+              <tr>
+                <td class="border-bottom" colspan="2">{{item.name}}</td>
+              </tr>
+              <tr>
+                <td class="border-bottom text__color-red" colspan="2">{{item.bridge}}&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="border-right border-bottom" style="width: 65px;">KL</td>
+                <td class="border-bottom" style="width: 65px; white-space: normal;">SL xe</td>
+              </tr>
+            </table>
+          </td>
+        </ng-container>
+        <td class="border-right border-bottom" style="width: 80px; white-space: normal;">Tổng GMT</td>
+        <td class="border-right border-bottom" style="width: 60px; white-space: normal;">Tổng SL xe</td>
+        <td class="border-bottom" style="width: 80px; white-space: normal;">GMT/xe</td>
+      </tr>
+
+      <!-- body -->
+
+      <!-- shift -->
+      <ng-container *ngFor="let item of rowData">
+        <tr>
+          <td [rowSpan]="4" class="border-right border-bottom">
+            <div class="text__align-center">{{item.date | date: 'dd/MM/yyyy'}}</div>
+          </td>
+          <td class="border-right border-bottom ext-left pl-5">
+            <div class="text__align-left">{{shiftName(item.shift[0].time)}}</div>
+          </td>
+          <ng-container *ngFor="let tunel of item.shift[0].tunel">
+            <td class="border-right border-bottom " style="width: 130px; padding: 0px !important;">
+              <table class="ls__table-child" [cellPadding]="0" [cellSpacing]="0">
+                <tr>
+                  <td class="border-right" style="width: 65px;">
+                    <div class="text__align-center">{{utils.formatNumber(tunel?.weight)}}</div>
+                  </td>
+                  <td class="" style="width: 65px;">
+                    <div class="text__align-center">{{utils.formatNumber(tunel?.vehicle)}}</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </ng-container>
+          <td class="border-right border-bottom">
+            <div class="text__align-center">{{utils.formatNumber(item.shift[0].totalWeight)}}</div>
+          </td>
+          <td class="border-right border-bottom">
+            <div class="text__align-center">{{utils.formatNumber(item.shift[0].totalVehicle)}}</div>
+          </td>
+          <td class=" border-bottom">
+            <div class="text__align-center">{{utils.formatNumber(item.shift[0].gmtPerVehicle)}}</div>
+          </td>
+        </tr>
+        <ng-container *ngFor="let shift of item.shift; let i = index;">
+          <tr *ngIf="i > 0">
+            <td class="border-right border-bottom ext-left pl-5">
+              <div class="text__align-left">{{shiftName(shift.time)}}</div>
+            </td>
+            <ng-container *ngFor="let tunel of shift.tunel">
+              <td class="border-right border-bottom " style="width: 130px; padding: 0px !important;">
+                <table class="ls__table-child" [cellPadding]="0" [cellSpacing]="0">
+                  <tr>
+                    <td class="border-right" style="width: 65px;">
+                      <div class="text__align-center">{{utils.formatNumber(tunel.weight)}}</div>
+                    </td>
+                    <td class="" style="width: 65px;">
+                      <div class="text__align-center">{{utils.formatNumber(tunel.vehicle)}}</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </ng-container>
+            <td class="border-right border-bottom">
+              <div class="text__align-center">{{utils.formatNumber(shift?.totalWeight)}}</div>
+            </td>
+            <td class="border-right border-bottom">
+              <div class="text__align-center">{{utils.formatNumber(shift?.totalVehicle)}}</div>
+            </td>
+            <td class=" border-bottom">
+              <div class="text__align-center">{{utils.formatNumber(shift?.gmtPerVehicle)}}</div>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+      <tr>
+      <tr class="custom-header" style="background-color: rgb(247, 247, 207);">
+        <td class="text-center border-right" style="width: 100px;">TC</td>
+        <td class="border-right" style="width: 80px;"></td>
+        <ng-container *ngFor="let item of colData">
+          <td class="border-right" style="width: 130px;">
+            <table class="ls__table-child" [cellPadding]="0" [cellSpacing]="0">
+              <tr>
+                <td class="border-right" style="width: 65px;">
+                  <div class="text__align-center">
+                    {{utils.formatNumber(item?.weight)}}
+                  </div>
+                </td>
+                <td class="" style="width: 65px;">
+                  <div class="text__align-center">
+                    {{utils.formatNumber(item?.vehicle)}}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </ng-container>
+        <td class="border-right" style="width: 80px; white-space: normal;">
+          <div class="text__align-center">
+            {{utils.formatNumber(data?.totalWeight)}}
+          </div>
+        </td>
+        <td class="border-right" style="width: 60px; white-space: normal;">
+          <div class="text__align-center">
+            {{utils.formatNumber(data?.totalVehicle)}}
+          </div>
+        </td>
+        <td class="" style="width: 60px; white-space: normal;">
+          <div class="text__align-center">
+            {{utils.formatNumber(data?.gmtPerVehicle)}}
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

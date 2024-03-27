@@ -1,0 +1,35 @@
+.container-list-purchase-orders {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 201px);
+  table td {
+    max-width: unset !important;
+    ::ng-deep {
+      .anticon-plus-circle,
+      .anticon-minus-circle {
+        line-height: 2.2 !important;
+        font-size: 14px;
+        margin-right: 4px;
+        cursor: pointer;
+      }
+      .anticon-minus-circle {
+        line-height: 2.2 !important;
+        color: red;
+      }
+    }
+    .long-content {
+      white-space: normal;
+    }
+  }
+  .wrapper-pour {
+    .ant-select {
+      min-width: 110px !important;
+    }
+  }
+  .from-color{
+     color: red;
+  }
+  .to-color{
+     color: green;
+  }
+}

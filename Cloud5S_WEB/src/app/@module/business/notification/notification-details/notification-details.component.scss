@@ -1,0 +1,25 @@
+.notify-detail-container {
+  padding-bottom: 10px;
+  .title {
+    margin-bottom: 20px !important;
+  }
+  .wraper-table {
+    overflow: auto;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 3px;
+    table {
+      margin: 0px !important;
+      min-width: unset !important;
+      border-collapse: collapse !important;
+      border-style: hidden;
+      overflow: auto;
+      th {
+        font-weight: 500 !important;
+      }
+    }
+    &.no-scroll-y {
+      overflow-y: hidden;
+      flex: 0 0 auto;
+    }
+  }
+}

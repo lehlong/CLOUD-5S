@@ -1,0 +1,59 @@
+.box-image{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.inOut-img {
+  width: 20%;
+  img {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+.group-img{
+  width:100%!important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.border-right {
+  border-right: 1px solid #cecece;
+}
+// them sau
+.inout-detail-container {
+  padding-bottom: 10px;
+  height: calc(100vh - 10px);
+  .main-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .detail-container {
+    .info-content {
+      border-left: 1px solid #dee2e6;
+      overflow: auto;
+      .list-info {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid #dee2e6;
+        gap: 5px;
+        padding: 12px 5px;
+        align-items: baseline;
+        .label {
+          font-weight: 500;
+          white-space: nowrap;
+          align-self: baseline;
+        }
+        .value {
+          font-weight: 400;
+        }
+        &.title {
+          border: none !important;
+        }
+      }
+      .gap-50 {
+        gap: 50px !important;
+      }
+    }
+  }
+}

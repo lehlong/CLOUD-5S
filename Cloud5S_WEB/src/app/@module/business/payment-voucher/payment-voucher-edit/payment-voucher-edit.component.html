@@ -1,0 +1,228 @@
+<div class="card payment-voucher-edit-container">
+    <div class="card-body">
+        <div class="d-flex-wrap d-gap d-space-bw border-bottom header-drawer">
+            <div class="card-title">
+                <i class="bi bi-plus-lg"></i>
+                Cập nhật phiếu chi
+            </div>
+            <div class="d-flex-wrap d-gap">
+                <div>
+                    <button (click)="showDetail()" type="button" class="btn btn-show-detail"
+                        [appPermission]="PAYMENT_VOUCHER_RIGHTS.CHI_TIET">
+                        <i class="bi bi-eye"></i>Chi tiết
+                    </button>
+                </div>
+                <div [appPermission]="PAYMENT_VOUCHER_RIGHTS.THEM_MOI">
+                    <button (click)="onEdit()" type="button" class="btn btn-primary" submitForm>
+                        <i class="bi bi-check-circle"></i>Lưu thông tin
+                    </button>
+                </div>
+                <div>
+                    <button type="button" (click)="close()" class="btn btn-warning"><i class="bi bi-x-circle"></i>Đóng</button>
+                </div>
+            </div>
+        </div>
+        <div class="pb-3">
+            <form *ngIf="paymentVoucherForm" [formGroup]="paymentVoucherForm" (ngSubmit)="onEdit()">
+                <div class="row mt-3">
+                    <div class="col-sm-12 col-md-8 wrapper-content">
+                        <div class="row g-3">
+                            <div class="mbf-box">
+                                <div class="mbf-box__header">
+                                    <div class="mbf-box__title">
+                                        <i class="bi bi-person"></i>
+                                        <span>Thông tin người nhận tiền</span>
+                                    </div>
+                                </div>
+                                <div class="mbf-box__body">
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Nhà cung cấp<span class="text-danger ms-1">*</span></label>
+                                            <div class="wrapper-choose">
+                                                <nz-select (ngModelChange)="selectPartner($event)"
+                                                    [nzStatus]="submitted && f['partnerCode'].errors ? 'error' : ''" nzShowSearch
+                                                    nzAllowClear nzPlaceHolder="Nhà cung cấp" formControlName="partnerCode">
+                                                    <nz-option *ngFor="let partner of listPartnerAll" [nzLabel]="partner.name"
+                                                        [nzValue]="partner.code"></nz-option>
+                                                </nz-select>
+                                                <span (click)="openChoosePartner()" nz-icon nzType="ellipsis"
+                                                    nzTheme="outline"></span>
+                                            </div>
+                                            <div *ngIf="submitted && f['partnerCode'].errors" class="text-validate">
+                                                <div *ngIf="f['partnerCode']['errors']['required'] || true">Không được để trống
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <app-input-clear label="Người nhận tiền" [required]="true"
+                                                [errorsRequired]="f['receiverName'].errors?.['required']"
+                                                [showErrors]="submitted && f['receiverName'].errors"
+                                                [status]="submitted && f['receiverName'].errors ? 'error' : ''"
+                                                [control]="$any(paymentVoucherForm).controls['receiverName']"></app-input-clear>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <app-input-clear label="Số điện thoại" type="number"
+                                                [control]="$any(paymentVoucherForm).controls['receiverPhoneNumber']"></app-input-clear>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <app-input-clear label="Địa chỉ"
+                                                [control]="$any(paymentVoucherForm).controls['receiverAddress']"></app-input-clear>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mbf-box">
+                                <div class="mbf-box__header">
+                                    <div class="mbf-box__title">
+                                        <i class="bi bi-currency-dollar"></i>
+                                        <span>Thông tin tiền chi</span>
+                                    </div>
+                                </div>
+                                <div class="mbf-box__body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Hình thức chi<span class="text-danger ms-1">*</span></label>
+                                            <nz-select (ngModelChange)="selectPaymentMethod($event)"
+                                                [nzStatus]="submitted && f['paymentMethod'].errors ? 'error' : ''" nzAllowClear
+                                                nzPlaceHolder="Hình thức chi" formControlName="paymentMethod">
+                                                <nz-option *ngFor="let method of PAYMENT_METHOD" [nzLabel]="method.name"
+                                                    [nzValue]="method.value"></nz-option>
+                                            </nz-select>
+                                            <div *ngIf="submitted && f['paymentMethod'].errors" class="text-validate">
+                                                <div *ngIf="f['paymentMethod']['errors']['required']">Không được để trống
+                                                </div>
+                                            </div>
+                                        </div>
+            
+                                        <div class="col-md-6">
+                                            <label class="form-label">Ngân hàng<span class="text-danger ms-1">*</span></label>
+                                            <nz-select [nzStatus]="submitted && f['bankAccountId'].errors ? 'error' : ''"
+                                                nzShowSearch nzAllowClear nzPlaceHolder="Ngân hàng" formControlName="bankAccountId">
+                                                <nz-option *ngFor="let bank of listBankAll" [nzLabel]="bank.name"
+                                                    [nzValue]="bank.id"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Nội dung chi<span class="text-danger ms-1">*</span></label>
+                                            <nz-select [nzStatus]="submitted && f['type'].errors ? 'error' : ''" nzAllowClear
+                                                nzShowSearch nzPlaceHolder="Hình thức chi" formControlName="type">
+                                                <nz-option *ngFor="let payType of listPayTypeAll" [nzLabel]="payType.name"
+                                                    [nzValue]="payType.id"></nz-option>
+                                            </nz-select>
+                                            <div *ngIf="submitted && f['type'].errors" class="text-validate">
+                                                <div *ngIf="f['type']['errors']['required']">Không được để trống</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <app-input-number label="Số tiền" [required]="true"
+                                                [errorsRequired]="f['money'].errors?.['min'] || f['money'].errors?.['required']"
+                                                [showErrors]="submitted && f['money'].errors"
+                                                [class]="submitted && f['money'].errors ? 'is-invalid' : ''"
+                                                [control]="$any(paymentVoucherForm).controls['money']"></app-input-number>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <app-input-clear label="Lý do"
+                                                [control]="$any(paymentVoucherForm).controls['reason']"></app-input-clear>
+                                        </div>
+            
+                                        <div class="col-md-12">
+                                            <app-input-clear label="Chứng từ gốc kèm theo"
+                                                [control]="$any(paymentVoucherForm).controls['reason']"></app-input-clear>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mbf-box">
+                                <div class="mbf-box__header">
+                                    <div class="mbf-box__title">
+                                        <i class="bi bi-clipboard"></i>
+                                        <span>Tham chiếu phiếu nhập hàng</span>
+                                    </div>
+                                </div>
+                                <div class="mbf-box__body">
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <button (click)="openChooseReceipt()" nz-button nzType="dashed" type="button"> <span
+                                                    nz-icon nzType="plus" nzTheme="outline"></span> Chọn phiếu nhập hàng</button>
+                                        </div>
+                                        <div class="list-container mb-1 mt-1">
+                                            <table mat-table [dataSource]="dataReceipt" *ngIf="dataReceipt?.length > 0"
+                                                class="table table-hover table-click-row mb-0">
+                                                <ng-container matColumnDef="code">
+                                                    <th mat-header-cell *matHeaderCellDef>Mã phiếu</th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{element.code}}
+                                                    </td>
+                                                    <td mat-footer-cell *matFooterCellDef></td>
+                                                </ng-container>
+            
+                                                <ng-container matColumnDef="importDate">
+                                                    <th mat-header-cell *matHeaderCellDef>Ngày nhập</th>
+                                                    <td mat-cell *matCellDef="let element">{{ element.importDate | date :
+                                                        'dd/MM/yyyy' }}
+                                                    </td>
+                                                    <td mat-footer-cell *matFooterCellDef></td>
+                                                </ng-container>
+            
+                                                <ng-container matColumnDef="partner">
+                                                    <th mat-header-cell *matHeaderCellDef>Đối tác</th>
+                                                    <td mat-cell *matCellDef="let element">{{ element?.partner?.name }}</td>
+                                                    <td mat-footer-cell *matFooterCellDef class="fw-600">Tổng tiền nợ</td>
+                                                </ng-container>
+            
+                                                <ng-container matColumnDef="debt">
+                                                    <th mat-header-cell *matHeaderCellDef>Tiền nợ</th>
+                                                    <td mat-cell *matCellDef="let element">{{ utils.formatNumber(element.debt) }}</td>
+                                                    <td mat-footer-cell *matFooterCellDef class="fw-600">{{getTotalReceipt()}}</td>
+                                                </ng-container>
+            
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                                                    class="border-bottom">
+                                                </tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="row g-3">
+                            <div class="mbf-box">
+                                <div class="mbf-box__header">
+                                    <div class="mbf-box__title">
+                                        <i class="bi bi-receipt"></i>
+                                        <span>Thông tin phiếu chi</span>
+                                    </div>
+                                </div>
+                                <div class="mbf-box__body">
+                                    <div class="row g-3">
+                                        <div class="col-sm-12">
+                                            <label class="form-label">Ngày chi<span class="text-danger ms-1">*</span></label>
+                                            <nz-date-picker nzFormat="dd/MM/yyyy" class="d-block"
+                                                [nzStatus]="submitted && f['paymentDate'].errors ? 'error' : ''"
+                                                formControlName="paymentDate"></nz-date-picker>
+                                            <div *ngIf="submitted && f['paymentDate'].errors" class="text-validate">
+                                                <div *ngIf="f['paymentDate']['errors']['required']">Không được để trống
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <app-input-clear label="Ghi chú" placeholder="Ghi chú" [textArea]="true"
+                                                [control]="$any(paymentVoucherForm).controls['note']"></app-input-clear>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
